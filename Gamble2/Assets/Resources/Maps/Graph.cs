@@ -9,10 +9,10 @@ namespace MapSystem
     public class Graph
     {
         // A list of all nodes within the graph
-        List<Node> nodes;
+        protected List<Node> nodes;
 
         // 
-        int nextNodeIndex;
+        protected int nextNodeIndex;
 
         //----------------------- Public Properties ---------------------------------
 
@@ -36,6 +36,22 @@ namespace MapSystem
 
             // Initialize the next node index
             nextNodeIndex = 0;
+        }
+
+        public virtual void Connect(int id1, int id2)
+        {
+            // Fail loudly
+            if(Count <= id1 || Count <=id2)
+            {
+#if UNITY_EDITOR
+                throw new NodeNotFoundException("Unable to find " + id1 + " and/or " + id2 + " for connection.");
+#else
+                return;
+#endif
+            }
+
+            // If no problems, connect the two
+            this[id1].AddConnection(this[id2]);
         }
 
         /// <summary>
@@ -84,7 +100,7 @@ namespace MapSystem
         /// Create a new node on the graph.
         /// </summary>
         /// <returns>Returns a reference to that newly created node.</returns>
-        public Node MakeNode()
+        public virtual Node MakeNode()
         {
             // Create new node and increment the next index
             Node node = new Node(nextNodeIndex++);
@@ -189,7 +205,7 @@ namespace MapSystem
 
 
     //---------------------------------Errors ------------------------------------------------
-    #region Exceptions
+#region Exceptions
     [System.Serializable]
     public class NodeNotFoundException : System.Exception
     {
@@ -211,5 +227,5 @@ namespace MapSystem
 
 
     }
-    #endregion
+#endregion
 }

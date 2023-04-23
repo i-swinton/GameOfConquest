@@ -345,6 +345,9 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.VSCode.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
+"Assets/Resources/Maps/Board.cs"
+"Assets/Resources/Maps/BoardManager.cs"
+"Assets/Resources/Maps/BoardTile.cs"
 "Assets/Resources/Maps/Graph.cs"
 "Assets/Resources/Other/ActionSystem.cs"
 -langversion:9.0
