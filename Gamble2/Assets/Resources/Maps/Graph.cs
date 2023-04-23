@@ -38,6 +38,22 @@ namespace MapSystem
             nextNodeIndex = 0;
         }
 
+        public virtual void Connect(int id1, int id2)
+        {
+            // Fail loudly
+            if(Count <= id1 || Count <=id2)
+            {
+#if UNITY_EDITOR
+                throw new NodeNotFoundException("Unable to find " + id1 + " and/or " + id2 + " for connection.");
+#else
+                return;
+#endif
+            }
+
+            // If no problems, connect the two
+            this[id1].AddConnection(this[id2]);
+        }
+
         /// <summary>
         /// Finds a node on the graph given that node's id number
         /// </summary>
@@ -189,7 +205,7 @@ namespace MapSystem
 
 
     //---------------------------------Errors ------------------------------------------------
-    #region Exceptions
+#region Exceptions
     [System.Serializable]
     public class NodeNotFoundException : System.Exception
     {
@@ -211,5 +227,5 @@ namespace MapSystem
 
 
     }
-    #endregion
+#endregion
 }
