@@ -3781,3 +3781,179 @@ AssetImportParameters requested are different than current active one (requested
   custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
   custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 2248.247282 seconds.
+  path: Assets/Resources/Maps/Board.cs
+  artifactKey: Guid(90484d0f4cc52df4bb40a36fae3ab40d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Maps/Board.cs using Guid(90484d0f4cc52df4bb40a36fae3ab40d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bedb205ab190d12db055ae37c71d250d') in 0.012356 seconds 
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.008972 seconds.
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image C:\Users\i.swinton\Documents\GitHub\GameOfConquest\Gamble2\Library\PackageCache\com.unity.visualscripting@1.7.6\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+Symbol file LoadedFromMemory doesn't match image C:\Users\i.swinton\Documents\GitHub\GameOfConquest\Gamble2\Library\PackageCache\com.unity.visualscripting@1.7.6\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.69 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.169 seconds
+Domain Reload Profiling:
+	ReloadAssembly (1169ms)
+		BeginReloadAssembly (167ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (4ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (37ms)
+		EndReloadAssembly (909ms)
+			LoadAssemblies (135ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (274ms)
+			ReleaseScriptCaches (2ms)
+			RebuildScriptCaches (51ms)
+			SetupLoadedEditorAssemblies (424ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (13ms)
+				SetLoadedEditorAssemblies (1ms)
+				RefreshPlugins (1ms)
+				BeforeProcessingInitializeOnLoad (78ms)
+				ProcessInitializeOnLoadAttributes (229ms)
+				ProcessInitializeOnLoadMethodAttributes (91ms)
+				AfterProcessingInitializeOnLoad (11ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (8ms)
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 2.37 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3236 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 29 unused Assets / (0.7 MB). Loaded Objects now: 3874.
+Memory consumption went from 114.7 MB to 114.0 MB.
+Total: 2.706400 ms (FindLiveObjects: 0.229700 ms CreateObjectMapping: 0.079600 ms MarkObjects: 2.094900 ms  DeleteObjects: 0.301100 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-codec-MediaFoundation-h265: 746d11721c4dcdbdad8f713fa42b33f4 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 10.809938 seconds.
+  path: Assets/Resources/Maps/BoardTile.cs
+  artifactKey: Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Maps/BoardTile.cs using Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '62e7fb4e0e88abbbadbb9c6dbd01284c') in 0.006945 seconds 
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.010935 seconds.
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image C:\Users\i.swinton\Documents\GitHub\GameOfConquest\Gamble2\Library\PackageCache\com.unity.visualscripting@1.7.6\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
+Symbol file LoadedFromMemory is not a mono symbol file
+Symbol file LoadedFromMemory doesn't match image C:\Users\i.swinton\Documents\GitHub\GameOfConquest\Gamble2\Library\PackageCache\com.unity.visualscripting@1.7.6\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.52 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.183 seconds
+Domain Reload Profiling:
+	ReloadAssembly (1184ms)
+		BeginReloadAssembly (173ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (6ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (33ms)
+		EndReloadAssembly (900ms)
+			LoadAssemblies (123ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (354ms)
+			ReleaseScriptCaches (2ms)
+			RebuildScriptCaches (50ms)
+			SetupLoadedEditorAssemblies (346ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (19ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (1ms)
+				BeforeProcessingInitializeOnLoad (79ms)
+				ProcessInitializeOnLoadAttributes (212ms)
+				ProcessInitializeOnLoadMethodAttributes (30ms)
+				AfterProcessingInitializeOnLoad (6ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (6ms)
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 2.44 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3237 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 29 unused Assets / (0.7 MB). Loaded Objects now: 3878.
+Memory consumption went from 114.7 MB to 114.0 MB.
+Total: 3.971400 ms (FindLiveObjects: 0.577600 ms CreateObjectMapping: 0.316300 ms MarkObjects: 2.605000 ms  DeleteObjects: 0.471100 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-codec-MediaFoundation-h265: 746d11721c4dcdbdad8f713fa42b33f4 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 12.387523 seconds.
+  path: Assets/Resources/Maps/BoardTile.cs
+  artifactKey: Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Maps/BoardTile.cs using Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '25e6002869abc998e5e4f55d9f4982e7') in 0.008089 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 3.171306 seconds.
+  path: Assets/Resources/Maps/BoardTile.cs
+  artifactKey: Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Maps/BoardTile.cs using Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8e20e028e8967aead0f0fb80162897ca') in 0.002362 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 3.410506 seconds.
+  path: Assets/Resources/Maps/BoardTile.cs
+  artifactKey: Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Maps/BoardTile.cs using Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '75547c8c955bfca7f053f289cfdf0094') in 0.002259 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 25.334686 seconds.
+  path: Assets/Resources/Maps/BoardTile.cs
+  artifactKey: Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Maps/BoardTile.cs using Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2178b919465638f8b4b8c288df735a01') in 0.002346 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 4.246926 seconds.
+  path: Assets/Resources/Maps/BoardTile.cs
+  artifactKey: Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Maps/BoardTile.cs using Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '345fcaf98bed55d85e7d7a59ab2e8d94') in 0.002223 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 35.182930 seconds.
+  path: Assets/Resources/Maps/BoardTile.cs
+  artifactKey: Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Maps/BoardTile.cs using Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e4b87275fc320e27bb2bb3e8c04c7910') in 0.002996 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 52.419407 seconds.
+  path: Assets/Resources/Maps/BoardTile.cs
+  artifactKey: Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Maps/BoardTile.cs using Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '29148b0764c0fdfd76b398b26980b444') in 0.002408 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 1.199803 seconds.
+  path: Assets/Resources/Maps/BoardTile.cs
+  artifactKey: Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Maps/BoardTile.cs using Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e20f316003b4f2c60fe803bd87012c9c') in 0.003418 seconds 
