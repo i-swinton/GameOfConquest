@@ -9,10 +9,10 @@ namespace MapSystem
     public class Graph
     {
         // A list of all nodes within the graph
-        List<Node> nodes;
+        protected List<Node> nodes;
 
         // 
-        int nextNodeIndex;
+        protected int nextNodeIndex;
 
         //----------------------- Public Properties ---------------------------------
 
@@ -84,7 +84,7 @@ namespace MapSystem
         /// Create a new node on the graph.
         /// </summary>
         /// <returns>Returns a reference to that newly created node.</returns>
-        public Node MakeNode()
+        public virtual Node MakeNode()
         {
             // Create new node and increment the next index
             Node node = new Node(nextNodeIndex++);

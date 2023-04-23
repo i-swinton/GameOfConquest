@@ -3957,3 +3957,9 @@ Received Import Request.
   path: Assets/Resources/Maps/BoardTile.cs
   artifactKey: Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
 Start importing Assets/Resources/Maps/BoardTile.cs using Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e20f316003b4f2c60fe803bd87012c9c') in 0.003418 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 536.340915 seconds.
+  path: Assets/Resources/Maps/BoardTile.cs
+  artifactKey: Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Maps/BoardTile.cs using Guid(0e4299d314fdf994696783d2ac48a68c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f2fa100a5a0b9c4fc725105f5750dd66') in 0.002596 seconds 

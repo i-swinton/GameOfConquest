@@ -10,7 +10,7 @@ namespace MapSystem
     {
         public BoardTile(int id): base(id)
         {
-
+            
         }
     }
 }
