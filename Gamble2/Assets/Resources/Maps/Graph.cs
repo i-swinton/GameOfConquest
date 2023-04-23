@@ -8,15 +8,34 @@ namespace MapSystem
 
     public class Graph
     {
+        // A list of all nodes within the graph
         List<Node> nodes;
 
+        // 
+        int nextNodeIndex;
+
         //----------------------- Public Properties ---------------------------------
+
+        /// <summary>
+        /// Get the number of nodes within the graph.
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                // Since indexing is zero-based, the next node index is the count
+                return nextNodeIndex;
+            }
+        }
 
         //----------------------- Public Functions ---------------------------------
 
         public Graph()
         {
             nodes = new List<Node>();
+
+            // Initialize the next node index
+            nextNodeIndex = 0;
         }
 
         /// <summary>
@@ -61,7 +80,21 @@ namespace MapSystem
         /// <returns>If the node is found, returns the requested node. Otherwise, returns null.</returns>
         public Node this[int id] =>Find(id);
 
+        /// <summary>
+        /// Create a new node on the graph.
+        /// </summary>
+        /// <returns>Returns a reference to that newly created node.</returns>
+        public Node MakeNode()
+        {
+            // Create new node and increment the next index
+            Node node = new Node(nextNodeIndex++);
 
+            // Add the new node to the list
+            nodes.Add(node);
+
+            // Return the new node
+            return node;
+        }
 
 
         // --------------------- Private Functions ----------------------------------
