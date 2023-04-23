@@ -19,17 +19,18 @@ namespace MapSystem
             nodes = new List<Node>();
         }
 
+        /// <summary>
+        /// Finds a node on the graph given that node's id number
+        /// </summary>
+        /// <param name="id">The id number of the node being searched for.</param>
+        /// <returns>If the node is found, returns the requested node. Otherwise, returns null.</returns>
         public Node Find(int id)
         {
-            // Look through the entirety of the nodes on the graph
-            for(int i =0; i < nodes.Count;  ++i)
-            {
-                // If the ids match, report the found node
-                if(nodes[i].ID == id)
-                {
-                    return nodes[i];
-                }
-            }
+
+            // Perform the find operation
+            Node node = PrivateFind(id);
+
+            if(node != null) { return node; }
 
             // Fail silently when built, while failing loudly in editor
 #if UNITY_EDITOR
@@ -42,6 +43,49 @@ namespace MapSystem
 #endif
         }
 
+
+        /// <summary>
+        /// Checks if the graph contains a node given an id number for the node.
+        /// </summary>
+        /// <param name="id">The id number of node being requested.</param>
+        /// <returns>If the node is within the graph, return true. Otherwise, return false.</returns>
+        public bool Contains(int id)
+        {
+            return PrivateFind(id) != null;
+        }
+
+        /// <summary>
+        /// Finds a node on the graph given that node's id number
+        /// </summary>
+        /// <param name="id">The id number of the node being searched for.</param>
+        /// <returns>If the node is found, returns the requested node. Otherwise, returns null.</returns>
+        public Node this[int id] =>Find(id);
+
+
+
+
+        // --------------------- Private Functions ----------------------------------
+
+        /// <summary>
+        /// What truly performs the find operation using the given id. 
+        /// </summary>
+        /// <param name="id">The id number of the node being searched for</param>
+        /// <returns>If the node is found, returns the requested node. Otherwise, returns null.</returns>
+        Node PrivateFind(int id)
+        {
+            // Look through the entirety of the nodes on the graph
+            for (int i = 0; i < nodes.Count; ++i)
+            {
+                // If the ids match, report the found node
+                if (nodes[i].ID == id)
+                {
+                    return nodes[i];
+                }
+            }
+
+            // If unable to find, return null
+            return null;
+        }
 
     }
 
