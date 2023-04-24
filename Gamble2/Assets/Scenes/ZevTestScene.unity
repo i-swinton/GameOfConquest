@@ -1056,10 +1056,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Tiles:
-  - {fileID: 21300000, guid: 09418fbbb4423af43bb2fb21d015e499, type: 3}
-  - {fileID: 21300000, guid: a1117bbdcdc34c94c9d582babf9f373b, type: 3}
-  - {fileID: 21300000, guid: a401f7512cc3c3042806e012e97c2c25, type: 3}
-  - {fileID: 21300000, guid: ca59a74fb8849504a9f10b392ae74926, type: 3}
+  - {fileID: 21300000, guid: 12718c3dfac4a0d49bb0717634978874, type: 3}
+  - {fileID: 21300000, guid: c4c85cc0360c13e4eaa5602c2284aaba, type: 3}
+  - {fileID: 21300000, guid: 0c31e4a9cd0b7dc4fb8f0b19c8a96b9e, type: 3}
+  - {fileID: 21300000, guid: 04ea2fd228ad68241abb71c4933a444d, type: 3}
+  - {fileID: 21300000, guid: 518ad7d8efb376645b0acc6a245a3016, type: 3}
+  - {fileID: 21300000, guid: 93c000e7b19441a4a8437fd4fcc495eb, type: 3}
+  - {fileID: 21300000, guid: ae517822d41a76d41ae95d207cee7a2c, type: 3}
+  - {fileID: 21300000, guid: ba6afa54af2a6334d880640c4845ed82, type: 3}
+  - {fileID: 21300000, guid: 764bed1c1f46f174f9a5a2218f4e12f3, type: 3}
+  - {fileID: 21300000, guid: 15270d69077e10b4ab8a376783f92b60, type: 3}
+  - {fileID: 21300000, guid: ae9277bef351a2e4aa8a234a4d432205, type: 3}
+  - {fileID: 21300000, guid: 8d5ef5118c17da7438eef1d365354e0c, type: 3}
+  - {fileID: 21300000, guid: a718bb3289fa1d5498c9d428a7345a58, type: 3}
+  - {fileID: 21300000, guid: 4752dd9b59f32d7479a4e0ca7ecce0dc, type: 3}
+  - {fileID: 21300000, guid: 1930fa56138b13b4ea6b18057502233e, type: 3}
+  - {fileID: 21300000, guid: 34ced2c88ca42234e843dc38e2aab936, type: 3}
+  - {fileID: 21300000, guid: 7559f0df1aed2b34d971f90d7cc237f9, type: 3}
+  - {fileID: 21300000, guid: 0627c00458980f845be6e0e3759ba75f, type: 3}
+  - {fileID: 21300000, guid: 67e531d7877ad4443863381b1e02b380, type: 3}
   TilePrefab: {fileID: 1043854607677495953, guid: 132dd8a0d5b3def478f1c1e1cf8653a3, type: 3}
 --- !u!212 &1330028034
 SpriteRenderer:
@@ -1122,7 +1137,7 @@ Transform:
   m_GameObject: {fileID: 1330028032}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 20, y: 20, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1140,7 +1155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981d0807722401a44bc7868a3cdce585, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfNodes: 4
+  numberOfNodes: 19
   connections:
   - node1: 1
     node2: 2
@@ -1154,6 +1169,8 @@ MonoBehaviour:
   - {x: 2, y: -2, z: 0}
   - {x: -1, y: -2, z: 0}
   nodeCenterRadius: 1.06
+  continents: []
+  tileBonuses: []
 --- !u!1 &1679200544
 GameObject:
   m_ObjectHideFlags: 0
@@ -1339,7 +1356,7 @@ GameObject:
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1953521785
 MonoBehaviour:
   m_ObjectHideFlags: 0
