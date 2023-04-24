@@ -123,6 +123,107 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &26804556
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 26804557}
+  - component: {fileID: 26804560}
+  - component: {fileID: 26804559}
+  - component: {fileID: 26804558}
+  m_Layer: 0
+  m_Name: Main Camera (1)
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &26804557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26804556}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1119107298}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &26804558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26804556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56666c5a40171f54783dd416a44f42bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_MaxRayIntersections: 0
+--- !u!81 &26804559
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26804556}
+  m_Enabled: 1
+--- !u!20 &26804560
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26804556}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 5
+  m_Depth: -1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 2147483647
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
 --- !u!1 &54600527
 GameObject:
   m_ObjectHideFlags: 0
@@ -815,6 +916,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &1119107297
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1119107298}
+  m_Layer: 0
+  m_Name: Cameras
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1119107298
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1119107297}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1679200547}
+  - {fileID: 26804557}
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1173581541
 GameObject:
   m_ObjectHideFlags: 0
@@ -1059,37 +1193,56 @@ MonoBehaviour:
   - Name: T-Town
     bonus: []
     Tiles:
-    - {fileID: 21300000, guid: 12718c3dfac4a0d49bb0717634978874, type: 3}
-    - {fileID: 21300000, guid: c4c85cc0360c13e4eaa5602c2284aaba, type: 3}
-    - {fileID: 21300000, guid: 0c31e4a9cd0b7dc4fb8f0b19c8a96b9e, type: 3}
-    - {fileID: 21300000, guid: 04ea2fd228ad68241abb71c4933a444d, type: 3}
+    - Name: Matcha
+      Image: {fileID: 21300000, guid: 12718c3dfac4a0d49bb0717634978874, type: 3}
+    - Name: Black
+      Image: {fileID: 21300000, guid: c4c85cc0360c13e4eaa5602c2284aaba, type: 3}
+    - Name: Green
+      Image: {fileID: 21300000, guid: 0c31e4a9cd0b7dc4fb8f0b19c8a96b9e, type: 3}
+    - Name: Oolong
+      Image: {fileID: 21300000, guid: 04ea2fd228ad68241abb71c4933a444d, type: 3}
   - Name: Fish
     bonus: []
     Tiles:
-    - {fileID: 21300000, guid: 518ad7d8efb376645b0acc6a245a3016, type: 3}
-    - {fileID: 21300000, guid: 93c000e7b19441a4a8437fd4fcc495eb, type: 3}
-    - {fileID: 21300000, guid: ae517822d41a76d41ae95d207cee7a2c, type: 3}
-    - {fileID: 21300000, guid: ba6afa54af2a6334d880640c4845ed82, type: 3}
+    - Name: Salmon
+      Image: {fileID: 21300000, guid: 518ad7d8efb376645b0acc6a245a3016, type: 3}
+    - Name: Cod
+      Image: {fileID: 21300000, guid: 93c000e7b19441a4a8437fd4fcc495eb, type: 3}
+    - Name: Dolphin
+      Image: {fileID: 21300000, guid: ae517822d41a76d41ae95d207cee7a2c, type: 3}
+    - Name: Octopus
+      Image: {fileID: 21300000, guid: ba6afa54af2a6334d880640c4845ed82, type: 3}
   - Name: Bottom
     bonus: []
     Tiles:
-    - {fileID: 21300000, guid: 764bed1c1f46f174f9a5a2218f4e12f3, type: 3}
-    - {fileID: 21300000, guid: 15270d69077e10b4ab8a376783f92b60, type: 3}
+    - Name: Left
+      Image: {fileID: 21300000, guid: 764bed1c1f46f174f9a5a2218f4e12f3, type: 3}
+    - Name: Right
+      Image: {fileID: 21300000, guid: 15270d69077e10b4ab8a376783f92b60, type: 3}
   - Name: Dennis
     bonus: []
     Tiles:
-    - {fileID: 21300000, guid: ae9277bef351a2e4aa8a234a4d432205, type: 3}
-    - {fileID: 21300000, guid: 8d5ef5118c17da7438eef1d365354e0c, type: 3}
-    - {fileID: 21300000, guid: a718bb3289fa1d5498c9d428a7345a58, type: 3}
-    - {fileID: 21300000, guid: 4752dd9b59f32d7479a4e0ca7ecce0dc, type: 3}
-    - {fileID: 21300000, guid: 1930fa56138b13b4ea6b18057502233e, type: 3}
+    - Name: McKinnely
+      Image: {fileID: 21300000, guid: ae9277bef351a2e4aa8a234a4d432205, type: 3}
+    - Name: Taft
+      Image: {fileID: 21300000, guid: 8d5ef5118c17da7438eef1d365354e0c, type: 3}
+    - Name: Clinton
+      Image: {fileID: 21300000, guid: a718bb3289fa1d5498c9d428a7345a58, type: 3}
+    - Name: Lincon
+      Image: {fileID: 21300000, guid: 4752dd9b59f32d7479a4e0ca7ecce0dc, type: 3}
+    - Name: Truman
+      Image: {fileID: 21300000, guid: 1930fa56138b13b4ea6b18057502233e, type: 3}
   - Name: Blorbton
     bonus: []
     Tiles:
-    - {fileID: 21300000, guid: 34ced2c88ca42234e843dc38e2aab936, type: 3}
-    - {fileID: 21300000, guid: 7559f0df1aed2b34d971f90d7cc237f9, type: 3}
-    - {fileID: 21300000, guid: 0627c00458980f845be6e0e3759ba75f, type: 3}
-    - {fileID: 21300000, guid: 67e531d7877ad4443863381b1e02b380, type: 3}
+    - Name: IDK
+      Image: {fileID: 21300000, guid: 34ced2c88ca42234e843dc38e2aab936, type: 3}
+    - Name: LMAO
+      Image: {fileID: 21300000, guid: 7559f0df1aed2b34d971f90d7cc237f9, type: 3}
+    - Name: LOL
+      Image: {fileID: 21300000, guid: 0627c00458980f845be6e0e3759ba75f, type: 3}
+    - Name: IDC
+      Image: {fileID: 21300000, guid: 67e531d7877ad4443863381b1e02b380, type: 3}
   TilePrefab: {fileID: 1043854607677495953, guid: 132dd8a0d5b3def478f1c1e1cf8653a3, type: 3}
 --- !u!212 &1330028034
 SpriteRenderer:
@@ -1210,7 +1363,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &1679200545
 AudioListener:
   m_ObjectHideFlags: 0
@@ -1250,7 +1403,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 23
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1269,13 +1422,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1679200544}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_Father: {fileID: 1119107298}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1679200548
 MonoBehaviour:
