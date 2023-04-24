@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameMaster : MonoBehaviour
@@ -12,6 +13,8 @@ public class GameMaster : MonoBehaviour
     public Vector2 BeginningOfUILine;
     public Vector2 EndOfUILine;
     public GameObject playerPanelPrefab;
+
+    public TextMeshProUGUI text;
     
     // Start is called before the first frame update
     void Start()
@@ -39,7 +42,7 @@ public class GameMaster : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        text.text = "Turn " + turnTacker.ToString();
     }
 
     public void EndTurn()
