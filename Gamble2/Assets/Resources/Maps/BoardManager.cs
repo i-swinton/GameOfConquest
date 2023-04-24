@@ -101,6 +101,35 @@ public class BoardManager : MonoBehaviour
             Debug.Log(board[0].UnitCount + " on tile 1");
             Debug.Log(board[1].UnitCount + " on tile 2");
         }
+        // Battle single
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            // Perform combat between the two board pieces
+            CombatSystem.BattleTiles(board[0], board[1], Combat.CombatRollType.Double, out int atkLoss, out int defLoss);
+
+            Debug.Log("Attack Losses: " + atkLoss + ", Def Loss: " + defLoss);
+            Debug.Log(board[0].UnitCount + " on tile 1");
+            Debug.Log(board[1].UnitCount + " on tile 2");
+        }
+        // Battle single
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            // Perform combat between the two board pieces
+            CombatSystem.BattleTiles(board[0], board[1], Combat.CombatRollType.Triple, out int atkLoss, out int defLoss);
+
+            Debug.Log("Attack Losses: " + atkLoss + ", Def Loss: " + defLoss);
+            Debug.Log(board[0].UnitCount + " on tile 1");
+            Debug.Log(board[1].UnitCount + " on tile 2");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            // Perform combat between the two board pieces
+            CombatSystem.BattleTiles(board[0], board[1], Combat.CombatRollType.Blitz, out int atkLoss, out int defLoss);
+
+            Debug.Log("Attack Losses: " + atkLoss + ", Def Loss: " + defLoss);
+            Debug.Log(board[0].UnitCount + " on tile 1");
+            Debug.Log(board[1].UnitCount + " on tile 2");
+        }
     }
 
     private void OnDrawGizmos()
