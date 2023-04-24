@@ -20,7 +20,7 @@ public class GameMaster : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        state = GameState.Draft;
+        state = GameState.Claim;
         
         if (PlayerAmount <= 1)
             PlayerAmount = 2;
@@ -49,10 +49,44 @@ public class GameMaster : MonoBehaviour
     public void EndTurn()
     {
         switch (state) {
+            case GameState.Claim:
+                if(AllTerroritesClaim())
+                    ChangeState(GameState.Reinforce);
+                IncrementTurnTracker();
+                break;
+            case GameState.Reinforce:
+                IncrementTurnTracker();
+                if(ReinforcingDone())
+                    ChangeState(GameState.Draft);
+                break;
             case GameState.Draft: ChangeState(GameState.Attack); break;
             case GameState.Attack: ChangeState(GameState.Fortify); break; 
             case GameState.Fortify: IncrementTurnTracker(); ChangeState(GameState.Draft); break;
         }
+    }
+
+    bool AllTerroritesClaim()
+    {
+        foreach (MapTile tile in FindObjectsOfType<MapTile>())
+        {
+            if (tile.Player == null)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    bool ReinforcingDone()
+    {
+        foreach (Player player in players)
+        {
+            if (player.draftTroop > 0)
+                return false;
+        }
+
+        return true;
     }
 
     void IncrementTurnTracker()
@@ -70,6 +104,16 @@ public class GameMaster : MonoBehaviour
     public int GetPlayerTurn()
     {
         return turnTacker;
+    }
+
+    public GameState GetState()
+    {
+        return state;
+    }
+
+    public Player GetPlayer()
+    {
+        return players[turnTacker];
     }
 
     public void OnDrawGizmosSelected()
@@ -95,10 +139,12 @@ public class Player
     {
         troopCount = 5;
         isAlive = true;
+        draftTroop = 20;
     }
 
     public int playerID;
     public Color playerColor;
     public int troopCount;
+    public int draftTroop;
     public bool isAlive;
 }

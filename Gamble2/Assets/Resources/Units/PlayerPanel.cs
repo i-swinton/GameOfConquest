@@ -5,36 +5,18 @@ using UnityEngine;
 
 public class PlayerPanel : MonoBehaviour
 {
-    private int playerInt;
-    private Color playerColor;
-    private int TroopCount;
+    private Player _player;
     public TextMeshPro text;
 
     // Update is called once per frame
     void Update()
     {
-        text.text = TroopCount.ToString();
+        text.text = _player.draftTroop.ToString();
     }
 
     public void Setup(Player player)
     {
-        playerInt = player.playerID;
-        playerColor = player.playerColor;
-        TroopCount = player.troopCount;
-        GetComponent<SpriteRenderer>().color = playerColor;
-    }
-
-    public void OnMouseDown()
-    {
-        GameMaster gm = FindObjectOfType<GameMaster>();
-
-        if (gm.GetPlayerTurn() == playerInt)
-        {
-            TroopCount++;
-        }
-        else
-        {
-            TroopCount--;
-        }
+        _player = player;
+        GetComponent<SpriteRenderer>().color = _player.playerColor;
     }
 }
