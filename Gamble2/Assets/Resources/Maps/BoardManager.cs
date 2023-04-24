@@ -23,6 +23,8 @@ public class BoardManager : MonoBehaviour
 
     [SerializeField] [Range(.5f, 10.0f)] float nodeCenterRadius = 1.0f;
 
+    [SerializeField] List<Continent> continents;
+
     // The board within the scene
     Board board;
 
@@ -48,6 +50,13 @@ public class BoardManager : MonoBehaviour
         {
             board.Connect(pair.node1, pair.node2);
         }
+
+        // Add in all of the continents
+        foreach (Continent c in continents)
+        {
+            board.AddContinent(c);
+        }
+
     }
 
     private void OnDrawGizmos()
