@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class GenerateMap : MonoBehaviour
 {
-
-    public Sprite[] Tiles;
-
+    
+    [SerializeField] List<MapContinent> Contenents;
     public GameObject TilePrefab;
     // Start is called before the first frame update
     void Start()
@@ -16,13 +15,26 @@ public class GenerateMap : MonoBehaviour
 
     public void GenBoard()
     {
-        for (int i = 0; i < Tiles.Length; i++)
+        for (int i = 0; i < Contenents.Count; i++)
         {
-            GameObject tile = Instantiate(TilePrefab,transform);
-            tile.GetComponent<SpriteRenderer>().sprite = Tiles[i];
-            tile.AddComponent<PolygonCollider2D>();
-            tile.GetComponent<MapTile>().NodeRef = (MapSystem.BoardTile)BoardManager.instance.GetBoard()[i];
+            List<int> tiles = new List<int>();
+
+            //Generates tiles within a continent
+            for (int j = 0; j < Contenents[i].Tiles.Length; j++)
+            {
+                GameObject tile = Instantiate(TilePrefab, transform);
+                tile.GetComponent<SpriteRenderer>().sprite = Contenents[i].Tiles[j];
+                tile.AddComponent<PolygonCollider2D>();
+                tile.GetComponent<MapTile>().NodeRef = (MapSystem.BoardTile)BoardManager.instance.GetBoard()[j];
+                tiles.Add(j);
+            }
+
+            //Adds continent to board
+            BoardManager.instance.GetBoard().AddContinent( new MapSystem.Continent(tiles, Contenents[i].Name, Contenents[i].bonus));
+
         }
+
+
     }
 
     // Update is called once per frame
@@ -30,4 +42,11 @@ public class GenerateMap : MonoBehaviour
     {
         
     }
+}
+[System.Serializable]
+class MapContinent
+{
+    public string Name;
+    public List<BonusBase> bonus;
+    public Sprite[] Tiles;
 }
