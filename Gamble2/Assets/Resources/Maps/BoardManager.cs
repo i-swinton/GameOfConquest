@@ -55,6 +55,8 @@ public class BoardManager : MonoBehaviour
         foreach (Continent c in continents)
         {
             board.AddContinent(c);
+            // Set the board of the continent
+            c.SetBoard(board);
         }
 
     }
@@ -68,7 +70,7 @@ public class BoardManager : MonoBehaviour
         for(int i=0; i < board.Count; ++i)
         {
 
-            BoardTile tile = (BoardTile)board[i];
+            BoardTile tile = board[i];
             Gizmos.DrawWireSphere(tile.Position, nodeCenterRadius) ;
         }
     }

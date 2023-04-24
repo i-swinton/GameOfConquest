@@ -15,6 +15,7 @@ namespace MapSystem
         // -------------------------------------------- Variables ---------------------------------------------------
         Vector3 worldPosition;
 
+        Player owner;
 
         int unitCount;
         Unit units;
@@ -34,6 +35,14 @@ namespace MapSystem
             get
             {
                 return unitCount;
+            }
+        }
+
+        public Player Owner
+        {
+            get
+            {
+                return owner;
             }
         }
 
@@ -69,11 +78,23 @@ namespace MapSystem
             }
         }
 
+        /// <summary>
+        /// Add additional units to a tile.
+        /// </summary>
+        /// <param name="additionalUnits">The units being moved to the tilr</param>
         public void Fortify(int additionalUnits)
         {
             units += additionalUnits;
         }
         
+        public void ChangeOwner(Player player)
+        {
+            // Ignore if the players match
+            if(owner == player) { return; }
 
+            // Change the owner to the new player
+            owner = player;
+            
+        }
     }
 }
