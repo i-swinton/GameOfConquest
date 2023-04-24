@@ -4,14 +4,26 @@ using UnityEngine;
 
 
 
-public class CombatSystem : MonoBehaviour
-{
+public static class CombatSystem { 
     /// What is combat
     ///  Attack rolls
     ///  Defense rolls
     ///  Resolving rolls
     ///  Needs to factor in bonuses
     ///  Report losses? (Should it perform the losses)
+    ///  
+
+    // -------------------------------------------------------- Variables ---------------------------------------------------
+
+    // ---------------------------------------------------- Properties ------------------------------------------------------
+
+
+
+    // ------------------------------------------------------ Public Functions -------------------------------------------------
+
+
+
+
 
     /// <summary>
     /// Pits two tiles against one another
@@ -20,7 +32,7 @@ public class CombatSystem : MonoBehaviour
     /// <param name="defenderTile">The tile which is being attacekd.</param>
     /// <param name="combatType">The type of combat which is being performed.</param>
 
-    public void BattleTiles(MapSystem.BoardTile attackTile, MapSystem.BoardTile defenderTile, Combat.CombatRollType combatType,
+    public static void BattleTiles(MapSystem.BoardTile attackTile, MapSystem.BoardTile defenderTile, Combat.CombatRollType combatType,
         out int totalAtkLoss, out int totalDefLoss)
     {
 
@@ -34,11 +46,16 @@ public class CombatSystem : MonoBehaviour
             case Combat.CombatRollType.Triple:
                 {
 
+                    // Perform the battle
                     PerformBattle(attackTile, defenderTile, combatType,
                         out totalAtkLoss, out totalDefLoss);
 
+                    // Decrement the troops
+                    attackTile.KillUnits(totalAtkLoss);
+                    defenderTile.KillUnits(totalDefLoss);
+
                     break;
-                }
+                } // Repeat combat until someone loses
             case Combat.CombatRollType.Blitz:
                 {
                     while(attackTile.UnitCount > 1 && defenderTile.UnitCount > 0)
@@ -49,7 +66,8 @@ public class CombatSystem : MonoBehaviour
                             out aLoss, out defLoss);
 
                         // Decrement the troops
-
+                        attackTile.KillUnits(aLoss);
+                        defenderTile.KillUnits(defLoss);
 
                         // Update the total loss
                         totalAtkLoss += aLoss;
@@ -61,13 +79,13 @@ public class CombatSystem : MonoBehaviour
 
     }
 
-    void PerformBattle(MapSystem.BoardTile attackTile, MapSystem.BoardTile defenderTile, Combat.CombatRollType combatType, out int attackerLosses, out int defenderLosses)
+    static void PerformBattle(MapSystem.BoardTile attackTile, MapSystem.BoardTile defenderTile, Combat.CombatRollType combatType, out int attackerLosses, out int defenderLosses)
     {
         List<int> attackRolls;
         List<int> defenderRolls;
 
         
-
+        // Perform the rolls based on the combat type
         switch (combatType)
         {
             case Combat.CombatRollType.Single:
@@ -108,7 +126,7 @@ public class CombatSystem : MonoBehaviour
 
     }
 
-    void EvaluateCombat(MapSystem.BoardTile attacker, MapSystem.BoardTile defender, List<int> attackRolls, 
+    static void EvaluateCombat(MapSystem.BoardTile attacker, MapSystem.BoardTile defender, List<int> attackRolls, 
         List<int> defenseRolls, Combat.CombatRollType rollType, out int attackerLosses, out int defenderLosses)
     {
         // Clamp the roll types     
@@ -162,7 +180,7 @@ public class CombatSystem : MonoBehaviour
     /// <param name="combatantType">Is this the attacker or the defender?</param>
     /// <param name="tile">The tile which is responsible for the rolling.</param>
     /// <returns></returns>
-    List<int> RollDice(int count, List<BonusBase> bonuses, MapSystem.BoardTile tile,Combat.CombatantType combatantType )
+    static List<int> RollDice(int count, List<BonusBase> bonuses, MapSystem.BoardTile tile,Combat.CombatantType combatantType )
     {
         // Clamp the count to the unit count
         if(count > tile.UnitCount)

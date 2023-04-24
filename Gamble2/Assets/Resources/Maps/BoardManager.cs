@@ -82,6 +82,28 @@ public class BoardManager : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        // Populate
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            for(int i =0; i < board.Count; ++i)
+            {
+                board[i].AddUnits(new Unit(10));
+            }
+        }
+        // Battle single
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            // Perform combat between the two board pieces
+            CombatSystem.BattleTiles(board[0], board[1], Combat.CombatRollType.Single, out int atkLoss, out int defLoss);
+
+            Debug.Log("Attack Losses: " + atkLoss + ", Def Loss: " + defLoss);
+            Debug.Log(board[0].UnitCount + " on tile 1");
+            Debug.Log(board[1].UnitCount + " on tile 2");
+        }
+    }
+
     private void OnDrawGizmos()
     {
         if (board == null) { return; }
