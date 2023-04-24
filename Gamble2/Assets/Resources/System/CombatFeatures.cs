@@ -6,7 +6,7 @@ namespace Combat
 {
     public enum CombatRollType
     {
-        Single,
+        Single =1,
         Double,
         Triple,
         Blitz

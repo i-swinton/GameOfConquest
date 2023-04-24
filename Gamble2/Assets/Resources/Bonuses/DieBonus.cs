@@ -8,11 +8,8 @@ public class DieBonus : BonusBase
 {
     [SerializeField] int numOfDice;
     
-    public int NumberOfDice
+    public int NumberOfDice(MapSystem.BoardTile tile, Combat.CombatantType combatType)
     {
-        get
-        {
-            return numOfDice;
-        }
+        return numOfDice;
     }
 }

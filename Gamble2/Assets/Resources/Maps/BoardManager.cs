@@ -10,6 +10,12 @@ public class NodeConnectionPair
     public int node2;
 }
 
+[System.Serializable]
+public class BonusEditorList
+{
+    public List<BonusBase> bonuses;
+}
+
 public class BoardManager : MonoBehaviour
 {
     public static BoardManager instance;
@@ -25,7 +31,7 @@ public class BoardManager : MonoBehaviour
 
     [SerializeField] List<Continent> continents;
 
-    [SerializeField] List<List<BonusBase>> tileBonuses;
+    [SerializeField] List<BonusEditorList> tileBonuses;
 
     // The board within the scene
     Board board;
@@ -37,6 +43,9 @@ public class BoardManager : MonoBehaviour
 
         // Create the board
         board = new Board();
+        
+        // Create tile bonus array
+        //tileBonuses = new List<List<BonusBase>>();
 
         // Create all of the nodes for the board
         for(int i =0; i < numberOfNodes; ++i)
@@ -65,7 +74,7 @@ public class BoardManager : MonoBehaviour
         for(int i=0; i < tileBonuses.Count; ++i)
         {
             // Apply the bonuses to tiles
-            foreach(BonusBase bonus in tileBonuses[i])
+            foreach(BonusBase bonus in tileBonuses[i].bonuses)
             {
                 board[i].ApplyBonus(bonus);
             }

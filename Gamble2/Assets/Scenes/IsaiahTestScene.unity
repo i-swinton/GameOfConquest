@@ -729,3 +729,4 @@ MonoBehaviour:
     bonuses: []
   - tiles: 
     bonuses: []
+  tileBonuses: []
