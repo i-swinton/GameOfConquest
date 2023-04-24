@@ -165,6 +165,8 @@ namespace MapSystem
 
         Board board;
 
+        [SerializeField] string name;
+
         //------------------------------------ Properties --------------------------------------
 
         public int TileCount
@@ -172,6 +174,14 @@ namespace MapSystem
             get
             {
                 return tiles.Count;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return name;
             }
         }
 
