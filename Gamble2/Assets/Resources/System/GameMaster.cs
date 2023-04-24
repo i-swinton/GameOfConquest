@@ -9,6 +9,7 @@ public class GameMaster : MonoBehaviour
     private int turnTacker = 0;
     public int PlayerAmount = 2;
     private List<Player> players = new List<Player>();
+    private GameState state;
 
     public Vector2 BeginningOfUILine;
     public Vector2 EndOfUILine;
@@ -19,6 +20,8 @@ public class GameMaster : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        state = GameState.Draft;
+        
         if (PlayerAmount <= 1)
             PlayerAmount = 2;
         
@@ -35,21 +38,33 @@ public class GameMaster : MonoBehaviour
             GameObject panel = Instantiate(playerPanelPrefab, pos, Quaternion.identity);
             panel.GetComponent<PlayerPanel>().Setup(p);
         }
-        
-        print(players.Count);
     }
 
     // Update is called once per frame
     void Update()
     {
-        text.text = "Turn " + turnTacker.ToString();
+        text.text = "Player " + (turnTacker+1).ToString() + "\n" + state.ToString();
     }
 
     public void EndTurn()
     {
+        switch (state) {
+            case GameState.Draft: ChangeState(GameState.Attack); break;
+            case GameState.Attack: ChangeState(GameState.Fortify); break; 
+            case GameState.Fortify: IncrementTurnTracker(); ChangeState(GameState.Draft); break;
+        }
+    }
+
+    void IncrementTurnTracker()
+    {
         turnTacker++;
-        if(turnTacker >= PlayerAmount)
+        if (turnTacker >= PlayerAmount)
             turnTacker = 0;
+    }
+
+    void ChangeState(GameState desiredState)
+    {
+        state = desiredState;
     }
 
     public int GetPlayerTurn()
