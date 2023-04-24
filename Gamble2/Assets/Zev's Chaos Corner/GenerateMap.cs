@@ -21,7 +21,7 @@ public class GenerateMap : MonoBehaviour
             GameObject tile = Instantiate(TilePrefab,transform);
             tile.GetComponent<SpriteRenderer>().sprite = Tiles[i];
             tile.AddComponent<PolygonCollider2D>();
-
+            tile.GetComponent<MapTile>().NodeRef = (MapSystem.BoardTile)BoardManager.instance.GetBoard()[i];
         }
     }
 

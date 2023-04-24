@@ -8,6 +8,8 @@ public class MapTile : MonoBehaviour
     public int Units = 1;
 
 
+    public MapSystem.BoardTile NodeRef;
+
     // Start is called before the first frame update
     void Start()
     {

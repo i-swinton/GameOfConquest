@@ -8,6 +8,7 @@ namespace MapSystem
 
     public class Board:Graph
     {
+
         // Used to hold game relevant information about the graph. 
         // May want to have it also hold a disjoint graph to quickly check if two board tiles are connected, but that is a later issue
 

@@ -12,6 +12,8 @@ public class NodeConnectionPair
 
 public class BoardManager : MonoBehaviour
 {
+    public static BoardManager instance;
+
     [Tooltip("The number of nodes on this graph")]
     [SerializeField] int numberOfNodes;
 
@@ -24,10 +26,11 @@ public class BoardManager : MonoBehaviour
     // The board within the scene
     Board board;
 
-
-    // Start is called before the first frame update
-    void Start()
+    // Awake is called before the first frame update
+    void Awake()
     {
+        instance = this;
+
         // Create the board
         board = new Board();
 
@@ -60,4 +63,8 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    public Board GetBoard()
+    {
+        return board;
+    }
 }
