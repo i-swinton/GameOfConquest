@@ -47,6 +47,43 @@ namespace MapSystem
             c.SetBoard(this);
         }
 
+        public Continent FindContinent(string continentName)
+        {
+            // Search the list for the matching continent
+            for(int i =0; i < continents.Count; ++i)
+            {
+                if(continents[i].Name == continentName)
+                {
+                    return continents[i];
+                }
+            }
+
+#if UNITY_EDITOR
+            throw new ContinentNotFound("Unable to find continent of name " + continentName);
+#else
+            return null;
+#endif
+        }
+
+        /// <summary>
+        /// Searches for a continent within the list of continents.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns>If the continent is found, returns that continent. Otherwise, returns null.</returns>
+        public Continent FindContinent(int index)
+        {
+            if(index >= continents.Count)
+            {
+#if UNITY_EDITOR
+                throw new ContinentNotFound("Unable to find continent at index " + index);
+#else
+                return null;
+#endif
+            }
+
+            return continents[index];
+        }
+
 
         //---------------------------------------- Overridden Functions --------------------------------------------
         /// <summary>
@@ -55,25 +92,28 @@ namespace MapSystem
         /// <returns>Returns a reference to the board.</returns>
         public override Node MakeNode()
         {
-
-            // Create new node and increment the next index
-            BoardTile node = new BoardTile(nextNodeIndex++, Vector3.zero,this);
-
-            // Add the new node to the list
-            nodes.Add(node);
-            return node;
+            return MakeNode(Vector3.zero, "Unnamed Board");
         }
 
-        public Node MakeNode(Vector3 worldPosition)
+        public BoardTile MakeNode(Vector3 worldPosition)
+        {
+            return MakeNode(worldPosition, "Unnamed Board");
+        }
+
+        public BoardTile MakeNode(Vector3 worldPosition, string name)
         {
             // Create new node and increment the next index
-            BoardTile node = new BoardTile(nextNodeIndex++, worldPosition, this);
+            BoardTile node = new BoardTile(nextNodeIndex++, worldPosition, this, name);
 
             // Add the new node to the list
             nodes.Add(node);
             return node;
         }
 
+        public BoardTile MakeNode(string name)
+        {
+            return MakeNode(Vector3.zero, name);
+        }
        
 
         public List<BoardTile> GetConnectedTiles(int tile)
@@ -258,4 +298,24 @@ namespace MapSystem
 
 
     }
+
+    //--------------------------------------------------- Errors --------------------------------------------------------------
+#region Exceptions
+    [System.Serializable]
+    public class ContinentNotFound : System.Exception
+    {
+
+
+        public ContinentNotFound() { }
+
+        public ContinentNotFound(string message)
+            : base(message) { }
+
+        public ContinentNotFound(string message, System.Exception inner)
+            : base(message, inner) { }
+
+
+
+    }
+#endregion
 }

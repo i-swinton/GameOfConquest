@@ -23,6 +23,8 @@ namespace MapSystem
 
         List<BonusBase> bonuses;
 
+        string name;
+
         //--------------------------------------------- Properties---------------------------------------------------
 
         /// <summary>
@@ -35,6 +37,14 @@ namespace MapSystem
                 return worldPosition;
             }
          }
+
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+        }
 
         /// <summary>
         /// The number of units on this tile
@@ -81,12 +91,13 @@ namespace MapSystem
         }
 
         // -------------------------------------------- Public Functions ---------------------------------------------
-        public BoardTile(int id, Vector3 worldPosition, Board parent): base(id)
+        public BoardTile(int id, Vector3 worldPosition, Board parent, string name): base(id)
         {
 
             this.worldPosition = worldPosition;
             this.bonuses = new List<BonusBase>();
             this.parent = parent;
+            this.name = name;
         }
 
         /// <summary>
