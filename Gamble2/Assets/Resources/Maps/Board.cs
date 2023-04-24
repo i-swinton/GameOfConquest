@@ -24,9 +24,29 @@ namespace MapSystem
             continents = new List<Continent>();
         }
 
-        public Board(List<MapContinent> newCons) :base()
+        public Board(List<MapContinent> newCons) : base()
         {
             // Create a number of nodes based on the continents
+            foreach (MapContinent con in newCons)
+            {
+
+                // Build all of the tiles for the continent
+                List<int> conTiles = new List<int>();
+                foreach (TileData data in con.Tiles)
+                {
+                    // Make the node
+                    BoardTile tile = MakeNode(data.Name);
+                    conTiles.Add(tile.ID);
+                }
+
+                // Add the tiles to the continent
+                Continent continent = new Continent(conTiles, con.Name, con.bonus);
+
+                // Add the continent to the list
+                AddContinent(continent);
+
+
+            }
         }
 
         /// <summary>
