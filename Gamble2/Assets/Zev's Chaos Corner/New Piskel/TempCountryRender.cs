@@ -2,19 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum SelectState
+{
+    CannotSelect,
+    CanSelect,
+    Selected,
+    OtherSelected
+}
+
 public class TempCountryRender : MonoBehaviour
 {
     SpriteRenderer Renderer;
-    public Material Mat;
-    public MaterialPropertyBlock Block;
-    public bool Heilight;
-    public enum SelectState
-    {
-        CannotSelect,
-        CanSelect,
-        Selected,
-        OtherSelected
-    }
+    [SerializeField] Material Mat;
     public SelectState _State;
 
     public SelectState State { get{
@@ -28,34 +28,29 @@ public class TempCountryRender : MonoBehaviour
 
         }
     }
-    /*
-     * Cannot Select
-     * Can Select
-     * Selected
-     * OtherSelected
-     */
 
-    public Color Hilighted = Color.gray;
-    public Color Default = Color.white;
+
+    //Sets base color of tile to inputed color
+    public void SetPlayerColor(Color color)
+    {
+        Mat.SetColor("_PlayerColor", color);
+    }
+    
     // Start is called before the first frame update
     void Awake()
     {
+        //Creates a clone of the material
         Mat = new Material(Mat);
-        Block = new MaterialPropertyBlock();
+
         Renderer = GetComponent<SpriteRenderer>();
         Renderer.material = Mat;
 
-        Mat.SetColor("_PlayerColor", Color.green);
-      //  Renderer.SetPropertyBlock(Block);
+        Debug.LogWarning("Player color is temp code, please replace");
+        
+        //  Renderer.SetPropertyBlock(Block);
 
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
+    
     public void SetHeilight(bool value)
     {
         if (value)

@@ -57,7 +57,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: f40f90cbb43598d49916461a86543256, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -101,6 +101,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c289d95958d59de4a860906f6a301dc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Mat: {fileID: 2100000, guid: f40f90cbb43598d49916461a86543256, type: 2}
+  Heilight: 0
+  _State: 0
   Hilighted: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   Default: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &2749915124486685116
