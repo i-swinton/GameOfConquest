@@ -58,6 +58,7 @@ public class BoardManager : MonoBehaviour
         // Draw dots for all of the position of nodes on the board
         for(int i=0; i < board.Count; ++i)
         {
+
             BoardTile tile = (BoardTile)board[i];
             Gizmos.DrawWireSphere(tile.Position, nodeCenterRadius) ;
         }
