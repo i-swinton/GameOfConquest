@@ -4,11 +4,17 @@ using UnityEngine;
 
 namespace Combat
 {
-    public enum CombatType
+    public enum CombatRollType
     {
         Single,
         Double,
         Triple,
         Blitz
+    }
+
+    public enum CombatantType
+    {
+        Attacker,
+        Defender,
     }
 }

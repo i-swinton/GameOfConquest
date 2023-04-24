@@ -21,8 +21,13 @@ namespace MapSystem
 
         Board parent;
 
+        List<BonusBase> bonuses;
+
         //--------------------------------------------- Properties---------------------------------------------------
 
+        /// <summary>
+        /// The location of this tile in world space.
+        /// </summary>
         public Vector3 Position 
         {
             get
@@ -31,6 +36,9 @@ namespace MapSystem
             }
          }
 
+        /// <summary>
+        /// The number of units on this tile
+        /// </summary>
         public int UnitCount
         {
             get
@@ -39,6 +47,9 @@ namespace MapSystem
             }
         }
 
+        /// <summary>
+        /// The player which currently has this tile claimed.
+        /// </summary>
         public Player Owner
         {
             get
@@ -47,11 +58,25 @@ namespace MapSystem
             }
         }
 
+        /// <summary>
+        /// The board which this tile is a part of.
+        /// </summary>
         public Board Parent
         {
             get
             {
                 return parent;
+            }
+        }
+
+        /// <summary>
+        /// A list of all the bonuses being applied to the tile.
+        /// </summary>
+        public List<BonusBase> Bonuses
+        {
+            get
+            {
+                return bonuses;
             }
         }
 
@@ -98,6 +123,19 @@ namespace MapSystem
             units += additionalUnits;
         }
         
+        public void TransferUnits(ref Unit otherUnits, int amount)
+        {
+            // Subtract from the other units
+            otherUnits -= amount;
+
+            // Add to the current amount
+            units += amount;
+        }
+
+        /// <summary>
+        /// Change the owner of the of tile.
+        /// </summary>
+        /// <param name="player">The new owner of the board tile.</param>
         public void ChangeOwner(Player player)
         {
             // Ignore if the players match
@@ -106,6 +144,16 @@ namespace MapSystem
             // Change the owner to the new player
             owner = player;
             
+        }
+
+        /// <summary>
+        /// Adds a bonus to the list of bonuses on this tile.
+        /// </summary>
+        /// <param name="bonus">The bonus being added to the tile.</param>
+        public void ApplyBonus(BonusBase bonus)
+        {
+            // Add a bonus to the list
+            bonuses.Add(bonus);
         }
     }
 }

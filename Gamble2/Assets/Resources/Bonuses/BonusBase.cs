@@ -7,6 +7,7 @@ public class BonusBase : ScriptableObject
     public enum BonusType
     {
         Unit,
+        ExtraDie,
     }
 
     // ------------------------------------------ Variables --------------------------------
