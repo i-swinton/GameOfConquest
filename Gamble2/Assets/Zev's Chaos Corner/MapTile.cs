@@ -41,6 +41,6 @@ public class MapTile : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawSphere(Center, 0.5f);
+        //Gizmos.DrawSphere(Center, 0.5f);
     }
 }
