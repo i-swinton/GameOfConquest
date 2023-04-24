@@ -44,7 +44,7 @@ public class GenerateMap : MonoBehaviour
     }
 }
 [System.Serializable]
-class MapContinent
+public class MapContinent
 {
     public string Name;
     public List<BonusBase> bonus;

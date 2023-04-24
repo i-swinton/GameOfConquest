@@ -24,6 +24,11 @@ namespace MapSystem
             continents = new List<Continent>();
         }
 
+        public Board(List<MapContinent> newCons) :base()
+        {
+            // Create a number of nodes based on the continents
+        }
+
         /// <summary>
         /// Get the board tile at the given index
         /// </summary>
