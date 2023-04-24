@@ -31,6 +31,16 @@ public class TempCountryRender : MonoBehaviour
     }
     public void DebugLog()
     {
-        Debug.Log("Test", this);
+        MapTile mt = GetComponent<MapTile>();
+
+        for(int i=0; i < mt.NodeRef.Parent.ContinentCount; ++i)
+        {
+            if(mt.NodeRef.Parent.FindContinent(i).Contains(mt.NodeRef))
+            {
+                Debug.Log("Continent: " + mt.NodeRef.Parent.FindContinent(i).Name, this);
+
+            }
+        }
+
     }
 }

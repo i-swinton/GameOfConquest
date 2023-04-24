@@ -16,6 +16,16 @@ namespace MapSystem
         [Tooltip("The list of continents on the board")]
         [SerializeField] List<Continent> continents;
 
+        // ----------------------------------------- Properties ---------------------------------------------------
+
+        public int ContinentCount
+        {
+            get
+            {
+                return continents.Count;
+            }
+        }
+
         // ------------------------------------ Public Functions ---------------------------------------------------
 
         public Board() : base()
@@ -26,6 +36,8 @@ namespace MapSystem
 
         public Board(List<MapContinent> newCons) : base()
         {
+            // Create a new list of continents
+            continents = new List<Continent>();
             // Create a number of nodes based on the continents
             foreach (MapContinent con in newCons)
             {
@@ -242,6 +254,13 @@ namespace MapSystem
                 return tiles.Count;
             }
         }
+        public List<int> Tiles
+        {
+            get
+            {
+                return tiles;
+            }
+        }
 
         public string Name
         {
@@ -321,6 +340,10 @@ namespace MapSystem
             return board[tiles[0]].Owner;
         }
 
+        public bool Contains(BoardTile boardTile)
+        {
+            return tiles.Contains(boardTile.ID);
+        }
 
     }
 

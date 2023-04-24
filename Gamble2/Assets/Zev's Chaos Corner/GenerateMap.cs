@@ -15,9 +15,14 @@ public class GenerateMap : MonoBehaviour
 
     public void GenBoard()
     {
+        // Create the board
+        BoardManager.instance.MakeBoard(Contenents);
+
+        MapSystem.Board board = BoardManager.instance.GetBoard();
+
         for (int i = 0; i < Contenents.Count; i++)
         {
-            List<int> tiles = new List<int>();
+
 
             //Generates tiles within a continent
             for (int j = 0; j < Contenents[i].Tiles.Length; j++)
@@ -25,12 +30,13 @@ public class GenerateMap : MonoBehaviour
                 GameObject tile = Instantiate(TilePrefab, transform);
                 tile.GetComponent<SpriteRenderer>().sprite = Contenents[i].Tiles[j].Image;
                 tile.AddComponent<PolygonCollider2D>();
-                tile.GetComponent<MapTile>().GenTile(BoardManager.instance.GetBoard()[j],Contenents[i].Tiles[j].Name);
-                tiles.Add(j);
+                tile.GetComponent<MapTile>().GenTile(
+                    board[board.FindContinent(i).Tiles[j]]
+                    ,Contenents[i].Tiles[j].Name);
             }
 
             //Adds continent to board
-            BoardManager.instance.GetBoard().AddContinent( new MapSystem.Continent(tiles, Contenents[i].Name, Contenents[i].bonus));
+            //BoardManager.instance.GetBoard().AddContinent( new MapSystem.Continent(tiles, Contenents[i].Name, Contenents[i].bonus));
 
         }
 
