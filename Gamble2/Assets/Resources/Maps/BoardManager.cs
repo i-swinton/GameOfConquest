@@ -25,6 +25,8 @@ public class BoardManager : MonoBehaviour
 
     [SerializeField] List<Continent> continents;
 
+    [SerializeField] List<List<BonusBase>> tileBonuses;
+
     // The board within the scene
     Board board;
 
@@ -57,6 +59,16 @@ public class BoardManager : MonoBehaviour
             board.AddContinent(c);
             // Set the board of the continent
             c.SetBoard(board);
+        }
+
+        // Loop through all of the tiles...
+        for(int i=0; i < tileBonuses.Count; ++i)
+        {
+            // Apply the bonuses to tiles
+            foreach(BonusBase bonus in tileBonuses[i])
+            {
+                board[i].ApplyBonus(bonus);
+            }
         }
 
     }
