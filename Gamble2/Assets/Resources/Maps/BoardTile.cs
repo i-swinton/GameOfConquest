@@ -123,6 +123,7 @@ namespace MapSystem
             units += additionalUnits;
         }
         
+
         public void TransferUnits(ref Unit otherUnits, int amount)
         {
             // Subtract from the other units
@@ -130,6 +131,15 @@ namespace MapSystem
 
             // Add to the current amount
             units += amount;
+        }
+
+        /// <summary>
+        /// Kills units on the board tile
+        /// </summary>
+        /// <param name="amount"></param>
+        public void KillUnits(int amount)
+        {
+            units -= amount;
         }
 
         /// <summary>

@@ -20,33 +20,41 @@ public class CombatSystem : MonoBehaviour
     /// <param name="defenderTile">The tile which is being attacekd.</param>
     /// <param name="combatType">The type of combat which is being performed.</param>
 
-    public void BattleTiles(MapSystem.BoardTile attackTile, MapSystem.BoardTile defenderTile, Combat.CombatRollType combatType)
+    public void BattleTiles(MapSystem.BoardTile attackTile, MapSystem.BoardTile defenderTile, Combat.CombatRollType combatType,
+        out int totalAtkLoss, out int totalDefLoss)
     {
 
-
+        totalAtkLoss = 0;
+        totalDefLoss = 0;
 
         switch (combatType)
         {
             case Combat.CombatRollType.Single:
-                {
-
-
-
-                    break;
-                }
             case Combat.CombatRollType.Double:
-                {
-                    // Both units roll two die
-                    break;
-                }
             case Combat.CombatRollType.Triple:
                 {
-                    // Attacker rolls three die, Defender rolls two
+
+                    PerformBattle(attackTile, defenderTile, combatType,
+                        out totalAtkLoss, out totalDefLoss);
 
                     break;
                 }
             case Combat.CombatRollType.Blitz:
                 {
+                    while(attackTile.UnitCount > 1 && defenderTile.UnitCount > 0)
+                    {
+                        // Perform the battle
+                        int aLoss; int defLoss;
+                        PerformBattle(attackTile, defenderTile, combatType,
+                            out aLoss, out defLoss);
+
+                        // Decrement the troops
+
+
+                        // Update the total loss
+                        totalAtkLoss += aLoss;
+                        totalDefLoss += defLoss;
+                    }
                     break;
                 }
         }
@@ -67,57 +75,35 @@ public class CombatSystem : MonoBehaviour
                     // Both units roll one die
                     attackRolls = RollDice(1, attackTile.Bonuses, attackTile, Combat.CombatantType.Attacker);
                     defenderRolls = RollDice(1, defenderTile.Bonuses, defenderTile, Combat.CombatantType.Defender);
-
-                    // Sort the dice
-                    attackRolls.Sort((x, y) => RollCompare(x, y));
-                    defenderRolls.Sort((x, y) => RollCompare(x, y));
-
-                    // Compare each
-                    if(defenderRolls[0] >= attackRolls[0])
-                    {
-                        attackerLosses = 1;
-                    }
-                    else
-                    {
-                        defenderLosses = 1;
-                    }
-
                     break;
                 }
             case Combat.CombatRollType.Double:
                 {
-                    // Both units roll one die
-                    attackRolls = RollDice(1, attackTile.Bonuses, attackTile, Combat.CombatantType.Attacker);
-                    defenderRolls = RollDice(1, defenderTile.Bonuses, defenderTile, Combat.CombatantType.Defender);
-
-                    // Sort the dice
-                    attackRolls.Sort((x, y) => RollCompare(x, y));
-                    defenderRolls.Sort((x, y) => RollCompare(x, y));
-
-
-
-                    // Compare each
-                    if (defenderRolls[0] >= attackRolls[0])
-                    {
-                        attackerLosses = 1;
-                    }
-                    else
-                    {
-                        defenderLosses = 1;
-                    }
+                    // Both units roll two dice
+                    attackRolls = RollDice(2, attackTile.Bonuses, attackTile, Combat.CombatantType.Attacker);
+                    defenderRolls = RollDice(2, defenderTile.Bonuses, defenderTile, Combat.CombatantType.Defender);
 
                     break;
                 }
             case Combat.CombatRollType.Triple:
             default:
                 {
+                    // Attacker rolls three die, Defender rolls two
+                    attackRolls = RollDice(3, attackTile.Bonuses, attackTile, Combat.CombatantType.Attacker);
+                    defenderRolls = RollDice(3, defenderTile.Bonuses, defenderTile, Combat.CombatantType.Defender);
                     break;
                 }
 
-        }
+              
 
-        attackerLosses = 0;
-        defenderLosses = 0;
+        }
+        // Sort the dice
+        attackRolls.Sort((x, y) => RollCompare(x, y));
+        defenderRolls.Sort((x, y) => RollCompare(x, y));
+
+        // Resolve combat 
+        EvaluateCombat(attackTile, defenderTile, attackRolls, defenderRolls,
+            combatType, out attackerLosses, out defenderLosses);
 
 
     }
@@ -127,14 +113,33 @@ public class CombatSystem : MonoBehaviour
     {
         // Clamp the roll types     
         int numberOfUnits = Mathf.Clamp( (int)rollType,1,2);
-        
-        for(int i =0; i < numberOfUnits; ++i)
-        {
-            
-        }
 
+        // You can only deal as much damage as the number of defenders
+        if(defender.UnitCount < numberOfUnits)
+        {
+            numberOfUnits = defender.UnitCount ;
+        }
+        
+
+        // Initialize the losses
         attackerLosses = 0;
         defenderLosses = 0;
+
+        // Evaluate the losses of war
+        for (int i =0; i < numberOfUnits; ++i)
+        {
+
+            if(defenseRolls[i] >= attackRolls[i])
+            {
+                ++attackerLosses;
+            }
+            else
+            {
+                ++defenderLosses;
+            }
+        }
+
+
     }
 
 
@@ -159,6 +164,13 @@ public class CombatSystem : MonoBehaviour
     /// <returns></returns>
     List<int> RollDice(int count, List<BonusBase> bonuses, MapSystem.BoardTile tile,Combat.CombatantType combatantType )
     {
+        // Clamp the count to the unit count
+        if(count > tile.UnitCount)
+        {
+            count = tile.UnitCount;
+        }
+
+
         // A list of the rolls
         List<int> rolls = new List<int>();
 
