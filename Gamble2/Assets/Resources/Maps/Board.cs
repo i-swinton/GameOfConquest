@@ -44,6 +44,7 @@ namespace MapSystem
         public void AddContinent(Continent c)
         {
             continents.Add(c);
+            c.SetBoard(this);
         }
 
 
@@ -190,6 +191,20 @@ namespace MapSystem
         public Continent()
         {
             
+        }
+
+        public Continent(List<int> tiles, string name)
+        {
+            this.tiles = tiles;
+            this.name = name;
+        }
+
+        public Continent(List<int> tiles, string name, List<BonusBase> bonuses)
+        {
+            this.tiles = tiles;
+            this.name = name;
+
+            this.bonuses = bonuses;
         }
 
         /// <summary>

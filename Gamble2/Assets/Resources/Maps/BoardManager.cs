@@ -66,8 +66,7 @@ public class BoardManager : MonoBehaviour
         foreach (Continent c in continents)
         {
             board.AddContinent(c);
-            // Set the board of the continent
-            c.SetBoard(board);
+
         }
 
         // Loop through all of the tiles...

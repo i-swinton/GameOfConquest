@@ -15,7 +15,7 @@ public class Unit
     {
         get
         {
-            return Count;
+            return unitCount;
         }
     }
 

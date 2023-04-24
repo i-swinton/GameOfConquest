@@ -85,7 +85,7 @@ namespace MapSystem
         {
 
             this.worldPosition = worldPosition;
-
+            this.bonuses = new List<BonusBase>();
             this.parent = parent;
         }
 
