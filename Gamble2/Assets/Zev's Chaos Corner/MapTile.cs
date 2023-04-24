@@ -84,7 +84,14 @@ public class MapTile : MonoBehaviour
     
     void MouseDown_Draft()
     {
-        
+        if (gm.GetPlayerTurn() == Player.playerID)
+        {
+            Units++;
+            Player.draftTroop--;
+        }
+
+        if (Player.draftTroop <= 0)
+            gm.EndTurn();
     }
     
     void MouseDown_Attack()

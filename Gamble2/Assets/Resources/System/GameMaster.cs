@@ -98,6 +98,10 @@ public class GameMaster : MonoBehaviour
 
     void ChangeState(GameState desiredState)
     {
+        if(desiredState == GameState.Draft)
+        {
+            players[turnTacker].draftTroop += 3;
+        }
         state = desiredState;
     }
 
