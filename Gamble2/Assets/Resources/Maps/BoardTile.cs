@@ -15,6 +15,9 @@ namespace MapSystem
         // -------------------------------------------- Variables ---------------------------------------------------
         Vector3 worldPosition;
 
+
+        int unitCount;
+
         //--------------------------------------------- Properties---------------------------------------------------
 
         public Vector3 Position 
@@ -24,6 +27,14 @@ namespace MapSystem
                 return worldPosition;
             }
          }
+
+        public int UnitCount
+        {
+            get
+            {
+                return unitCount;
+            }
+        }
 
         // -------------------------------------------- Public Functions ---------------------------------------------
         public BoardTile(int id, Vector3 worldPosition): base(id)
@@ -41,7 +52,7 @@ namespace MapSystem
             worldPosition = newPosition;
         }
 
-
+        
 
     }
 }
