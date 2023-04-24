@@ -17,9 +17,10 @@ namespace MapSystem
 
         Player owner;
 
-        int unitCount;
         Unit units;
-        
+
+        Board parent;
+
         //--------------------------------------------- Properties---------------------------------------------------
 
         public Vector3 Position 
@@ -34,7 +35,7 @@ namespace MapSystem
         {
             get
             {
-                return unitCount;
+                return units.Count;
             }
         }
 
@@ -46,11 +47,21 @@ namespace MapSystem
             }
         }
 
+        public Board Parent
+        {
+            get
+            {
+                return parent;
+            }
+        }
+
         // -------------------------------------------- Public Functions ---------------------------------------------
-        public BoardTile(int id, Vector3 worldPosition): base(id)
+        public BoardTile(int id, Vector3 worldPosition, Board parent): base(id)
         {
 
             this.worldPosition = worldPosition;
+
+            this.parent = parent;
         }
 
         /// <summary>

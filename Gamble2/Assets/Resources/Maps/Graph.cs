@@ -160,6 +160,13 @@ namespace MapSystem
             }
         }
 
+        public List<Node> Neighbors
+        {
+            get
+            {
+                return connections;
+            }
+        }
 
         //----------------------- Public Functions ---------------------------------
 

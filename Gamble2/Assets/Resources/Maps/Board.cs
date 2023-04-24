@@ -56,7 +56,7 @@ namespace MapSystem
         {
 
             // Create new node and increment the next index
-            BoardTile node = new BoardTile(nextNodeIndex++, Vector3.zero);
+            BoardTile node = new BoardTile(nextNodeIndex++, Vector3.zero,this);
 
             // Add the new node to the list
             nodes.Add(node);
@@ -66,12 +66,91 @@ namespace MapSystem
         public Node MakeNode(Vector3 worldPosition)
         {
             // Create new node and increment the next index
-            BoardTile node = new BoardTile(nextNodeIndex++, worldPosition);
+            BoardTile node = new BoardTile(nextNodeIndex++, worldPosition, this);
 
             // Add the new node to the list
             nodes.Add(node);
             return node;
         }
+
+       
+
+        public List<BoardTile> GetConnectedTiles(int tile)
+        {
+            // Tiles
+            List<BoardTile> closedList = new List<BoardTile>();
+
+            // Add the initial tile to the open list
+            List<BoardTile> openList = new List<BoardTile>();
+            openList.Add(this[tile]);
+
+            // Perform a Dijkstra search to find all connected tiles
+            while (openList.Count > 0)
+            {
+                // Pop off the top
+                BoardTile top = openList[0];
+                openList.Remove(top);
+
+                // Add self to closed list
+                closedList.Add(top);
+
+                foreach(BoardTile neighbor in top.Neighbors)
+                {
+                    // If the owner doesn't match, skip
+                    if(neighbor.Owner != top.Owner) { continue; }
+
+                    // If already on the open list, skip
+                    if (openList.Contains(neighbor)) { continue; }
+
+                    // If already on the closed list, skip
+                    if (closedList.Contains(neighbor)) { continue; }
+
+                    // Otherwise, add to closed list
+                    closedList.Add(neighbor);
+                }
+
+                
+            }
+
+                return closedList;
+        }
+
+        public List<List<BoardTile>> GetAllConnectedTiles(Player player)
+        {
+
+
+            List<List<BoardTile>> listOfConnectedTiles = new List<List<BoardTile>>();
+
+            // Search through indexes for all player tiles
+            foreach(BoardTile tile in nodes)
+            {
+                // Skip if tile is owner
+                if(tile.Owner != player) 
+                {
+                    continue; 
+                }
+
+                bool shouldSkip = false;
+                // Check if tile is already in the collection
+                for(int i =0; i < listOfConnectedTiles.Count; ++i)
+                {
+                    // Skip adding tile if we already have it.
+                    if(listOfConnectedTiles[i].Contains(tile))
+                    {
+                        shouldSkip = true;
+                        break;
+                    }
+                }
+                // Skip if should skip
+                if (shouldSkip) { continue; }
+
+                // If they do match, search for other connected tiles and add to collection
+                listOfConnectedTiles.Add(GetConnectedTiles(tile.ID));
+            }
+            // Return the collection
+            return listOfConnectedTiles;
+        }
+
 
     }
     
@@ -151,6 +230,7 @@ namespace MapSystem
             // 
             return board[tiles[0]].Owner;
         }
+
 
     }
 }
