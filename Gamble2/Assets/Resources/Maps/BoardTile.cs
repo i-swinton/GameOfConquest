@@ -17,7 +17,8 @@ namespace MapSystem
 
 
         int unitCount;
-
+        Unit units;
+        
         //--------------------------------------------- Properties---------------------------------------------------
 
         public Vector3 Position 
@@ -52,6 +53,26 @@ namespace MapSystem
             worldPosition = newPosition;
         }
 
+        /// <summary>
+        /// Adds addtional units to the tile. If no units are on the tile, fills the tiles.
+        /// </summary>
+        /// <param name="newUnits">The additional units being added. </param>
+        public void AddUnits(Unit newUnits)
+        {
+            if (units == null)
+            {
+                units = newUnits;
+            }
+            else
+            {
+                units += newUnits;
+            }
+        }
+
+        public void Fortify(int additionalUnits)
+        {
+            units += additionalUnits;
+        }
         
 
     }

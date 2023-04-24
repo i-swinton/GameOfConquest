@@ -20,6 +20,13 @@ public class Unit
     }
 
 
+    public bool IsZero
+    {
+        get
+        {
+            return Count == 0;
+        }
+    }
 
     //----------------------------------------------- Public Functions -----------------------------------------
 
@@ -44,7 +51,12 @@ public class Unit
 
     public void Add(int unitCount)
     {
-        
+        this.unitCount += unitCount;
+
+        if(this.unitCount <= 0)
+        {
+            this.unitCount = 0;
+        }
     }
 
     public static Unit operator +(Unit unit, int amount)
@@ -53,6 +65,36 @@ public class Unit
         
         // Add the amount to the result
         result.Add(amount);
+
+        return result;
+    }
+
+    public static Unit operator +(Unit unit1, Unit unit2)
+    {
+        // Copy the original units
+        Unit result = new Unit(unit1);
+        // Add the secondary units
+        result += unit2.unitCount;
+
+        return result;
+    }
+
+    public static Unit operator -(Unit unit, int amount)
+    {
+        // Copy the original units
+        Unit result = new Unit(unit);
+
+        result.Add(-amount);
+
+        return result;
+    }
+
+    public static Unit operator -(Unit unit1, Unit unit2)
+    {
+        // Copy the original units
+        Unit result = new Unit(unit1);
+        // Add the secondary units
+        result -= unit2.unitCount;
 
         return result;
     }
