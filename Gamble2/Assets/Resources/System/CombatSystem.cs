@@ -92,7 +92,7 @@ public static class CombatSystem {
                 {
                     // Both units roll one die
                     attackRolls = RollDice(1, attackTile.Bonuses, attackTile, Combat.CombatantType.Attacker);
-                    defenderRolls = RollDice(1, defenderTile.Bonuses, defenderTile, Combat.CombatantType.Defender);
+                    defenderRolls = RollDice(2, defenderTile.Bonuses, defenderTile, Combat.CombatantType.Defender);
                     break;
                 }
             case Combat.CombatRollType.Double:
@@ -108,7 +108,7 @@ public static class CombatSystem {
                 {
                     // Attacker rolls three die, Defender rolls two
                     attackRolls = RollDice(3, attackTile.Bonuses, attackTile, Combat.CombatantType.Attacker);
-                    defenderRolls = RollDice(3, defenderTile.Bonuses, defenderTile, Combat.CombatantType.Defender);
+                    defenderRolls = RollDice(2, defenderTile.Bonuses, defenderTile, Combat.CombatantType.Defender);
                     break;
                 }
 
