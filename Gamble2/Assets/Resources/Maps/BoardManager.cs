@@ -81,6 +81,11 @@ public class BoardManager : MonoBehaviour
 
     }
 
+    public void MakeBoard(List<MapContinent> map)
+    {
+        board = new Board(map);
+    }
+
     private void Update()
     {
         // Populate
