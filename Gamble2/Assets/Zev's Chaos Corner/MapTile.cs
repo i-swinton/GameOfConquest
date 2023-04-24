@@ -88,10 +88,10 @@ public class MapTile : MonoBehaviour
         {
             Units++;
             Player.draftTroop--;
+            
+            if (Player.draftTroop <= 0)
+                gm.EndTurn();
         }
-
-        if (Player.draftTroop <= 0)
-            gm.EndTurn();
     }
     
     void MouseDown_Attack()
