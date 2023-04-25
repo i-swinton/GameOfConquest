@@ -146,6 +146,11 @@ namespace MapSystem
             units += amount;
         }
 
+        public void TransferUnits(BoardTile other, int amount)
+        {
+            TransferUnits(ref other.units, amount);
+        }
+
         /// <summary>
         /// Kills units on the board tile
         /// </summary>
