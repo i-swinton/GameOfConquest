@@ -91,6 +91,7 @@ public class MapTile : MonoBehaviour
         if (gm.GetPlayerTurn() == Player.playerID)
         {
             Units++;
+            NodeRef.Fortify(1);
             Player.draftTroop--;
             
             if (Player.draftTroop <= 0)
@@ -100,6 +101,7 @@ public class MapTile : MonoBehaviour
     
     void MouseDown_Attack()
     {
+        
         if (gm.HasChallengerCheck())
         {
             //Has a Challenger
@@ -109,18 +111,34 @@ public class MapTile : MonoBehaviour
             }
             else
             {
-                int AtkUnitsLost = 0, DefUnitsLost = 0;
-                CombatSystem.BattleTiles(gm.GetChallenger().NodeRef, this.NodeRef, CombatRollType.Single, out AtkUnitsLost, out DefUnitsLost);
-                Units -= DefUnitsLost;
-                gm.GetChallenger().Units -= AtkUnitsLost;
-                gm.ReleaseChallenger();
+                if (gm.GetChallenger().Player.playerID != Player.playerID)
+                {
+                    int AtkUnitsLost = 0, DefUnitsLost = 0;
+                    CombatSystem.BattleTiles(gm.GetChallenger().NodeRef, this.NodeRef, CombatRollType.Single, out AtkUnitsLost, out DefUnitsLost);
+                    Units -= DefUnitsLost;
+                    gm.GetChallenger().Units -= AtkUnitsLost;
+                    
+
+                    if (Units <= 0)
+                    {
+                        Player = gm.GetChallenger().Player;
+                        NodeRef.Fortify(3);
+                        Units = 3;
+                        
+                    }
+                    
+                    gm.ReleaseChallenger();
+                }
             }
             
         }
         else
         {
-            //Doesn't Have a Challenger
-            gm.SetChallenger(this);
+            if (gm.GetPlayerTurn() == Player.playerID)
+            {
+                //Doesn't Have a Challenger
+                gm.SetChallenger(this);
+            }
         }
     }
     

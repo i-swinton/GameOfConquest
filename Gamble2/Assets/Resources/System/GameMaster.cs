@@ -43,6 +43,8 @@ public class GameMaster : MonoBehaviour
             GameObject panel = Instantiate(playerPanelPrefab, pos, Quaternion.identity);
             panel.GetComponent<PlayerPanel>().Setup(p);
         }
+
+        actions = new ActionList();
     }
 
     // Update is called once per frame
@@ -70,8 +72,11 @@ public class GameMaster : MonoBehaviour
 
     public void ReleaseChallenger()
     {
-        actions.Add(new Actions.Scale(Vector3.one, Vector3.one * 1.4f, Challenger.gameObject, 0.2f,0.0f, ActionType.NoGroup, false, EaseType.Linear ));
-        Challenger = null;
+        if (Challenger != null)
+        {
+            actions.Add(new Actions.Scale(Vector3.one, Vector3.one * 1.4f, Challenger.gameObject, 0.2f,0.0f, ActionType.NoGroup, false, EaseType.Linear ));
+            Challenger = null;
+        }
     }
 
     public bool HasChallengerCheck()
