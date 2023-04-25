@@ -178,5 +178,15 @@ namespace MapSystem
             // Add a bonus to the list
             bonuses.Add(bonus);
         }
+
+        // ---------------------------------------------- DEBUG FUNCTIONS --------------------------------------------
+        public void DrawConnections()
+        {
+            // Draw the line to each node
+            foreach(BoardTile node in Neighbors)
+            {
+                Gizmos.DrawLine(worldPosition, node.Position);
+            }
+        }
     }
 }

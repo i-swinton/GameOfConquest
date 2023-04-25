@@ -7,6 +7,12 @@ public class GenerateMap : MonoBehaviour
     
     [SerializeField] List<MapContinent> Contenents;
     public GameObject TilePrefab;
+
+    public ContactFilter2D ConnectionFilter;
+
+    [Tooltip("A list of pairs to be connected to each other regardless of location")]
+    [SerializeField] List<NodeConnectionPair> connectionPairs;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +26,8 @@ public class GenerateMap : MonoBehaviour
 
         MapSystem.Board board = BoardManager.instance.GetBoard();
 
+        List<MapTile> spawnedTiles = new List<MapTile>();
+
         for (int i = 0; i < Contenents.Count; i++)
         {
 
@@ -30,24 +38,96 @@ public class GenerateMap : MonoBehaviour
                 GameObject tile = Instantiate(TilePrefab, transform);
                 tile.GetComponent<SpriteRenderer>().sprite = Contenents[i].Tiles[j].Image;
                 tile.AddComponent<PolygonCollider2D>();
+                // Generate the tile
                 tile.GetComponent<MapTile>().GenTile(
                     board[board.FindContinent(i).Tiles[j]]
                     ,Contenents[i].Tiles[j].Name);
+
+                // Set the tile's position (for debug references)
+                tile.GetComponent<MapTile>().NodeRef.MoveTo(tile.GetComponent<PolygonCollider2D>().bounds.center);
+
+
+                // Add the tiles to the list
+                spawnedTiles.Add(tile.GetComponent<MapTile>());
             }
 
             //Adds continent to board
             //BoardManager.instance.GetBoard().AddContinent( new MapSystem.Continent(tiles, Contenents[i].Name, Contenents[i].bonus));
-
+            
         }
 
-
+        GenerateConnections(board, spawnedTiles);
+        ForceConnections(board, connectionPairs);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ForceConnections(MapSystem.Board board, List<NodeConnectionPair> pairs)
     {
-        
+        // Loop through all of the pairs and connect them.
+        foreach(NodeConnectionPair pair in pairs)
+        {
+            board.Connect(pair.node1, pair.node2);
+        }
     }
+
+    public void GenerateConnections(MapSystem.Board board, List<MapTile> tiles )
+    {
+        for(int i=0; i < tiles.Count; ++i)
+        {
+            // Grab all of the map tiles connected to this one
+            var connectedNodes = FindConnections(tiles[i]);
+
+            // Loop through the nodes to connect them
+            foreach(var node in connectedNodes)
+            {
+                board.Connect(tiles[i].NodeRef.ID, node.NodeRef.ID);
+            }
+        }
+    }
+
+    private List<MapTile> FindConnections(MapTile tile)
+    {
+        PolygonCollider2D Collider = tile.GetComponent<PolygonCollider2D>();
+
+        // Tiles to be connected to tile
+        List<MapTile> tiles = new List<MapTile>();
+
+        List<Collider2D> Results = new List<Collider2D>();
+
+        Vector3 Center = Collider.bounds.center;
+        Collider.OverlapCollider(ConnectionFilter, Results);
+        foreach (Collider2D item in Results)
+        {
+
+            Vector3 point = item.ClosestPoint(Center);
+
+
+            float angle = Vector3.SignedAngle(point, Center, Vector3.forward);
+            angle = Mathf.Rad2Deg * Mathf.Asin((point - Center).normalized.y);
+            Debug.Log($"{(point - Center).normalized.y}, {angle}, {item.GetComponent<MapTile>().NameDisplay.text}");
+
+            angle %= 90;
+            angle = Mathf.Abs(angle);
+
+            if (angle > 22 && angle < 70)
+            { }//    continue;
+            else
+            {
+                // Check if it is a tile
+                MapTile tileToAdd = item.GetComponent<MapTile>();
+                if (tileToAdd)
+                {
+                    // Add to list
+                    tiles.Add(tileToAdd);
+                }
+                //points.Add(item.ClosestPoint(Center));
+                //points.Add(item.bounds.center);
+            }
+        }
+
+        return tiles;
+
+    }
+
 }
 [System.Serializable]
 public class MapContinent
