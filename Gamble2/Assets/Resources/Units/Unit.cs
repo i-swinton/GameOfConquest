@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class Unit 
 {
+    // ------------------------------------------------- Declarations ---------------------------------------
+    public enum Type
+    {
+        Standard
+    }
 
     // ------------------------------------------------- Variables -------------------------------------------
 
     int unitCount;
-
+    Type unitType;
     //--------------------------------------------------- Properties ---------------------------------------
 
     public int Count
@@ -16,6 +21,14 @@ public class Unit
         get
         {
             return unitCount;
+        }
+    }
+
+    public Type UnitType
+    {
+        get
+        {
+            return unitType;
         }
     }
 
@@ -36,6 +49,18 @@ public class Unit
     /// <param name="amount">The number of units within the object.</param>
     public Unit(int amount = 0)
     {
+        unitCount = amount;
+    }
+
+    /// <summary>
+    /// Creates a group of units of a given size and unit type
+    /// </summary>
+    /// <param name="amount">The number of units within the object. </param>
+    /// <param name="type">The type of unit the unit uses.</param>
+    public Unit(int amount, Type type)
+    {
+        unitType = type;
+
         unitCount = amount;
     }
 
