@@ -144,7 +144,28 @@ public class MapTile : MonoBehaviour
     
     void MouseDown_Fortify()
     {
-        
+        if (gm.GetPlayerTurn() == Player.playerID)
+        {
+            if (gm.HasChallengerCheck())
+            {
+                if (gm.GetChallenger() == this)
+                {
+                    gm.ReleaseChallenger();
+                }
+                else
+                {
+                    NodeRef.TransferUnits(gm.GetChallenger().NodeRef, 1);
+                    gm.GetChallenger().Units = gm.GetChallenger().NodeRef.UnitCount;
+                    Units = NodeRef.UnitCount;
+                    gm.ReleaseChallenger();
+                }
+            }
+            else
+            {
+                //Doesn't Have a Challenger
+                gm.SetChallenger(this);
+            }
+        }
     }
 
     private void OnDrawGizmos()
