@@ -50,6 +50,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b6e44e80b04bc14aa40e6019fc25234, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hideElement: {fileID: 0}
+  isVisible: 1
   unitTypeIcon: {fileID: 7875740372253595680}
   tileImage: {fileID: 7875740373486742015}
   tileName: {fileID: 7875740373787454006}
@@ -65,6 +67,8 @@ GameObject:
   - component: {fileID: 7875740372249481618}
   - component: {fileID: 7875740372249481620}
   - component: {fileID: 7875740372249481621}
+  - component: {fileID: 8484000723838600581}
+  - component: {fileID: 1057211157347781714}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -131,6 +135,64 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8484000723838600581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7875740372249481619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77eedc7244503a142a29629011bc7ef5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetTransform: {fileID: 7875740372118290949}
+--- !u!114 &1057211157347781714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7875740372249481619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 5
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8484000723838600581}
+          m_TargetAssemblyTypeName: DragUI, Assembly-CSharp
+          m_MethodName: DragHandler
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 6
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8484000723838600581}
+          m_TargetAssemblyTypeName: DragUI, Assembly-CSharp
+          m_MethodName: DragEndHandler
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &7875740372253595742
 GameObject:
   m_ObjectHideFlags: 0

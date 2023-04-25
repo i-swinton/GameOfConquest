@@ -4,8 +4,13 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class UIDisplayCard : MonoBehaviour
+public class UIDisplayCard : UIElement
 {
+    //---------------------------------------------------------- Variables -----------------------------------------------------------------
+    [Space]
+    [Header("Display Card")]
+
+
     // The card being referenced by the the display card
     TerritoryCard cardRef;
 
@@ -18,6 +23,27 @@ public class UIDisplayCard : MonoBehaviour
 
     [SerializeField] IconSet icons;
 
+    //------------------------------------------------------ Properties -----------------------------------------------------------------------
+    /// <summary>
+    /// The card which the display card is referencing 
+    /// </summary>
+    public TerritoryCard Card
+    {
+        get
+        {
+            return cardRef;
+        }
+    }
+
+
+    //--------------------------------------------------------- Public Functions ------------------------------------------------------------
+    
+    /// <summary>
+    /// Initializes the card with data it needs to fix itself
+    /// </summary>
+    /// <param name="card">The card which this Display card is going to represent.</param>
+    /// <param name="player">The player which owns this card.</param>
+    /// <param name="board">The board which this card is referencing.</param>
     public void Initialize(TerritoryCard card, Player player, MapSystem.Board board)
     {
         cardRef = card;

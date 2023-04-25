@@ -15,6 +15,9 @@ public class CardInUI : UIElement
 
     public List<UIDisplayCard> cards = new List<UIDisplayCard>();
 
+    [Header("Drag and Drop")]
+    [SerializeField] float dropThreshold;
+
     MapSystem.Board board;
 
     // Start is called before the first frame update
@@ -34,6 +37,35 @@ public class CardInUI : UIElement
 
         cards.Add(Instantiate(cardPrefab, transform));
         cards[cards.Count - 1].Initialize(card, b[0].Owner, b);
+
+        cards[cards.Count - 1].GetComponentInChildren<DragUI>().OnDragEnd += OnCardDragEnd;
+    }
+
+    public void OnCardDragEnd(Vector2 position, Transform cardTransform, Vector2 lastPosition)
+    {
+        float closestDistance = float.MaxValue;
+        int index = -1;
+        // Adjust 
+        for(int i=0; i < cardInAnchors.Length; ++i)
+        {
+            // Compare distances to see which is the closest
+            float dist = Vector2.Distance(position, cardInAnchors[i].position);
+            if(dist < closestDistance)
+            {
+                closestDistance = dist;
+                index = i;
+            }
+        }
+        // If it is further than the drop threshold, return to the original spot
+        if(closestDistance > dropThreshold)
+        {
+            cardTransform.position = lastPosition;
+            cardTransform.GetComponentInChildren<DragUI>().ForceLastPosition(lastPosition);
+            return;
+        }
+
+        // Otherwise, we lock it in place
+        cardTransform.position = cardInAnchors[index].position;
     }
 
     // Update is called once per frame
@@ -55,6 +87,13 @@ public class CardInUI : UIElement
         }
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        foreach(Transform t in cardInAnchors)
+        {
+            Gizmos.DrawWireSphere(t.position, dropThreshold);
+        }
+    }
 
-    
 }
