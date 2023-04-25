@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class CardInUI : MonoBehaviour
+public class CardInUI : UIElement
 {
+    [Header("Card-In UI")]
     // The positions used for anchoring cards that are being traded in.
     [SerializeField] Transform[] cardInAnchors;
 
@@ -48,5 +49,12 @@ public class CardInUI : MonoBehaviour
         {
             MakeCard(board);
         }
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            IsVisible = !IsVisible;
+        }
     }
+
+
+    
 }
