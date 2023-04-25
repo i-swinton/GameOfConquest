@@ -14,7 +14,7 @@ public static class CombatSystem {
     ///  
 
     // -------------------------------------------------------- Variables ---------------------------------------------------
-
+    public static int BlitzLimit = 1;
     // ---------------------------------------------------- Properties ------------------------------------------------------
 
 
@@ -33,7 +33,7 @@ public static class CombatSystem {
     /// <param name="combatType">The type of combat which is being performed.</param>
 
     public static void BattleTiles(MapSystem.BoardTile attackTile, MapSystem.BoardTile defenderTile, Combat.CombatRollType combatType,
-        out int totalAtkLoss, out int totalDefLoss)
+        out int totalAtkLoss, out int totalDefLoss, int blitzLimit = 1)
     {
 
         totalAtkLoss = 0;
@@ -58,11 +58,19 @@ public static class CombatSystem {
                 } // Repeat combat until someone loses
             case Combat.CombatRollType.Blitz:
                 {
-                    while(attackTile.UnitCount > 1 && defenderTile.UnitCount > 0)
+                    Combat.CombatRollType rollType = Combat.CombatRollType.Triple;
+                    while(attackTile.UnitCount > blitzLimit && defenderTile.UnitCount > 0)
                     {
                         // Perform the battle
                         int aLoss; int defLoss;
-                        PerformBattle(attackTile, defenderTile, combatType,
+
+                        // If we have less than three attack tiles, change the type
+                        if(attackTile.UnitCount < (blitzLimit+3))
+                        {
+                            rollType = (Combat.CombatRollType)(attackTile.UnitCount-1);
+                        }
+
+                        PerformBattle(attackTile, defenderTile, rollType,
                             out aLoss, out defLoss);
 
                         // Decrement the troops
@@ -84,6 +92,7 @@ public static class CombatSystem {
         List<int> attackRolls;
         List<int> defenderRolls;
 
+        
         
         // Perform the rolls based on the combat type
         switch (combatType)
@@ -107,7 +116,7 @@ public static class CombatSystem {
             default:
                 {
                     // Attacker rolls three die, Defender rolls two
-                    attackRolls = RollDice(3, attackTile.Bonuses, attackTile, Combat.CombatantType.Attacker);
+                    attackRolls = RollDice( 3  , attackTile.Bonuses, attackTile, Combat.CombatantType.Attacker);
                     defenderRolls = RollDice(2, defenderTile.Bonuses, defenderTile, Combat.CombatantType.Defender);
                     break;
                 }
