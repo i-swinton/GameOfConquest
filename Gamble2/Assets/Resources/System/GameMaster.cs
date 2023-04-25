@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Actions;
 using TMPro;
 using UnityEngine;
 
@@ -17,6 +18,10 @@ public class GameMaster : MonoBehaviour
 
     public TextMeshProUGUI text;
     
+    private MapTile Challenger;
+    private MapTile Defender;
+
+    private Actions.ActionList actions;
     // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +50,29 @@ public class GameMaster : MonoBehaviour
     {
         text.text = "Player " + (turnTacker+1).ToString() + "\n" + state.ToString();
     }
+    
+    public void SetChallenger(MapTile mt)
+    {
+        Challenger = mt;
+        actions.Add(new Actions.Scale(Vector3.one * 1.4f, Vector3.one, Challenger.gameObject, 0.2f,0.0f, ActionType.NoGroup, false, EaseType.Linear ));
+    }
+    
+    public MapTile GetChallenger()
+    {
+        return Challenger;
+    }
+
+    public void ReleaseChallenger()
+    {
+        actions.Add(new Actions.Scale(Vector3.one, Vector3.one * 1.4f, Challenger.gameObject, 0.2f,0.0f, ActionType.NoGroup, false, EaseType.Linear ));
+        Challenger = null;
+    }
+
+    public bool HasChallengerCheck()
+    {
+        return Challenger != null;
+    }
+    
 
     public void EndTurn()
     {

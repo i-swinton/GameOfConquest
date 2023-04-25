@@ -329,5 +329,68 @@ namespace Actions
         }
 
     }
+    
+    public class Scale : Action
+    {
+        public Vector3 targetScale;
+        public Vector3 startingScale;
+
+        bool useCurrentPos;
+
+        public GameObject target;
+
+        public Scale(Vector3 targetPos, GameObject target, float dur, float delay, ActionType group, bool isBlock, EaseType easeType)
+            : base(dur, delay,group, isBlock, easeType)
+        {
+            // Use the target's current position
+            useCurrentPos = true;
+
+            targetScale = targetPos;
+            this.target = target;
+        }
+
+        public Scale(Vector3 targetPos, Vector3 startPos, GameObject target, float dur, float delay, ActionType group, bool isBlock, EaseType easeType)
+            : base(dur, delay, group, isBlock, easeType)
+        {
+            targetScale = targetPos;
+            this.target = target;
+            startingScale = startPos;
+
+            useCurrentPos = false;
+            
+        }
+
+        public override void Start()
+        {
+            base.Start();
+
+            // Grab the current pos if applicable
+            if (useCurrentPos)
+            {
+                startingScale = target.transform.position;
+            }
+        }
+
+        public override bool Execute(float dt)
+        {
+            // Lerp to the end position
+            target.transform.localScale = Vector3.Lerp(startingScale, targetScale, PercentDone);
+
+            return base.Execute(dt);
+        }
+
+    
+
+        public override void Reverse()
+        {
+            base.Reverse();
+
+            // Swap start and end
+            Vector3 temp = startingScale;
+            startingScale = targetScale;
+            targetScale = temp;
+        }
+
+    }
 }
 
