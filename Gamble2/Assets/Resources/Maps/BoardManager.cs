@@ -33,6 +33,8 @@ public class BoardManager : MonoBehaviour
 
     [SerializeField] List<BonusEditorList> tileBonuses;
 
+
+
     // The board within the scene
     Board board;
 
@@ -135,6 +137,8 @@ public class BoardManager : MonoBehaviour
             Debug.Log(board[0].UnitCount + " on tile 1");
             Debug.Log(board[1].UnitCount + " on tile 2");
         }
+
+
     }
 
     private void OnDrawGizmos()
@@ -143,11 +147,19 @@ public class BoardManager : MonoBehaviour
 
         Gizmos.color = Color.green;
         // Draw dots for all of the position of nodes on the board
-        for(int i=0; i < board.Count; ++i)
+        for (int i = 0; i < board.Count; ++i)
         {
 
             BoardTile tile = board[i];
-            Gizmos.DrawWireSphere(tile.Position, nodeCenterRadius) ;
+            Gizmos.DrawWireSphere(tile.Position, nodeCenterRadius);
+        }
+
+        if (Input.GetKey(KeyCode.C))
+        {
+            for(int i=0; i < board.Count; ++i)
+            {
+                board[i].DrawConnections();
+            }
         }
     }
 
