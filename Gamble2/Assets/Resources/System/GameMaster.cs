@@ -49,6 +49,12 @@ public class GameMaster : MonoBehaviour
     void Update()
     {
         text.text = "Player " + (turnTacker+1).ToString() + "\n" + state.ToString();
+
+        // Update the action list
+        if(actions != null)
+        {
+            actions.Update(Time.deltaTime);
+        }
     }
     
     public void SetChallenger(MapTile mt)
