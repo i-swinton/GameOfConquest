@@ -10,7 +10,7 @@ public static class CardSystem
     // How much the bonus increases per card-in
     public static int BonusStepAmount = 5;
 
-    
+
 
     public enum CardType
     {
@@ -104,7 +104,7 @@ public static class CardSystem
         if (!CanCardIn(cards)) { return false; }
 
         // If the user has five cards, they can card in and must do so. 
-        if(cards.Count >= 5) { return true; }
+        if (cards.Count >= 5) { return true; }
 
         // If none of the above statements are true, then hand does not have to card-in
         return false;
@@ -118,9 +118,9 @@ public static class CardSystem
     /// <param name="player">The player who is performing the card-in.</param>
     /// <param name="board">The board which the cards are going to be applied to.</param>
     /// <returns>The number of additional troops which the player can deploy.</returns>
-    public static int CardIn(List<TerritoryCard> cards,Player player ,MapSystem.Board board)
+    public static int CardIn(List<TerritoryCard> cards, Player player, MapSystem.Board board)
     {
-        if(cards.Count != 3) 
+        if (cards.Count != 3)
         {
 #if UNITY_EDITOR
             throw new CardInOverflow("The improper amount of cards were used for card-in. " + cards.Count + " cards were used. ", cards.Count);
@@ -130,19 +130,19 @@ public static class CardSystem
         }
 
         // Calculate the units to recieve
-        int unitsToRecieve = BonusAmount ;
+        int unitsToRecieve = BonusAmount;
 
         // Increment the bonus amount 
         BonusAmount += BonusStepAmount;
 
         // Check if any of the positions on the board are owned by the player
-        foreach(TerritoryCard card in cards)
+        foreach (TerritoryCard card in cards)
         {
             // Wild cards do not have territories
-            if(card.CardType == CardType.Wild) { continue; }
+            if (card.CardType == CardType.Wild) { continue; }
 
             // Check if player owns the tile
-            if(board[card.TargetTileID].Owner == player)
+            if (board[card.TargetTileID].Owner == player)
             {
                 // Create new units on that tile to become the new type of units
                 board[card.TargetTileID].AddUnits(new Unit(2, card.UnitType));
@@ -152,7 +152,7 @@ public static class CardSystem
 
         // Return the number of unit to recieve
         return unitsToRecieve;
-        
+
     }
 
     

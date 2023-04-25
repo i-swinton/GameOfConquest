@@ -50,43 +50,43 @@ public class BoardManager : MonoBehaviour
     {
         instance = this;
 
-        // Create the board
-        board = new Board();
+        //// Create the board
+        //board = new Board();
         
-        // Create tile bonus array
-        //tileBonuses = new List<List<BonusBase>>();
+        //// Create tile bonus array
+        ////tileBonuses = new List<List<BonusBase>>();
 
-        // Create all of the nodes for the board
-        for(int i =0; i < numberOfNodes; ++i)
-        {
-            // Fill the board with postions listed in the editor
-            Vector3 pos = nodePositions.Count > i ? nodePositions[i] : Vector3.zero;
+        //// Create all of the nodes for the board
+        //for(int i =0; i < numberOfNodes; ++i)
+        //{
+        //    // Fill the board with postions listed in the editor
+        //    Vector3 pos = nodePositions.Count > i ? nodePositions[i] : Vector3.zero;
 
-            board.MakeNode(pos);
-        }
+        //    board.MakeNode(pos);
+        //}
 
-        // Create all of the  connections
-        foreach(NodeConnectionPair pair in connections)
-        {
-            board.Connect(pair.node1, pair.node2);
-        }
+        //// Create all of the  connections
+        //foreach(NodeConnectionPair pair in connections)
+        //{
+        //    board.Connect(pair.node1, pair.node2);
+        //}
 
-        // Add in all of the continents
-        foreach (Continent c in continents)
-        {
-            board.AddContinent(c);
+        //// Add in all of the continents
+        //foreach (Continent c in continents)
+        //{
+        //    board.AddContinent(c);
 
-        }
+        //}
 
-        // Loop through all of the tiles...
-        for(int i=0; i < tileBonuses.Count; ++i)
-        {
-            // Apply the bonuses to tiles
-            foreach(BonusBase bonus in tileBonuses[i].bonuses)
-            {
-                board[i].ApplyBonus(bonus);
-            }
-        }
+        //// Loop through all of the tiles...
+        //for(int i=0; i < tileBonuses.Count; ++i)
+        //{
+        //    // Apply the bonuses to tiles
+        //    foreach(BonusBase bonus in tileBonuses[i].bonuses)
+        //    {
+        //        board[i].ApplyBonus(bonus);
+        //    }
+        //}
 
     }
 
