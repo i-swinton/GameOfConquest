@@ -19,7 +19,7 @@ public class MapTile : MonoBehaviour
 
     public Transform UIDisplays;
     public TextMeshPro NameDisplay;
-    public TextMeshProUGUI UnitsDisplay;
+    public TextMeshPro UnitsDisplay;
 
     private SpriteRenderer _spriteRenderer;
     private GameMaster gm;
@@ -47,7 +47,7 @@ public class MapTile : MonoBehaviour
         if (Player != null)
         {
             _spriteRenderer.color = Player.playerColor;
-            NameDisplay.text = Units.ToString();
+            UnitsDisplay.text = Units.ToString();
         }
     }
 
