@@ -136,6 +136,19 @@ namespace MapSystem
             return null;
         }
 
+        protected Node PrivateFind(string name)
+        {
+            for(int i =0; i < nodes.Count; ++i)
+            {
+                if(((BoardTile)nodes[i]).Name == name)
+                {
+                    return nodes[i];
+                }
+            }
+
+            return null;
+        }
+
     }
 
     public class Node

@@ -74,6 +74,8 @@ namespace MapSystem
             }
         }
 
+
+
         /// <summary>
         /// Add a continent to the board
         /// </summary>
@@ -153,6 +155,39 @@ namespace MapSystem
             return MakeNode(Vector3.zero, name);
         }
        
+        /// <summary>
+        /// Sees if the node with the given name exists within the board
+        /// </summary>
+        /// <param name="name">The name of the target node.</param>
+        /// <returns>If the node is found, returns true. Otherwise, reutrns false.</returns>
+        public bool Contains(string name)
+        {
+            return PrivateFind(name) != null;
+        }
+
+        public BoardTile Find(string name)
+        {
+            BoardTile tile = (BoardTile)PrivateFind(name);
+
+            if(tile != null)
+            {
+                return tile;
+            }
+
+#if UNITY_EDITOR
+            throw new NodeNotFoundException("Board Tile named " + name + " was not found.");
+#else
+            return null;
+#endif
+        }
+
+        /// <summary>
+        /// Finds a board tile using the name of the tile.
+        /// </summary>
+        /// <param name="name">The name of the given tile.</param>
+        /// <returns>If the tile is found, returns a reference to that tile. Otherwise, returns null.</returns>
+        public BoardTile this[string name] => Find(name);
+
 
         public List<BoardTile> GetConnectedTiles(int tile)
         {

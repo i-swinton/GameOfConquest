@@ -1972,6 +1972,11 @@ MonoBehaviour:
   connectionPairs:
   - node1: 17
     node2: 16
+  namedPairs:
+  - node1: LMAO
+    node2: LOL
+  - node1: LMAO
+    node2: Matcha
 --- !u!212 &1330028034
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2520,6 +2525,7 @@ MonoBehaviour:
     minNormalAngle: 0
     maxNormalAngle: 0
   connectionPairs: []
+  namedPairs: []
 --- !u!212 &1953521786
 SpriteRenderer:
   m_ObjectHideFlags: 0

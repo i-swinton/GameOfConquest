@@ -11,6 +11,13 @@ public class NodeConnectionPair
 }
 
 [System.Serializable]
+public class NodeConnectionPairNamed
+{
+    public string node1;
+    public string node2;
+}
+
+[System.Serializable]
 public class BonusEditorList
 {
     public List<BonusBase> bonuses;

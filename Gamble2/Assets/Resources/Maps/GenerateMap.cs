@@ -12,6 +12,7 @@ public class GenerateMap : MonoBehaviour
 
     [Tooltip("A list of pairs to be connected to each other regardless of location")]
     [SerializeField] List<NodeConnectionPair> connectionPairs;
+    [SerializeField] List<NodeConnectionPairNamed> namedPairs;
 
     // Start is called before the first frame update
     void Start()
@@ -57,15 +58,19 @@ public class GenerateMap : MonoBehaviour
         }
 
         GenerateConnections(board, spawnedTiles);
-        ForceConnections(board, connectionPairs);
+        ForceConnections(board, namedPairs);
     }
 
-    public void ForceConnections(MapSystem.Board board, List<NodeConnectionPair> pairs)
+    public void ForceConnections(MapSystem.Board board, List<NodeConnectionPairNamed> pairs)
     {
         // Loop through all of the pairs and connect them.
-        foreach(NodeConnectionPair pair in pairs)
+        foreach (NodeConnectionPairNamed pair in pairs)
         {
-            board.Connect(pair.node1, pair.node2);
+            if (board.Contains(pair.node1) && board.Contains(pair.node2))
+            {
+                // Find and connect the two nodes
+                board.Connect(board[pair.node1].ID, board[pair.node2].ID);
+            }
         }
     }
 
