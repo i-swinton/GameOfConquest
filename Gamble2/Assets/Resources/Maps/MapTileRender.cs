@@ -11,7 +11,7 @@ public enum SelectState
     OtherSelected
 }
 
-public class TempCountryRender : MonoBehaviour
+public class MapTileRender : MonoBehaviour
 {
     SpriteRenderer Renderer;
     [SerializeField] Material Mat;
@@ -39,6 +39,7 @@ public class TempCountryRender : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+
         //Creates a clone of the material
         Mat = new Material(Mat);
 
@@ -62,6 +63,8 @@ public class TempCountryRender : MonoBehaviour
         }
         //Renderer.color = Default;
     }
+
+
     public void DebugLog()
     {
         State = SelectState.Selected;
