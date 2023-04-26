@@ -280,8 +280,9 @@ public class CardInUI : UIElement
         if (!CanCardIn) { return; }
 
         // Insert player for card in here
-        CardSystem.CardIn(turnInRefs.ToList(), board[0].Owner, board);
+        int troopCount = CardSystem.CardIn(turnInRefs.ToList(), board[0].Owner, board);
 
+        NotifySystem.Message($"{board[0].Owner} has recieved {troopCount} units.");
 
 
         // Delete the cards
