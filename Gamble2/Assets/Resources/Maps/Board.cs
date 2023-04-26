@@ -142,12 +142,21 @@ namespace MapSystem
 
         public BoardTile MakeNode(Vector3 worldPosition, string name)
         {
+            return MakeNode(worldPosition, name, -1);
+        }
+
+        public BoardTile MakeNode(Vector3 worldPosition, string name, int tileGroup)
+        {
             // Create new node and increment the next index
-            BoardTile node = new BoardTile(nextNodeIndex++, worldPosition, this, name);
+            BoardTile node = new BoardTile(nextNodeIndex++, worldPosition, this, name, tileGroup);
 
             // Add the new node to the list
             nodes.Add(node);
             return node;
+        }
+        public BoardTile MakeNode(string name, int tileGroup)
+        {
+            return MakeNode(Vector3.zero, name, tileGroup);
         }
 
         public BoardTile MakeNode(string name)

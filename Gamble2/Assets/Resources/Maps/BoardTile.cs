@@ -25,6 +25,8 @@ namespace MapSystem
 
         string name;
 
+        int tileGroup;
+
         //--------------------------------------------- Properties---------------------------------------------------
 
         /// <summary>
@@ -90,17 +92,37 @@ namespace MapSystem
             }
         }
 
+        public int TileGroup
+        {
+            get
+            {
+                return tileGroup;
+            }
+            set
+            {
+                // Make sure it is a valid tile group id
+                if (value > -1)
+                {
+                    tileGroup = value;
+                }
+            }
+        }
        
 
         // -------------------------------------------- Public Functions ---------------------------------------------
-        public BoardTile(int id, Vector3 worldPosition, Board parent, string name): base(id)
+        public BoardTile(int id, Vector3 worldPosition, Board parent, string name, int tileGroup ): base(id)
         {
 
             this.worldPosition = worldPosition;
             this.bonuses = new List<BonusBase>();
             this.parent = parent;
             this.name = name;
+
+            this.tileGroup = tileGroup;
         }
+
+       
+
 
         /// <summary>
         /// Moves the central position of the board tile to another point in the world.
