@@ -180,6 +180,10 @@ MonoBehaviour:
   - eventID: 6
     callback:
       m_PersistentCalls:
+        m_Calls: []
+  - eventID: 14
+    callback:
+      m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 8484000723838600581}
           m_TargetAssemblyTypeName: DragUI, Assembly-CSharp

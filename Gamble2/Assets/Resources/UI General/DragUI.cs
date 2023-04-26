@@ -39,6 +39,9 @@ public class DragUI : MonoBehaviour
 
         // Apply the canvas space position to the object
         targetTransform.position = canvas.transform.TransformPoint(position);
+
+        Debug.Log("Drag Start On Card: " + targetTransform.gameObject.name);
+
     }
 
     public void DragEndHandler(BaseEventData data)
@@ -53,6 +56,9 @@ public class DragUI : MonoBehaviour
         }
 
         lastPosition = targetTransform.position;
+
+        Debug.Log("Drag Start On Card: " + targetTransform.gameObject.name);
+
     }
 
     public void ForceLastPosition(Vector2 pos)

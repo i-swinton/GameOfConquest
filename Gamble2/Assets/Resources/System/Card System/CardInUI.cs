@@ -77,6 +77,11 @@ public class CardInUI : UIElement
 
         // Check if we can card in
         CheckCardIn();
+
+        for (int i = 0; i < 7; ++i)
+        {
+            rootPositions.Add(Instantiate(emptyPrefab, bottomAnchor.transform));
+        }
     }
 
     public void MakeCard(MapSystem.Board b)
@@ -92,18 +97,6 @@ public class CardInUI : UIElement
 
         uiCard.name = "Card " + cards.Count;
 
-        rootPositions.Add(Instantiate(emptyPrefab, bottomAnchor.transform));
-
-        // Call a move action
-        //actions.Add(new Actions.Move(
-        //    rootPositions[rootPositions.Count - 1].transform.position,
-        //    uiCard.gameObject,
-        //    0.5f,
-        //    0.0f,
-        //    Actions.ActionType.NoGroup,
-        //    false,
-        //    Actions.EaseType.Linear
-        //    ));
 
         AdjustItems();
 
@@ -112,6 +105,8 @@ public class CardInUI : UIElement
 
     public void OnCardDragEnd(Vector2 position, Transform cardTransform, Vector2 lastPosition)
     {
+        Debug.Log("Drag End On Card: " + cardTransform.gameObject.name);
+
         float closestDistance = float.MaxValue;
         int index = -1;
         // Adjust 
@@ -132,6 +127,8 @@ public class CardInUI : UIElement
             cardTransform.GetComponentInChildren<DragUI>().ForceLastPosition(lastPosition);
             return;
         }
+
+
 
         // Otherwise, we lock it in place
         cardTransform.position = cardInAnchors[index].position;
