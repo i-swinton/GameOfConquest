@@ -105,7 +105,6 @@ public class CardInUI : UIElement
 
     public void OnCardDragEnd(Vector2 position, Transform cardTransform, Vector2 lastPosition)
     {
-        Debug.Log("Drag End On Card: " + cardTransform.gameObject.name);
 
         float closestDistance = float.MaxValue;
         int index = -1;
@@ -238,6 +237,21 @@ public class CardInUI : UIElement
     public void CancelCardIn()
     {
         Hide();
+
+        // Remove all of the cards
+        for(int i=0; i <cards.Count; ++i)
+        {
+            Destroy(cards[i].gameObject);
+        }
+
+        // Clear the cards
+        cards.Clear();
+
+        // Turn in the card
+        for(int i =0; i < turnInCards.Length; ++i)
+        {
+            turnInCards[i] = null;
+        }
     }
 
     public void PerfomrCardIn()
@@ -248,6 +262,8 @@ public class CardInUI : UIElement
         // Insert player for card in here
         CardSystem.CardIn(turnInRefs.ToList(), board[0].Owner, board);
 
+
+
         // Delete the cards
         RemoveCardRefs();
     }
@@ -257,8 +273,14 @@ public class CardInUI : UIElement
         // Loop through and remove the turn in cards
         for(int i=0; i < turnInCards.Length; ++i)
         {
+            // Remove from total list
+            cards.Remove(turnInCards[i]);
+
             // Delete the turn in cards
             Destroy(turnInCards[i].gameObject);
+
+            // Replace with null
+            turnInCards[i] = null;
         }
 
         CheckCardIn();
