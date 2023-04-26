@@ -171,6 +171,7 @@ public class CardInUI : UIElement
         }
         if(Input.GetKeyDown(KeyCode.Q))
         {
+            NotifySystem.Message("Spawned a card for player");
             MakeCard(board);
         }
         if(Input.GetKeyDown(KeyCode.E))
