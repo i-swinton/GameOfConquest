@@ -25,6 +25,9 @@ public class PopUpText : MonoBehaviour
     /// <param name="speed">The speed at which the text moves</param>
     public void Init(float duration, Color color,int fontSize, Vector3 spawnPosition, Vector3 moveDirection, float speed =1.0f)
     {
+        // Push in front of everyhting else
+        spawnPosition -= Vector3.forward;
+
         // Set the font size
         text.fontSize = fontSize;
         Vector3 endPos = spawnPosition + moveDirection.normalized * speed;
