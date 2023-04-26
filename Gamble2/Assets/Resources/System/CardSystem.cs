@@ -150,6 +150,7 @@ public static class CardSystem
 
         }
 
+        Debug.Log("Trade In Complete!");
         // Return the number of unit to recieve
         return unitsToRecieve;
 

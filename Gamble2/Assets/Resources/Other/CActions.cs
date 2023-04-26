@@ -276,7 +276,9 @@ namespace Actions
 
         public GameObject target;
 
-        public Move(Vector3 targetPos, GameObject target, float dur, float delay, ActionType group, bool isBlock, EaseType easeType)
+        public Move(Vector3 targetPos, GameObject target, float dur, 
+            float delay = 0.0f, ActionType group = ActionType.NoGroup, 
+            bool isBlock = false, EaseType easeType = EaseType.Linear)
             : base(dur, delay,group, isBlock, easeType)
         {
             // Use the target's current position
@@ -286,7 +288,9 @@ namespace Actions
             this.target = target;
         }
 
-        public Move(Vector3 targetPos, Vector3 startPos, GameObject target, float dur, float delay, ActionType group, bool isBlock, EaseType easeType)
+        public Move(Vector3 targetPos, Vector3 startPos, GameObject target, float dur,
+            float delay = 0.0f, ActionType group = ActionType.NoGroup,
+            bool isBlock = false, EaseType easeType = EaseType.Linear)
     : base(dur, delay, group, isBlock, easeType)
         {
             targetPosition = targetPos;
