@@ -44,6 +44,8 @@ public class CardInUI : UIElement
 
     // ACTION LIST POWER!!!!
     Actions.ActionList actions;
+
+    Player targetPlayer;
     
 
     //--------------------------------------------- Properties ----------------------------------------------------------------
@@ -82,6 +84,18 @@ public class CardInUI : UIElement
         {
             rootPositions.Add(Instantiate(emptyPrefab, bottomAnchor.transform));
         }
+    }
+
+    public void LoadCardInUI(Player player)
+    {
+        // Grab the board if the board is empty
+        if(board== null) { board= BoardManager.instance.GetBoard(); }
+
+        // Set the target player
+        targetPlayer = player;
+
+        // INSERT READ IN CARDS FROM PLAYER HERE
+
     }
 
     public void MakeCard(MapSystem.Board b)
@@ -217,6 +231,9 @@ public class CardInUI : UIElement
                    cards[i].gameObject,
                    0.5f
                 ));
+
+            // Set the new last position for fixing thing
+            cards[i].GetComponentInChildren<DragUI>().ForceLastPosition(rootPositions[step].transform.position);
 
 
             //actions.Add(
