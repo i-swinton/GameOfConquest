@@ -88,7 +88,9 @@ public class CardInUI : UIElement
     {
         TerritoryCard card = new(0, RNG.Roll(0, b.Count - 1));
 
-        cards.Add(Instantiate(cardPrefab, new Vector3(0, -1000), Quaternion.identity, transform));
+        // Bind the cards to the hide element to disappear with it. 
+        // Spawn them off screen for movment stuff
+        cards.Add(Instantiate(cardPrefab, new Vector3(0, -1000), Quaternion.identity, hideElement.transform));
         cards[cards.Count - 1].Initialize(card, b[0].Owner, b);
 
         cards[cards.Count - 1].GetComponentInChildren<DragUI>().OnDragEnd += OnCardDragEnd;
