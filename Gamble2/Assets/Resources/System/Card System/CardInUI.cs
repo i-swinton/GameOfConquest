@@ -90,20 +90,24 @@ public class CardInUI : UIElement
 
         UIDisplayCard uiCard = cards[cards.Count - 1];
 
+        uiCard.name = "Card " + cards.Count;
+
         rootPositions.Add(Instantiate(emptyPrefab, bottomAnchor.transform));
 
         // Call a move action
-        actions.Add(new Actions.Move(
-            rootPositions[rootPositions.Count - 1].transform.position,
-            uiCard.gameObject,
-            0.5f,
-            0.0f,
-            Actions.ActionType.NoGroup,
-            false,
-            Actions.EaseType.Linear
-            ));
+        //actions.Add(new Actions.Move(
+        //    rootPositions[rootPositions.Count - 1].transform.position,
+        //    uiCard.gameObject,
+        //    0.5f,
+        //    0.0f,
+        //    Actions.ActionType.NoGroup,
+        //    false,
+        //    Actions.EaseType.Linear
+        //    ));
 
-        actions.Add(new Actions.Parent(uiCard.gameObject, rootPositions[rootPositions.Count - 1],0.5f));
+        AdjustItems();
+
+        //actions.Add(new Actions.Parent(uiCard.gameObject, rootPositions[rootPositions.Count - 1],0.5f));
     }
 
     public void OnCardDragEnd(Vector2 position, Transform cardTransform, Vector2 lastPosition)
@@ -217,14 +221,14 @@ public class CardInUI : UIElement
                 ));
 
 
-            actions.Add(
-                new Actions.Parent
-                (
-                    cards[i].gameObject,
-                    rootPositions[step].gameObject, 
-                    0.5f
-                )
-                );
+            //actions.Add(
+            //    new Actions.Parent
+            //    (
+            //        cards[i].gameObject,
+            //        rootPositions[step].gameObject, 
+            //        0.5f
+            //    )
+            //    );
 
             ++step;
         }
@@ -257,7 +261,7 @@ public class CardInUI : UIElement
         for(int i=0; i < turnInCards.Length; ++i)
         {
             // Delete the turn in cards
-            Destroy(turnInCards[i]);
+            Destroy(turnInCards[i].gameObject);
         }
 
         CheckCardIn();
