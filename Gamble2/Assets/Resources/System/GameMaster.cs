@@ -28,13 +28,22 @@ public class GameMaster : MonoBehaviour
     // Singleton
     static GameMaster instance;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         instance = this;
 
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
         hasGameStarted = false;
         actions = new ActionList();
+    }
+
+    public static GameMaster GetInstance()
+    {
+        return instance;
     }
 
     public void StartGame(int numberOfPlayers)
@@ -146,7 +155,6 @@ public class GameMaster : MonoBehaviour
     {
         if(Defender!=null)
         {
-
             Defender = null;
         }
     }
@@ -155,8 +163,6 @@ public class GameMaster : MonoBehaviour
     {
         return Challenger != null;
     }
-    
-
 
     public void EndTurn()
     {
@@ -263,7 +269,16 @@ public class GameMaster : MonoBehaviour
     // ------------------------------------------ Confirm Functions --------------------------------------------
     public void Confirm(int value)
     {
-
+        switch(GetState())
+        {
+            // Handle combat confirmation
+            case GameState.Attack:
+                {
+                    // NOTE: Will want to make fortify changes here as well.
+                    CompleteBattle();
+                    break;
+                }
+        }
     }
 }
 

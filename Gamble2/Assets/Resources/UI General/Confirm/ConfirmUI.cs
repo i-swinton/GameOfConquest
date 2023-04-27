@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class ConfirmUI : UIElement
 {
-
+    // ------------------------------------------------- Variables --------------------------------------------------------
     GameMaster requester;
 
+    [SerializeField]
     TMPro.TextMeshProUGUI confirmText;
 
     static ConfirmUI instance;
@@ -21,15 +22,20 @@ public class ConfirmUI : UIElement
 
     Actions.ActionList actions;
 
+    // --------------------------------------------------------- Public Functions -------------------------------------------
+
     private void Awake()
     {
         instance = this;
+        actions = new Actions.ActionList();
     }
 
 
     private void Start()
     {
         SetStartPos();
+
+        requester = GameMaster.GetInstance();
     }
 
     private void OnValidate()
@@ -43,7 +49,7 @@ public class ConfirmUI : UIElement
     void SetStartPos()
     {
         startPos = topPanel.transform.position;
-        endPos = startPos - Vector2.down * endOffset;
+        endPos = startPos + Vector2.down * endOffset;
     }
 
 
@@ -54,13 +60,47 @@ public class ConfirmUI : UIElement
 
     public static void BeginConfirm(string text)
     {
+        instance.IsVisible = true;
+
         // Set the text to desired value
         instance.confirmText.text = text;
+
+        //float upTime = 0.5f;
+        //float stayTime = 1.0f;
+        float downTime = 0.5f;
+
+        instance.actions.Add(
+            new Actions.Move(
+                instance.endPos, instance.startPos, instance.topPanel,
+                downTime, 0.0f));
+        
+
     }
 
     public void OnConfirm()
     {
         int value = 0;
         requester.Confirm(value);
+
+        // Hide the UI
+        CloseUI();
+    }
+
+    void CloseUI()
+    {
+        instance.actions.Add(
+            new Actions.Move
+            (
+                instance.startPos, instance.endPos, instance.topPanel,
+                0.5f, 0.0f
+                ));
+
+
+
+        // Add a hide action
+        actions.Add(
+            new Actions.UIHide
+            (this, 0, 0.5f)
+            );
     }
 }

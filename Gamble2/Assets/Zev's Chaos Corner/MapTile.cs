@@ -125,6 +125,10 @@ public class MapTile : MonoBehaviour
 
                         // Draw the arrow displaying who is attacking on the map
                         MapDrawSystem.SpawnArrow(gm.GetChallenger().NodeRef.Position, NodeRef.Position);
+
+                        // Pull up the confirm menu
+                        ConfirmUI.BeginConfirm($"Attack {NodeRef.Name}?");
+
                     }
                 }
             }

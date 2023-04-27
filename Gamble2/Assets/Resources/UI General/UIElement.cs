@@ -44,3 +44,24 @@ public class UIElement : MonoBehaviour
 
    
 }
+
+namespace Actions
+{
+    public class UIHide : Action
+    {
+        UIElement target;
+
+        public UIHide(UIElement element, 
+            float duration, float delay = 0, ActionType group = ActionType.NoGroup, bool isBlocking = false, EaseType easeType = EaseType.Linear) :
+            base(duration,delay,group,isBlocking, easeType)
+        {
+            target = element;
+        }
+
+        public override void End()
+        {
+            target.Hide();
+            base.End();
+        }
+    }
+}
