@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MapSystem
 {
 
-    [System.Serializable]
+    
     public class Board:Graph
     {
 
