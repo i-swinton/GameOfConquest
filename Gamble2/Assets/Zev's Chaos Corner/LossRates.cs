@@ -6,7 +6,7 @@ public static class LossRates
 {
     static Dictionary<(int,int), (float,float)> lossRates = new Dictionary<(int,int), (float,float)>();
 
-    public static (float,float) GetLossRate(int AttackDice, int DefenseDice)
+    public static (float attackLoss ,float defenseLoss) GetLossRate(int AttackDice, int DefenseDice)
     {
         if(lossRates == null)
         {
@@ -15,6 +15,13 @@ public static class LossRates
 
         return lossRates[(AttackDice, DefenseDice)];
         
+    }
+
+    public static float GetLosses(int Defenders, int AttackDice, int DefenseDice)
+    {
+        (float attackLoss, float defenseLoss) rates = GetLossRate(AttackDice, DefenseDice);
+
+        return (Defenders / rates.defenseLoss) * rates.attackLoss; 
     }
 
     static void GenDict()
