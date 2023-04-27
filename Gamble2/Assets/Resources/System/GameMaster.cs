@@ -63,6 +63,13 @@ public class GameMaster : MonoBehaviour
     {
         Challenger = mt;
         actions.Add(new Actions.Scale(Vector3.one * 1.4f, Vector3.one, Challenger.gameObject, 0.2f,0.0f, ActionType.NoGroup, false, EaseType.Linear ));
+        foreach (MapTile mapTile in FindObjectsOfType<MapTile>())
+        {
+            if (mt.NodeRef.Neighbors.Contains(mapTile.NodeRef))
+            {
+                actions.Add(new Actions.Scale(Vector3.one * 1.1f, Vector3.one, mapTile.gameObject, 0.2f,0.0f, ActionType.NoGroup, false, EaseType.Linear ));
+            }
+        }
     }
     
     public MapTile GetChallenger()
@@ -75,6 +82,13 @@ public class GameMaster : MonoBehaviour
         if (Challenger != null)
         {
             actions.Add(new Actions.Scale(Vector3.one, Vector3.one * 1.4f, Challenger.gameObject, 0.2f,0.0f, ActionType.NoGroup, false, EaseType.Linear ));
+            foreach (MapTile mapTile in FindObjectsOfType<MapTile>())
+            {
+                if (Challenger.NodeRef.Neighbors.Contains(mapTile.NodeRef))
+                {
+                    actions.Add(new Actions.Scale(Vector3.one, Vector3.one * 1.1f, mapTile.gameObject, 0.2f,0.0f, ActionType.NoGroup, false, EaseType.Linear ));
+                }
+            }
             Challenger = null;
         }
     }

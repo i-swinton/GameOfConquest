@@ -113,21 +113,24 @@ public class MapTile : MonoBehaviour
             {
                 if (gm.GetChallenger().Player.playerID != Player.playerID)
                 {
-                    int AtkUnitsLost = 0, DefUnitsLost = 0;
-                    CombatSystem.BattleTiles(gm.GetChallenger().NodeRef, this.NodeRef, CombatRollType.Single, out AtkUnitsLost, out DefUnitsLost);
-                    Units -= DefUnitsLost;
-                    gm.GetChallenger().Units -= AtkUnitsLost;
+                    if (gm.GetChallenger().NodeRef.Neighbors.Contains(this.NodeRef))
+                    {
+                        int AtkUnitsLost = 0, DefUnitsLost = 0;
+                        CombatSystem.BattleTiles(gm.GetChallenger().NodeRef, this.NodeRef, CombatRollType.Blitz, out AtkUnitsLost, out DefUnitsLost);
+                        Units -= DefUnitsLost;
+                        gm.GetChallenger().Units -= AtkUnitsLost;
                     
 
-                    if (Units <= 0)
-                    {
-                        Player = gm.GetChallenger().Player;
-                        NodeRef.Fortify(3);
-                        Units = 3;
+                        if (Units <= 0)
+                        {
+                            Player = gm.GetChallenger().Player;
+                            NodeRef.Fortify(3);
+                            Units = 3;
                         
-                    }
+                        }
                     
-                    gm.ReleaseChallenger();
+                        gm.ReleaseChallenger();
+                    }
                 }
             }
             
