@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1043854607677495956}
   - component: {fileID: 2749915124486685116}
   - component: {fileID: 1043854607677495955}
-  - component: {fileID: 3591091183494606159}
   m_Layer: 0
   m_Name: MapTile
   m_TagString: Untagged
@@ -115,7 +114,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9acdf7b69dc9022499a217f7d1669e1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Units: 1
   Center: {x: 1, y: 1, z: 1}
   UIDisplays: {fileID: 4986420040975085915}
   NameDisplay: {fileID: 3330055250225447949}
@@ -169,47 +167,30 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 3591091183494606159}
-          m_TargetAssemblyTypeName: FindConnections, Assembly-CSharp
-          m_MethodName: ToggleShow
+        - m_Target: {fileID: 1043854607677495956}
+          m_TargetAssemblyTypeName: MapTileRender, Assembly-CSharp
+          m_MethodName: DebugLog
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Hello
+            m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
---- !u!114 &3591091183494606159
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1043854607677495953}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b61cf3d7771d1934d8a02903907a6253, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Tile: {fileID: 2749915124486685116}
-  Results: []
-  Filter:
-    useTriggers: 0
-    useLayerMask: 0
-    useDepth: 0
-    useOutsideDepth: 0
-    useNormalAngle: 0
-    useOutsideNormalAngle: 0
-    layerMask:
-      serializedVersion: 2
-      m_Bits: 2147483647
-    minDepth: 0
-    maxDepth: 0
-    minNormalAngle: 0
-    maxNormalAngle: 0
-  ShowConnections: 0
+        - m_Target: {fileID: 2749915124486685116}
+          m_TargetAssemblyTypeName: MapTile, Assembly-CSharp
+          m_MethodName: OnClick
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1391835273897236283
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,7 +250,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2abd46c55e053e44485aed43a2a2e505, type: 2}
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -314,7 +295,7 @@ MonoBehaviour:
   m_text: WWWWWWW
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 2abd46c55e053e44485aed43a2a2e505, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

@@ -33,7 +33,6 @@ public class FindConnections : MonoBehaviour
 
             float angle = Vector3.SignedAngle(point, Center,Vector3.forward);
             angle = Mathf.Rad2Deg* Mathf.Asin((point - Center).normalized.y);
-            Debug.Log($"{(point - Center).normalized.y}, {angle}, {item.GetComponent<MapTile>().NameDisplay.text}");
 
             angle %= 90;
             angle = Mathf.Abs(angle);

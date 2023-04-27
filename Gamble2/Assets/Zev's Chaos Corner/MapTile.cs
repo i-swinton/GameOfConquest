@@ -65,7 +65,7 @@ public class MapTile : MonoBehaviour
         }
     }
 
-    private void OnMouseDown()
+    public void OnClick()
     {
         switch (gm.GetState())
         {
