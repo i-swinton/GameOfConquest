@@ -57,7 +57,6 @@ public class CardInUI : UIElement
         }
         set
         {
-            Debug.Log("Setting card in to " + value);
             canCardIn = value;
             turnInButton.interactable = canCardIn;
         }

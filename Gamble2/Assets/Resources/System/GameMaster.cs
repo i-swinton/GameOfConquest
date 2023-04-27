@@ -25,9 +25,13 @@ public class GameMaster : MonoBehaviour
 
     bool hasGameStarted;
 
+    // Singleton
+    static GameMaster instance;
+
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
 
         hasGameStarted = false;
         actions = new ActionList();
@@ -256,8 +260,11 @@ public class GameMaster : MonoBehaviour
         MapDrawSystem.CancelArrow();
     }
 
+    // ------------------------------------------ Confirm Functions --------------------------------------------
+    public void Confirm(int value)
+    {
 
-
+    }
 }
 
 public enum GameState{

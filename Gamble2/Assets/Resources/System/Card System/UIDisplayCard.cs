@@ -48,7 +48,7 @@ public class UIDisplayCard : UIElement
     {
         cardRef = card;
 
-        Debug.Log("Initialize data: " + card.CardType + ", " + board[card.TargetTileID].Name + " at " + card.TargetTileID + ", " + card.UnitType);
+       // Debug.Log("Initialize data: " + card.CardType + ", " + board[card.TargetTileID].Name + " at " + card.TargetTileID + ", " + card.UnitType);
 
         // Get icons from players
         // IconSet icons = player.Icons;
