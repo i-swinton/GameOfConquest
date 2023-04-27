@@ -48,6 +48,8 @@ public class GenerateMap : MonoBehaviour
                 tile.GetComponent<MapTile>().NodeRef.MoveTo(tile.GetComponent<PolygonCollider2D>().bounds.center);
 
 
+                tile.name = tile.GetComponent<MapTile>().NodeRef.Name + tile.GetComponent<MapTile>().NodeRef.ID;
+
                 // Add the tiles to the list
                 spawnedTiles.Add(tile.GetComponent<MapTile>());
             }
