@@ -7,7 +7,14 @@ using UnityEngine;
 using TMPro;
 public class MapTile : MonoBehaviour
 {
-    public Player Player = null;
+    public Player Player
+    {
+        get
+        {
+            if (NodeRef == null) { return null; }
+            return NodeRef.Owner;
+        }
+    }
     private string Name;
 
     public int Units
@@ -74,7 +81,7 @@ public class MapTile : MonoBehaviour
     {
         if (Player == null)
         {
-            Player = gm.GetPlayer();
+            NodeRef.ChangeOwner( gm.GetPlayer());
             Player.draftTroop--;
             NodeRef.AddUnits(new Unit(1));
             gm.EndTurn();
@@ -180,7 +187,7 @@ public class MapTile : MonoBehaviour
 
     public void SetOwner(Player newOwner)
     {
-        Player = newOwner;
+
         NodeRef.ChangeOwner(newOwner);
     }
 }

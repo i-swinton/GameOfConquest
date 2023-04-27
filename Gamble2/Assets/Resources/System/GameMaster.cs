@@ -23,10 +23,16 @@ public class GameMaster : MonoBehaviour
 
     private Actions.ActionList actions;
 
+    [SerializeField]
+    GameMode gameMode;
+    MapSystem.Board gameBoard;
+
+
     bool hasGameStarted;
 
     // Singleton
     static GameMaster instance;
+
 
     private void Awake()
     {
@@ -39,6 +45,7 @@ public class GameMaster : MonoBehaviour
     {
         hasGameStarted = false;
         actions = new ActionList();
+        gameBoard = BoardManager.instance.GetBoard();
     }
 
     public static GameMaster GetInstance()
@@ -94,6 +101,12 @@ public class GameMaster : MonoBehaviour
             actions.Update(Time.deltaTime);
         }
 
+
+        if(Input.GetKey(KeyCode.N))
+        {
+            EndTurn();
+        }
+
         if( Input.GetKey(KeyCode.B))
         {
             // If the right characters are ready, perform the battle sequence
@@ -102,6 +115,19 @@ public class GameMaster : MonoBehaviour
                 CompleteBattle();
             }
         }
+
+        if (gameMode)
+        {
+            // Check if the game is over
+            if (GetState()!= GameState.Claim && gameMode.CheckIfOver(this, gameBoard))
+            {
+                PlayWinSequence(gameMode.WinningPlayer(this, gameBoard));
+            }
+        }else
+        {
+            Debug.LogWarning("The Game Mode is missing. If you want to win, you are going to need that");
+        }
+
     }
     
     public void SetDefender(MapTile mt)
@@ -238,6 +264,11 @@ public class GameMaster : MonoBehaviour
         return players[turnTacker];
     }
 
+    public Player GetPlayerAt(int index)
+    {
+        return players[index];
+    }
+
     public void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
@@ -279,6 +310,14 @@ public class GameMaster : MonoBehaviour
                     break;
                 }
         }
+    }
+
+    // ------------------------------------------- Win Functions ----------------------------------------------
+    public void PlayWinSequence(Player winner)
+    {
+        // Display Win Text
+
+        // Shut everything down
     }
 }
 
