@@ -16,6 +16,9 @@ public  class MapDrawSystem : MonoBehaviour
 
     public static GameObject SpawnArrow(Vector3 startPos, Vector3 endPos)
     {
+        // Clear the arrow before creating a new one
+        if (instance.arrow) { CancelArrow(); }
+
         instance.arrow = Instantiate(instance.AttackArrowPrefab, startPos, Quaternion.Euler(-90,0,0));
         instance.arrow.GetComponentInChildren<LaunchArcMesh>().SetEndPosition(endPos);
 

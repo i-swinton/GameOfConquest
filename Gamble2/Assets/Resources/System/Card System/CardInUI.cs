@@ -27,7 +27,7 @@ public class CardInUI : UIElement
 
     public List<UIDisplayCard> cards = new List<UIDisplayCard>();
 
-
+    List<TerritoryCard> playerCards;
 
     [Header("Drag and Drop")]
     [SerializeField] float dropThreshold;
@@ -89,13 +89,39 @@ public class CardInUI : UIElement
     public void LoadCardInUI(Player player)
     {
         // Grab the board if the board is empty
-        if(board== null) { board= BoardManager.instance.GetBoard(); }
+        if (board == null) { board = BoardManager.instance.GetBoard(); }
 
         // Set the target player
         targetPlayer = player;
 
         // INSERT READ IN CARDS FROM PLAYER HERE
+        playerCards = player.cards;
 
+        // Set the player
+        targetPlayer = player;
+
+        for (int i = 0; i < playerCards.Count; ++i)
+        {
+            MakeCard(playerCards[i], player, board);
+        } 
+    }
+
+    public void MakeCard(TerritoryCard card, Player p, MapSystem.Board b)
+    {
+
+        // Bind the cards to the hide element to disappear with it. 
+        // Spawn them off screen for movment stuff
+        cards.Add(Instantiate(cardPrefab, new Vector3(0, -1000), Quaternion.identity, hideElement.transform));
+        cards[cards.Count - 1].Initialize(card, p, b);
+
+        cards[cards.Count - 1].GetComponentInChildren<DragUI>().OnDragEnd += OnCardDragEnd;
+
+        UIDisplayCard uiCard = cards[cards.Count - 1];
+
+        uiCard.name = "Card " + cards.Count;
+
+
+        AdjustItems();
     }
 
     public void MakeCard(MapSystem.Board b)

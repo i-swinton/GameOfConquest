@@ -204,4 +204,5 @@ public class Player
     public int troopCount;
     public int draftTroop;
     public bool isAlive;
+    public List<TerritoryCard> cards;
 }
