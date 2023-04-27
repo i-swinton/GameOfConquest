@@ -7,10 +7,16 @@ using UnityEngine;
 
 public class GameMaster : MonoBehaviour
 {
+    public Player Winner { get { return winningPlayer; } }
+
+
     private int turnTacker = 0;
     public int PlayerAmount = 2;
     private List<Player> players = new List<Player>();
     private GameState state;
+
+    private Player winningPlayer = null;
+
 
     public Vector2 BeginningOfUILine;
     public Vector2 EndOfUILine;
@@ -102,7 +108,7 @@ public class GameMaster : MonoBehaviour
         }
 
 
-        if(Input.GetKey(KeyCode.N))
+        if(Input.GetKeyDown(KeyCode.N))
         {
             EndTurn();
         }
@@ -315,8 +321,10 @@ public class GameMaster : MonoBehaviour
     // ------------------------------------------- Win Functions ----------------------------------------------
     public void PlayWinSequence(Player winner)
     {
+        // Set the winner
+        winningPlayer = winner;
         // Display Win Text
-
+        WinLossUI.Open("Victory!", true, winner);
         // Shut everything down
     }
 }
@@ -338,6 +346,15 @@ public class Player
         draftTroop = 20;
     }
 
+    public string Name
+    {
+        get
+        {
+            return "Player " + playerID;
+        }
+    }
+
+    string name;
     public int playerID;
     public Color playerColor;
     public int troopCount;
