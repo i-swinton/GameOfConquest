@@ -52,7 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textField: {fileID: 1860999624469606693}
   notifyBG: {fileID: 1860999624514446341}
-  distance: 50
+  distance: 90
 --- !u!1 &1860999624469606695
 GameObject:
   m_ObjectHideFlags: 0
