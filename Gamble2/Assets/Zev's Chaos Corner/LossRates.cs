@@ -17,8 +17,11 @@ public static class LossRates
         
     }
 
+
+    //Preditces losses based on number of defenders
     public static float GetLosses(int Defenders, int AttackDice, int DefenseDice)
     {
+        //Gets conversion rates
         (float attackLoss, float defenseLoss) rates = GetLossRate(AttackDice, DefenseDice);
 
         return (Defenders / rates.defenseLoss) * rates.attackLoss; 

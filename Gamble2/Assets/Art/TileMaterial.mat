@@ -102,6 +102,6 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _MainColor: {r: 0, g: 1, b: 0.70980406, a: 1}
     - _OtherSelected: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
-    - _PlayerColor: {r: 1, g: 0, b: 0.44950724, a: 1}
+    - _PlayerColor: {r: 1, g: 1, b: 1, a: 1}
     - _Selected: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
