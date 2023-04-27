@@ -24,7 +24,6 @@ public class MapTileRender : MonoBehaviour
         {
             _State = value;
             Mat.SetFloat("_State", (float)State);
-            Debug.Log("State Change", this);
 
         }
     }
@@ -46,9 +45,6 @@ public class MapTileRender : MonoBehaviour
         Renderer = GetComponent<SpriteRenderer>();
         Renderer.material = Mat;
 
-        Debug.LogWarning("Player color is temp code, please replace");
-        
-        //  Renderer.SetPropertyBlock(Block);
 
     }
     
