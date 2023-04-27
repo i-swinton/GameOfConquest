@@ -10,7 +10,14 @@ public class MapTile : MonoBehaviour
     public Player Player = null;
     private string Name;
 
-    public int Units = 1;
+    public int Units
+    {
+        get
+        {
+            if (NodeRef == null) { return 0; }
+            return NodeRef.UnitCount;
+        }
+    }
 
 
     public MapSystem.BoardTile NodeRef;
@@ -70,7 +77,6 @@ public class MapTile : MonoBehaviour
             Player = gm.GetPlayer();
             Player.draftTroop--;
             NodeRef.AddUnits(new Unit(1));
-            Units = 1;
             gm.EndTurn();
         }
     }
@@ -79,7 +85,6 @@ public class MapTile : MonoBehaviour
     {
         if (gm.GetPlayerTurn() == Player.playerID)
         {
-            Units++;
             NodeRef.Fortify(1);
             Player.draftTroop--;
             gm.EndTurn();
@@ -90,7 +95,6 @@ public class MapTile : MonoBehaviour
     {
         if (gm.GetPlayerTurn() == Player.playerID)
         {
-            Units++;
             NodeRef.Fortify(1);
             Player.draftTroop--;
             
@@ -111,25 +115,16 @@ public class MapTile : MonoBehaviour
             }
             else
             {
+                // Battle two challengers
                 if (gm.GetChallenger().Player.playerID != Player.playerID)
                 {
-                    if (gm.GetChallenger().NodeRef.Neighbors.Contains(this.NodeRef))
+                    if (gm.GetChallenger().NodeRef.Neighbors.Contains(NodeRef))
                     {
-                        int AtkUnitsLost = 0, DefUnitsLost = 0;
-                        CombatSystem.BattleTiles(gm.GetChallenger().NodeRef, this.NodeRef, CombatRollType.Blitz, out AtkUnitsLost, out DefUnitsLost);
-                        Units -= DefUnitsLost;
-                        gm.GetChallenger().Units -= AtkUnitsLost;
-                    
+                        // Mark this tile as the challenger
+                        gm.SetDefender(this);
 
-                        if (Units <= 0)
-                        {
-                            Player = gm.GetChallenger().Player;
-                            NodeRef.Fortify(3);
-                            Units = 3;
-                        
-                        }
-                    
-                        gm.ReleaseChallenger();
+                        // Draw the arrow displaying who is attacking on the map
+                        MapDrawSystem.SpawnArrow(gm.GetChallenger().NodeRef.Position, NodeRef.Position);
                     }
                 }
             }
@@ -145,6 +140,8 @@ public class MapTile : MonoBehaviour
         }
     }
     
+    
+
     void MouseDown_Fortify()
     {
         if (gm.GetPlayerTurn() == Player.playerID)
@@ -158,8 +155,8 @@ public class MapTile : MonoBehaviour
                 else
                 {
                     NodeRef.TransferUnits(gm.GetChallenger().NodeRef, 1);
-                    gm.GetChallenger().Units = gm.GetChallenger().NodeRef.UnitCount;
-                    Units = NodeRef.UnitCount;
+                    //gm.GetChallenger().Units = gm.GetChallenger().NodeRef.UnitCount;
+                    //Units = NodeRef.UnitCount;
                     gm.ReleaseChallenger();
                 }
             }
@@ -175,5 +172,11 @@ public class MapTile : MonoBehaviour
     {
         Gizmos.color = Color.green;
         //Gizmos.DrawSphere(Center, 0.5f);
+    }
+
+    public void SetOwner(Player newOwner)
+    {
+        Player = newOwner;
+        NodeRef.ChangeOwner(newOwner);
     }
 }

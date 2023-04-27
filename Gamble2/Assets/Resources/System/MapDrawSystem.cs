@@ -16,6 +16,7 @@ public  class MapDrawSystem : MonoBehaviour
 
     public static GameObject SpawnArrow(Vector3 startPos, Vector3 endPos)
     {
+        if(instance == null) { Debug.LogWarning("The Map Draw System is not within your scene. You may want to add it for the full experience."); return null; }
         // Clear the arrow before creating a new one
         if (instance.arrow) { CancelArrow(); }
 
@@ -27,6 +28,8 @@ public  class MapDrawSystem : MonoBehaviour
 
     public static void CancelArrow()
     {
+        if (instance == null) { Debug.LogWarning("The Map Draw System is not within your scene. You may want to add it for the full experience."); return; }
+
         // If the arrow exists, delete it
         if (instance.arrow)
         {

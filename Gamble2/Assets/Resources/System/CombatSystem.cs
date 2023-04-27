@@ -31,6 +31,9 @@ public static class CombatSystem {
     /// <param name="attackTile">The tile which is declaring the attack. </param>
     /// <param name="defenderTile">The tile which is being attacekd.</param>
     /// <param name="combatType">The type of combat which is being performed.</param>
+    /// <param name="totalAtkLoss">The total number of attacking units already lost from the battle. They are already removed from the tiles.</param>
+    /// <param name="totalDefLoss">The total number of defending units already lost from the battle. They are already removed from the tiles</param>
+    /// <param name="blitzLimit">The maximimum number of soldiers to survive the blitz.</param>
 
     public static void BattleTiles(MapSystem.BoardTile attackTile, MapSystem.BoardTile defenderTile, Combat.CombatRollType combatType,
         out int totalAtkLoss, out int totalDefLoss, int blitzLimit = 1)

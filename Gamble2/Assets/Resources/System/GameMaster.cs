@@ -57,8 +57,25 @@ public class GameMaster : MonoBehaviour
         {
             actions.Update(Time.deltaTime);
         }
+
+        if( Input.GetKey(KeyCode.B))
+        {
+            // If the right characters are ready, perform the battle sequence
+            if(Defender && Challenger)
+            {
+                CompleteBattle();
+            }
+        }
     }
     
+    public void SetDefender(MapTile mt)
+    {
+        Defender = mt;
+        // Do whatever actions you want to 
+
+        
+    }
+
     public void SetChallenger(MapTile mt)
     {
         Challenger = mt;
@@ -77,6 +94,11 @@ public class GameMaster : MonoBehaviour
         return Challenger;
     }
 
+    public MapTile GetDefender()
+    {
+        return Defender;
+    }
+
     public void ReleaseChallenger()
     {
         if (Challenger != null)
@@ -93,11 +115,21 @@ public class GameMaster : MonoBehaviour
         }
     }
 
+    public void ReleaseDefender()
+    {
+        if(Defender!=null)
+        {
+
+            Defender = null;
+        }
+    }
+
     public bool HasChallengerCheck()
     {
         return Challenger != null;
     }
     
+
 
     public void EndTurn()
     {
@@ -180,6 +212,29 @@ public class GameMaster : MonoBehaviour
         Gizmos.DrawSphere(EndOfUILine,0.5f);
         Gizmos.DrawLine(BeginningOfUILine, EndOfUILine);
     }
+
+    //------------------------------------------ Combat Functions -------------------------------------------
+    public void CompleteBattle()
+    {
+
+        int AtkUnitsLost = 0, DefUnitsLost = 0;
+        CombatSystem.BattleTiles(GetChallenger().NodeRef, Defender.NodeRef, Combat.CombatRollType.Blitz, out AtkUnitsLost, out DefUnitsLost);
+
+        if (Defender.Units <= 0)
+        {
+            Defender.SetOwner(GetChallenger().Player);
+            Defender.NodeRef.Fortify(3);
+
+        }
+
+        // Perform the proper cleanup
+        ReleaseChallenger();
+        ReleaseDefender();
+        MapDrawSystem.CancelArrow();
+    }
+
+
+
 }
 
 public enum GameState{
@@ -205,4 +260,5 @@ public class Player
     public int draftTroop;
     public bool isAlive;
     public List<TerritoryCard> cards;
+    // Insert spot for player UI
 }

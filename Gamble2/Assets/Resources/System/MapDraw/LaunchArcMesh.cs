@@ -115,7 +115,9 @@ public class LaunchArcMesh : MonoBehaviour
 
     public void SetEndPosition(Vector3 endPos)
     {
-        target.position = endPos;    
+        target.position = endPos;
+        // Force validate
+        OnValidate();
     }
 
     Vector3 CalculateArcPoint(float t, float maxDistance)
