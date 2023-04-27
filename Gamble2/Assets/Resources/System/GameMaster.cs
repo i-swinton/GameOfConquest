@@ -22,19 +22,33 @@ public class GameMaster : MonoBehaviour
     private MapTile Defender;
 
     private Actions.ActionList actions;
+
+    bool hasGameStarted;
+
     // Start is called before the first frame update
     void Start()
     {
+
+        hasGameStarted = false;
+        actions = new ActionList();
+    }
+
+    public void StartGame(int numberOfPlayers)
+    {
+        // Set the game as started
+        hasGameStarted = true;
+        PlayerAmount = numberOfPlayers;
+
         state = GameState.Claim;
-        
+
         if (PlayerAmount <= 1)
             PlayerAmount = 2;
-        
+
         for (int i = 0; i < PlayerAmount; i++)
         {
             Player p = new Player();
             p.playerID = i;
-            float t = (float) i / PlayerAmount;
+            float t = (float)i / PlayerAmount;
             Color color = Color.HSVToRGB(Mathf.Lerp(0.0f, 1.0f, t), 1.0f, 1.0f);
             color.a = 1.0f;
             p.playerColor = color;
@@ -43,13 +57,22 @@ public class GameMaster : MonoBehaviour
             GameObject panel = Instantiate(playerPanelPrefab, pos, Quaternion.identity);
             panel.GetComponent<PlayerPanel>().Setup(p);
         }
-
-        actions = new ActionList();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(!hasGameStarted)
+        {
+            if(Input.GetKeyDown(KeyCode.Return))
+            {
+                StartGame(2);
+
+            }
+
+            return;
+        }
+
         text.text = "Player " + (turnTacker+1).ToString() + "\n" + state.ToString();
 
         // Update the action list
