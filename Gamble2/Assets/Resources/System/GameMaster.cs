@@ -123,7 +123,7 @@ public class GameMaster : MonoBehaviour
             // If the right characters are ready, perform the battle sequence
             if(Defender && Challenger)
             {
-                CompleteBattle();
+                CompleteBattle(-4);
             }
         }
 
@@ -185,6 +185,8 @@ public class GameMaster : MonoBehaviour
                 }
             }
             Challenger = null;
+
+            MapDrawSystem.CancelArrow();
         }
     }
 
@@ -219,6 +221,9 @@ public class GameMaster : MonoBehaviour
             case GameState.Fortify: IncrementTurnTracker(); ChangeState(GameState.Draft); break;
         }
     }
+
+
+
 
     bool AllTerroritesClaim()
     {
@@ -289,20 +294,40 @@ public class GameMaster : MonoBehaviour
     }
 
     //------------------------------------------ Combat Functions -------------------------------------------
-    public void CompleteBattle()
+    public void CompleteBattle(int index =-1)
     {
 
         int AtkUnitsLost = 0, DefUnitsLost = 0;
-        CombatSystem.BattleTiles(GetChallenger().NodeRef, Defender.NodeRef, Combat.CombatRollType.Blitz, out AtkUnitsLost, out DefUnitsLost);
+        CombatSystem.BattleTiles(GetChallenger().NodeRef, Defender.NodeRef,(Combat.CombatRollType)(-index), out AtkUnitsLost, out DefUnitsLost);
 
         if (Defender.Units <= 0)
         {
+
             Defender.SetOwner(GetChallenger().Player);
-            Defender.NodeRef.Fortify(3);
+
+            // Pull up the confirm for fortify
+            ConfirmUI.BeginConfirm("Fortify", ConfirmUI.ConfirmType.Fortify,
+                GetChallenger().NodeRef, GetDefender().NodeRef, Mathf.Clamp((-index), 1, 3));
+            //Defender.NodeRef.Fortify(3);
 
         }
+        else
+        {
 
-        // Perform the proper cleanup
+            // Perform the proper cleanup
+            ReleaseChallenger();
+            ReleaseDefender();
+            MapDrawSystem.CancelArrow();
+        }
+    }
+
+    // ------------------------------------------ Fortify Functions ----------------------------------------------
+
+    public void CompleteFortify(int amount)
+    {
+        // Transfer over the units
+        Defender.NodeRef.TransferUnits( Challenger.NodeRef, amount);
+
         ReleaseChallenger();
         ReleaseDefender();
         MapDrawSystem.CancelArrow();
@@ -316,8 +341,16 @@ public class GameMaster : MonoBehaviour
             // Handle combat confirmation
             case GameState.Attack:
                 {
-                    // NOTE: Will want to make fortify changes here as well.
-                    CompleteBattle();
+                    if (value <= 0)
+                    {
+                        // NOTE: Will want to make fortify changes here as well.
+                        CompleteBattle(value);
+                    }
+                    else
+                    {
+                        CompleteFortify(value);
+                    }
+
                     break;
                 }
         }

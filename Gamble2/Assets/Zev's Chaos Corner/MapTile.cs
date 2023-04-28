@@ -134,7 +134,7 @@ public class MapTile : MonoBehaviour
                         MapDrawSystem.SpawnArrow(gm.GetChallenger().NodeRef.Position, NodeRef.Position);
 
                         // Pull up the confirm menu
-                        ConfirmUI.BeginConfirm($"Attack {NodeRef.Name}?");
+                        ConfirmUI.BeginConfirm($"Attack {NodeRef.Name}?", ConfirmUI.ConfirmType.Battle,gm.GetChallenger().NodeRef);
 
                     }
                 }

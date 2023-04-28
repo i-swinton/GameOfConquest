@@ -64,4 +64,23 @@ namespace Actions
             base.End();
         }
     }
+
+    public class UIShow : Action
+    {
+        UIElement target;
+
+        public UIShow(UIElement element,
+            float duration, float delay = 0, ActionType group = ActionType.NoGroup, bool isBlocking = false, EaseType easeType = EaseType.Linear) :
+            base(duration, delay, group, isBlocking, easeType)
+        {
+            target = element;
+        }
+
+        public override void End()
+        {
+            target.Show();
+            base.End();
+        }
+    }
+
 }
