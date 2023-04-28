@@ -165,10 +165,18 @@ public class MapTile : MonoBehaviour
                 }
                 else
                 {
-                    NodeRef.TransferUnits(gm.GetChallenger().NodeRef, 1);
-                    //gm.GetChallenger().Units = gm.GetChallenger().NodeRef.UnitCount;
-                    //Units = NodeRef.UnitCount;
-                    gm.ReleaseChallenger();
+                    //NodeRef.TransferUnits(gm.GetChallenger().NodeRef, 1);
+                    ////gm.GetChallenger().Units = gm.GetChallenger().NodeRef.UnitCount;
+                    ////Units = NodeRef.UnitCount;
+                    //gm.ReleaseChallenger();
+                    // Mark this tile as the challenger
+                    gm.SetDefender(this);
+
+                    // Draw the arrow displaying who is attacking on the map
+                    MapDrawSystem.SpawnArrow(gm.GetChallenger().NodeRef.Position, NodeRef.Position);
+
+                    // Pull up the confirm menu
+                    ConfirmUI.BeginConfirm("Fortify", ConfirmUI.ConfirmType.Fortify, gm.GetChallenger().NodeRef, NodeRef);
                 }
             }
             else

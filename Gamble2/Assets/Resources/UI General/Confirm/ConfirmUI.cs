@@ -143,8 +143,8 @@ public class ConfirmUI : UIElement
         List<string> battleList = battleStrings.ToList();
         
         // Check to see how many units the child has
-        if(tile.UnitCount < 3) { battleList.RemoveAt(2); }
-        if(tile.UnitCount < 2) { battleList.RemoveAt(1); }
+        if(tile.UnitCount < 4) { battleList.RemoveAt(2); }
+        if(tile.UnitCount < 3) { battleList.RemoveAt(1); }
 
         // Initialize the scroll
         confirmScroll.Initialize(battleList, 0);

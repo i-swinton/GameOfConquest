@@ -334,6 +334,12 @@ public class GameMaster : MonoBehaviour
         ReleaseChallenger();
         ReleaseDefender();
         MapDrawSystem.CancelArrow();
+
+        // Force continue after you fortify
+        if(GetState() == GameState.Fortify)
+        {
+            EndTurn();
+        }
     }
 
     // ------------------------------------------ Confirm Functions --------------------------------------------
