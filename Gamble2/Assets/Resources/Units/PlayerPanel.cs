@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerPanel : MonoBehaviour
 {
     private Player _player;
-    public TextMeshPro text;
+    public TextMeshProUGUI text;
 
     // Update is called once per frame
     void Update()
@@ -17,6 +17,6 @@ public class PlayerPanel : MonoBehaviour
     public void Setup(Player player)
     {
         _player = player;
-        GetComponent<SpriteRenderer>().color = _player.playerColor;
+        GetComponent<UnityEngine.UI.Image>().color = _player.playerColor;
     }
 }

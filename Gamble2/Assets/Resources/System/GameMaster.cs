@@ -79,9 +79,12 @@ public class GameMaster : MonoBehaviour
             color.a = 1.0f;
             p.playerColor = color;
             players.Add(p);
-            Vector3 pos = Vector2.Lerp(BeginningOfUILine, EndOfUILine, t);
-            GameObject panel = Instantiate(playerPanelPrefab, pos, Quaternion.identity);
-            panel.GetComponent<PlayerPanel>().Setup(p);
+
+            PlayerPanelUI.SpawnPlayerPanel(p);
+
+            //Vector3 pos = Vector2.Lerp(BeginningOfUILine, EndOfUILine, t);
+            //GameObject panel = Instantiate(playerPanelPrefab, pos, Quaternion.identity);
+            //panel.GetComponent<PlayerPanel>().Setup(p);
         }
     }
 
