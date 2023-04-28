@@ -70,4 +70,20 @@ MonoBehaviour:
   connectionPairs: []
   namedPairs:
   - node1: LMAO
-    node2: Matcha
+    node2: Oolong
+  - node1: Taft
+    node2: Lincoln
+  - node1: Taft
+    node2: Johnson
+  - node1: Taft
+    node2: Right
+  - node1: Left
+    node2: Cod
+  - node1: Black
+    node2: Salmon
+  - node1: LMAO
+    node2: RIP
+  - node1: RIP
+    node2: Truman
+  - node1: Jackson
+    node2: Cod
