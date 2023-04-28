@@ -17,6 +17,8 @@ public class MapTileRender : MonoBehaviour
     [SerializeField] Material Mat;
     public SelectState _State;
 
+    bool otherSel;
+
     public SelectState State { get{
             return _State;
         }
@@ -30,6 +32,10 @@ public class MapTileRender : MonoBehaviour
 
     public void Select()
     {
+        // Do not do anything if already selected
+        if(State == SelectState.Selected) { return; }
+
+
         GameMaster.AddAction(new Actions.Scale(Vector3.one * 1.4f, Vector3.one, 
             gameObject, 0.2f,0.0f, Actions.ActionType.NoGroup, false, Actions.EaseType.Linear ));
 
@@ -37,16 +43,22 @@ public class MapTileRender : MonoBehaviour
     }
     public void CanSelect(bool OtherSelected)
     {
-        
+        // Do not do anything if already in the correct can select state
+        if(State == SelectState.CanSelect && otherSel == OtherSelected) { return; }
+
+
         GameMaster.AddAction(new Actions.Scale(Vector3.one * 1.1f, Vector3.one, 
             gameObject, 0.2f,0.0f, Actions.ActionType.NoGroup, false, Actions.EaseType.Linear ));
 
-
+        otherSel = OtherSelected;
         State = SelectState.CanSelect;
 
     }
     public void Deselect()
     {
+        // Do not do anything if already deselected
+        if(State== SelectState.CannotSelect) { return; }
+
         GameMaster.AddAction(new Actions.Scale(Vector3.one, Vector3.one * 1.1f, gameObject, 0.2f,
             0.0f, Actions.ActionType.Tiles, false, Actions.EaseType.Linear));
 
