@@ -308,9 +308,12 @@ public class GameMaster : MonoBehaviour
 
             Defender.SetOwner(GetChallenger().Player);
 
+            int unitsToMove = Mathf.Clamp((-index), 1, 3);
+
             // Pull up the confirm for fortify
             ConfirmUI.BeginConfirm("Fortify", ConfirmUI.ConfirmType.Fortify,
-                GetChallenger().NodeRef, GetDefender().NodeRef, Mathf.Clamp((-index), 1, 3));
+                GetChallenger().NodeRef, GetDefender().NodeRef,
+                Mathf.Clamp(unitsToMove , 1, Challenger.Units-1));
             //Defender.NodeRef.Fortify(3);
 
         }
