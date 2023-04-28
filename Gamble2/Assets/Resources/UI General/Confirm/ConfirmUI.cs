@@ -200,17 +200,21 @@ public class ConfirmUI : UIElement
         CloseUI();
 
         requester.Confirm(value);
-
-
+    }
+    public static void CancelConfirm()
+    {
+        instance.CloseUI();
     }
 
     void CloseUI()
     {
+        float closeSpeed = .1f;
+
         instance.actions.Add(
             new Actions.Move
             (
                 instance.startPos, instance.endPos, instance.topPanel,
-                0.5f, 0.0f
+                closeSpeed, 0.0f
                 ));
 
 
@@ -218,7 +222,7 @@ public class ConfirmUI : UIElement
         // Add a hide action
         actions.Add(
             new Actions.UIHide
-            (this, 0, 0.5f,Actions.ActionType.AllGroup,true)
+            (this, 0, closeSpeed,Actions.ActionType.AllGroup,true)
             );
     }
 }

@@ -119,6 +119,9 @@ public class MapTile : MonoBehaviour
             if (gm.GetChallenger() == this)
             {
                 gm.ReleaseChallenger();
+                // Stop drawing the cancel arrow
+                MapDrawSystem.CancelArrow();
+                ConfirmUI.CancelConfirm();
             }
             else
             {
@@ -166,6 +169,8 @@ public class MapTile : MonoBehaviour
                 if (gm.GetChallenger() == this)
                 {
                     gm.ReleaseChallenger();
+                    MapDrawSystem.CancelArrow();
+                    ConfirmUI.CancelConfirm();
                 }
                 else
                 {
