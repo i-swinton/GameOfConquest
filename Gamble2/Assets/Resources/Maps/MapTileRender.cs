@@ -29,6 +29,23 @@ public class MapTileRender : MonoBehaviour
     }
 
 
+    public void Select()
+    {
+        State = SelectState.Selected;
+    }
+    public void CanSelect(bool OtherSelected)
+    {
+        
+
+        State = SelectState.CanSelect;
+
+    }
+    public void Deselect()
+    {
+        State = SelectState.CannotSelect;
+
+    }
+
     //Sets base color of tile to inputed color
     public void SetPlayerColor(Color color)
     {
@@ -57,7 +74,6 @@ public class MapTileRender : MonoBehaviour
         {
             State = SelectState.CannotSelect;
         }
-        //Renderer.color = Default;
     }
 
 
