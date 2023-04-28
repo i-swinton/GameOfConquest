@@ -85,6 +85,13 @@ public class CardInUI : UIElement
         }
     }
 
+    public override void Show()
+    {
+        base.Show();
+
+        LoadCardInUI(GameMaster.GetInstance().GetPlayer());
+    }
+
     public void LoadCardInUI(Player player)
     {
         // Grab the board if the board is empty
@@ -129,7 +136,7 @@ public class CardInUI : UIElement
 
     public void MakeCard(MapSystem.Board b)
     {
-        TerritoryCard card = new(0, RNG.Roll(0, b.Count - 1));
+        TerritoryCard card = CardGainUI.RandomCard();
 
         // Bind the cards to the hide element to disappear with it. 
         // Spawn them off screen for movment stuff

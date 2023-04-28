@@ -382,7 +382,15 @@ public class GameMaster : MonoBehaviour
                 break;
             case GameState.Draft: ChangeState(GameState.Attack); break;
             case GameState.Attack: ChangeState(GameState.Fortify); break; 
-            case GameState.Fortify: IncrementTurnTracker(); ChangeState(GameState.Draft); break;
+            case GameState.Fortify: 
+                ChangeState(GameState.End);
+                if (GetPlayer().canGetCard)
+                {
+                    CardGainUI.GainCards(CardGainUI.RandomCard(), GetPlayer(),gameBoard);
+                }
+                else { EndTurn(); }
+                break;
+            case GameState.End: IncrementTurnTracker(); ChangeState(GameState.Draft); break;
         }
     }
 
@@ -568,6 +576,8 @@ public class GameMaster : MonoBehaviour
 
         if (Defender.Units <= 0)
         {
+            // If we have captured a territory, allow us to gain a card
+            GetPlayer().canGetCard = true;
 
             Defender.SetOwner(GetChallenger().Player);
 
@@ -658,7 +668,8 @@ public enum GameState{
     Reinforce,
     Draft,
     Attack,
-    Fortify
+    Fortify,
+    End
 }
 
 public class Player
@@ -688,6 +699,8 @@ public class Player
     public bool isAlive;
     public List<TerritoryCard> cards;
     public List<MapSystem.Continent> continentsOwned;
+
+    public bool canGetCard;
 
     // Insert spot for player UI
 }
