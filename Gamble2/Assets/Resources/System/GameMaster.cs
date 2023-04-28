@@ -362,6 +362,12 @@ public class GameMaster : MonoBehaviour
 
                     break;
                 }
+            case GameState.Fortify:
+                {
+                    CompleteFortify(value);
+                    break;
+                }
+                
         }
     }
 
