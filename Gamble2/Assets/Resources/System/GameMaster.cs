@@ -70,6 +70,10 @@ public class GameMaster : MonoBehaviour
 
     public void StartGame(int numberOfPlayers)
     {
+        if(gameBoard == null)
+        {
+            gameBoard = BoardManager.instance.GetBoard();
+        }
         // Set the game as started
         hasGameStarted = true;
         PlayerAmount = numberOfPlayers;
@@ -95,6 +99,11 @@ public class GameMaster : MonoBehaviour
             //GameObject panel = Instantiate(playerPanelPrefab, pos, Quaternion.identity);
             //panel.GetComponent<PlayerPanel>().Setup(p);
         }
+
+        turnTacker = -1;
+        IncrementTurnTracker();
+        //ChangeState(GameState.Claim);
+
     }
 
     // Update is called once per frame
@@ -377,7 +386,24 @@ public class GameMaster : MonoBehaviour
         }
     }
 
-
+    public void UpdateContinentsOwned()
+    {
+        // Clear all player continents
+        for(int i =0; i < players.Count; ++i)
+        {
+            players[i].continentsOwned.Clear();
+        }
+        // Loop through and update all of the continents
+        for(int i=0; i < gameBoard.ContinentCount; ++i)
+        {
+            Player owningPlayer = gameBoard.FindContinent(i).GetOwningPlayer();
+            // Add the owning player
+            if(owningPlayer!=null)
+            {
+                owningPlayer.continentsOwned.Add(gameBoard.FindContinent(i));
+            }
+        }
+    }
 
 
     bool AllTerroritesClaim()
@@ -560,6 +586,11 @@ public class GameMaster : MonoBehaviour
         {
             EndTurn();
         }
+        // Update continents
+        if(GetState() == GameState.Attack)
+        {
+            UpdateContinentsOwned();
+        }
     }
 
     // ------------------------------------------ Confirm Functions --------------------------------------------
@@ -617,6 +648,8 @@ public class Player
         troopCount = 5;
         isAlive = true;
         draftTroop = 20;
+        continentsOwned = new List<MapSystem.Continent>();
+        cards = new List<TerritoryCard>();
     }
 
     public string Name
@@ -634,5 +667,7 @@ public class Player
     public int draftTroop;
     public bool isAlive;
     public List<TerritoryCard> cards;
+    public List<MapSystem.Continent> continentsOwned;
+
     // Insert spot for player UI
 }

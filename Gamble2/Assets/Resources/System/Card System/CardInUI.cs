@@ -98,6 +98,10 @@ public class CardInUI : UIElement
 
         // Set the player
         targetPlayer = player;
+        if(targetPlayer == null)
+        {
+            targetPlayer = GameMaster.GetInstance().GetPlayer();
+        }
 
         for (int i = 0; i < playerCards.Count; ++i)
         {
@@ -305,7 +309,10 @@ public class CardInUI : UIElement
         if (!CanCardIn) { return; }
 
         // Insert player for card in here
-        int troopCount = CardSystem.CardIn(turnInRefs.ToList(), board[0].Owner, board);
+        int troopCount = CardSystem.CardIn(turnInRefs.ToList(), GameMaster.GetInstance().GetPlayer(), board);
+
+        targetPlayer.draftTroop += troopCount;
+        
 
         NotifySystem.Message($"{board[0].Owner} has recieved {troopCount} units.");
 

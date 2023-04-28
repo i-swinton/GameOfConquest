@@ -16,7 +16,10 @@ namespace MapSystem
         [Tooltip("The list of continents on the board")]
         [SerializeField] List<Continent> continents;
 
+
         // ----------------------------------------- Properties ---------------------------------------------------
+
+        
 
         public int ContinentCount
         {
@@ -296,6 +299,9 @@ namespace MapSystem
 
         [SerializeField] string name;
 
+
+        Player lastOwningPlayer;
+
         //------------------------------------ Properties --------------------------------------
 
         public int TileCount
@@ -318,6 +324,17 @@ namespace MapSystem
             get
             {
                 return name;
+            }
+        }
+
+        /// <summary>
+        /// The player who had owned the continent when last checked.
+        /// </summary>
+        public Player LastOwningPlayer
+        {
+            get
+            {
+                return lastOwningPlayer;
             }
         }
 
@@ -383,10 +400,13 @@ namespace MapSystem
             // Check if the continent is owned
             if(!IsOwned())
             {
+                lastOwningPlayer = null;
+
                 // If not owned, return nobody
                 return null;
             }
 
+            lastOwningPlayer = board[tiles[0]].Owner;
             // 
             return board[tiles[0]].Owner;
         }
