@@ -465,7 +465,27 @@ public class GameMaster : MonoBehaviour
 
         if (desiredState == GameState.Draft)
         {
+            // Give the base three
             players[turnTacker].draftTroop += 3;
+
+            // Add the additional troops from the continents
+            foreach(MapSystem.Continent con in players[turnTacker].continentsOwned)
+            {
+                int total = 0;
+                foreach(BonusBase bonus in con.AllBonuses)
+                {
+                    // If not a unit bonus, ignore
+
+                    if (bonus.MyType != BonusBase.BonusType.Unit) { continue; }
+                    // Try to cast to unit bonus
+                    UnitBonus b = (UnitBonus)bonus;
+
+                    // Otherwise add to total
+                    total += b.Count;
+                }
+
+                players[turnTacker].draftTroop += total;
+            }
 
             // Show locations
             if(gameBoard != null)

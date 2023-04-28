@@ -67,4 +67,6 @@ MonoBehaviour:
     - Name: XD
       Image: {fileID: 21300000, guid: 393ec866f7a8f8b49a3edfae404cd500, type: 3}
   connectionPairs: []
-  namedPairs: []
+  namedPairs:
+  - node1: LMAO
+    node2: Matcha

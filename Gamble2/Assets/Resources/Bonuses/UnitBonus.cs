@@ -9,5 +9,13 @@ public class UnitBonus : BonusBase
     [SerializeField] int count;
 
 
+    public int Count
+    {
+        get
+        {
+            return count;
+        }
+    }
+
 
 }

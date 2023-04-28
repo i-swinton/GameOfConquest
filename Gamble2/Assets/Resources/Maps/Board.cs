@@ -338,6 +338,14 @@ namespace MapSystem
             }
         }
 
+        public List<BonusBase> AllBonuses
+        {
+            get
+            {
+                return bonuses;
+            }
+        }
+
         //---------------------------------- Public Functions -----------------------------------
 
         public Continent()
