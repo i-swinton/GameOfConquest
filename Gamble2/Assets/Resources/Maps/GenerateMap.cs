@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class GenerateMap : MonoBehaviour
 {
-    
-    [SerializeField] List<MapContinent> Contenents;
+    public MapData Map;
+
     public GameObject TilePrefab;
 
     public ContactFilter2D ConnectionFilter;
-
-    [Tooltip("A list of pairs to be connected to each other regardless of location")]
-    [SerializeField] List<NodeConnectionPair> connectionPairs;
-    [SerializeField] List<NodeConnectionPairNamed> namedPairs;
 
     // Start is called before the first frame update
     void Start()
@@ -23,26 +19,26 @@ public class GenerateMap : MonoBehaviour
     public void GenBoard()
     {
         // Create the board
-        BoardManager.instance.MakeBoard(Contenents);
+        BoardManager.instance.MakeBoard(Map.Contenents);
 
         MapSystem.Board board = BoardManager.instance.GetBoard();
 
         List<MapTile> spawnedTiles = new List<MapTile>();
 
-        for (int i = 0; i < Contenents.Count; i++)
+        for (int i = 0; i < Map.Contenents.Count; i++)
         {
 
 
             //Generates tiles within a continent
-            for (int j = 0; j < Contenents[i].Tiles.Length; j++)
+            for (int j = 0; j < Map.Contenents[i].Tiles.Length; j++)
             {
                 GameObject tile = Instantiate(TilePrefab, transform);
-                tile.GetComponent<SpriteRenderer>().sprite = Contenents[i].Tiles[j].Image;
+                tile.GetComponent<SpriteRenderer>().sprite = Map.Contenents[i].Tiles[j].Image;
                 tile.AddComponent<PolygonCollider2D>();
                 // Generate the tile
                 tile.GetComponent<MapTile>().GenTile(
                     board[board.FindContinent(i).Tiles[j]]
-                    ,Contenents[i].Tiles[j].Name);
+                    ,Map.Contenents[i].Tiles[j].Name);
 
                 // Set the tile's position (for debug references)
                 tile.GetComponent<MapTile>().NodeRef.MoveTo(tile.GetComponent<PolygonCollider2D>().bounds.center);
@@ -60,7 +56,7 @@ public class GenerateMap : MonoBehaviour
         }
 
         GenerateConnections(board, spawnedTiles);
-        ForceConnections(board, namedPairs);
+        ForceConnections(board, Map.namedPairs);
     }
 
     public void ForceConnections(MapSystem.Board board, List<NodeConnectionPairNamed> pairs)
@@ -134,19 +130,4 @@ public class GenerateMap : MonoBehaviour
 
     }
 
-}
-[System.Serializable]
-public class MapContinent
-{
-    public string Name;
-    public List<BonusBase> bonus;
-    public TileData[] Tiles;
-}
-
-[System.Serializable]
-public struct TileData
-{
-    public string Name;
-    public Sprite Image;
-  //  Sprite this[int i = 0] { get { return Image; } }
 }

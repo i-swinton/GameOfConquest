@@ -83,23 +83,29 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _Hover_Strength: 0.5
+    - _Hovering: 0
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _OffSet2: 10
+    - _Offset: 0.03
     - _Parallax: 0.02
     - _Selected: 0.45
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _State: 3
+    - _State: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
+    - _BorderColor: {r: 1, g: 0, b: 0, a: 1}
     - _CUnselectable: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
     - _CanSelect: {r: 0.9056604, g: 0.9056604, b: 0.9056604, a: 1}
     - _Color: {r: 1, g: 0, b: 0, a: 1}
     - _Color_1: {r: 0, g: 0.1836467, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _HoverColor: {r: 1, g: 1, b: 1, a: 1}
     - _MainColor: {r: 0, g: 1, b: 0.70980406, a: 1}
     - _OtherSelected: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
     - _PlayerColor: {r: 1, g: 1, b: 1, a: 1}
