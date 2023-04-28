@@ -435,7 +435,9 @@ public class GameMaster : MonoBehaviour
 
     void ChangeState(GameState desiredState)
     {
-        if(desiredState == GameState.Draft)
+        state = desiredState;
+
+        if (desiredState == GameState.Draft)
         {
             players[turnTacker].draftTroop += 3;
 
@@ -481,7 +483,6 @@ public class GameMaster : MonoBehaviour
         }
 
 
-        state = desiredState;
     }
 
     public int GetPlayerTurn()
