@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Contenents:
   - Name: Tea Town
-    bonus: []
+    bonus:
+    - {fileID: 11400000, guid: e4310051c4f83e84b9ad76651f41b309, type: 2}
     Tiles:
     - Name: Oolong
       Image: {fileID: 21300000, guid: 519b8598e6e6f314c819f70db0aad70a, type: 3}
