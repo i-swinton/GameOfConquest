@@ -1942,60 +1942,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8699cffd143e1f64bbaaf581992ce386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Contenents:
-  - Name: T-Town
-    bonus: []
-    Tiles:
-    - Name: Matcha
-      Image: {fileID: 21300000, guid: 12718c3dfac4a0d49bb0717634978874, type: 3}
-    - Name: Black
-      Image: {fileID: 21300000, guid: c4c85cc0360c13e4eaa5602c2284aaba, type: 3}
-    - Name: Green
-      Image: {fileID: 21300000, guid: 0c31e4a9cd0b7dc4fb8f0b19c8a96b9e, type: 3}
-    - Name: Oolong
-      Image: {fileID: 21300000, guid: 04ea2fd228ad68241abb71c4933a444d, type: 3}
-  - Name: Fish
-    bonus: []
-    Tiles:
-    - Name: Salmon
-      Image: {fileID: 21300000, guid: 518ad7d8efb376645b0acc6a245a3016, type: 3}
-    - Name: Cod
-      Image: {fileID: 21300000, guid: 93c000e7b19441a4a8437fd4fcc495eb, type: 3}
-    - Name: Dolphin
-      Image: {fileID: 21300000, guid: ae517822d41a76d41ae95d207cee7a2c, type: 3}
-    - Name: Octopus
-      Image: {fileID: 21300000, guid: ba6afa54af2a6334d880640c4845ed82, type: 3}
-  - Name: Bottom
-    bonus: []
-    Tiles:
-    - Name: Left
-      Image: {fileID: 21300000, guid: 764bed1c1f46f174f9a5a2218f4e12f3, type: 3}
-    - Name: Right
-      Image: {fileID: 21300000, guid: 15270d69077e10b4ab8a376783f92b60, type: 3}
-  - Name: Dennis
-    bonus: []
-    Tiles:
-    - Name: McKinnely
-      Image: {fileID: 21300000, guid: ae9277bef351a2e4aa8a234a4d432205, type: 3}
-    - Name: Taft
-      Image: {fileID: 21300000, guid: 8d5ef5118c17da7438eef1d365354e0c, type: 3}
-    - Name: Clinton
-      Image: {fileID: 21300000, guid: a718bb3289fa1d5498c9d428a7345a58, type: 3}
-    - Name: Lincon
-      Image: {fileID: 21300000, guid: 4752dd9b59f32d7479a4e0ca7ecce0dc, type: 3}
-    - Name: Truman
-      Image: {fileID: 21300000, guid: 1930fa56138b13b4ea6b18057502233e, type: 3}
-  - Name: Blorbton
-    bonus: []
-    Tiles:
-    - Name: IDK
-      Image: {fileID: 21300000, guid: 34ced2c88ca42234e843dc38e2aab936, type: 3}
-    - Name: LMAO
-      Image: {fileID: 21300000, guid: 7559f0df1aed2b34d971f90d7cc237f9, type: 3}
-    - Name: LOL
-      Image: {fileID: 21300000, guid: 0627c00458980f845be6e0e3759ba75f, type: 3}
-    - Name: IDC
-      Image: {fileID: 21300000, guid: 67e531d7877ad4443863381b1e02b380, type: 3}
+  Map: {fileID: 11400000, guid: 771de78332a522a43a833df3f165ce83, type: 2}
   TilePrefab: {fileID: 1043854607677495953, guid: 132dd8a0d5b3def478f1c1e1cf8653a3, type: 3}
   ConnectionFilter:
     useTriggers: 0
@@ -2011,14 +1958,6 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
-  connectionPairs:
-  - node1: 17
-    node2: 16
-  namedPairs:
-  - node1: LMAO
-    node2: LOL
-  - node1: LMAO
-    node2: Matcha
 --- !u!4 &1277355905
 Transform:
   m_ObjectHideFlags: 0
