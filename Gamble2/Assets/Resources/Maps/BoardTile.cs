@@ -27,6 +27,13 @@ namespace MapSystem
 
         int tileGroup;
 
+        // Actions
+
+        public System.Action onSelect;
+        public System.Action onDeselect;
+        public System.Action<bool> onSelectable;
+        public System.Action onUnselectable;
+
         //--------------------------------------------- Properties---------------------------------------------------
 
         /// <summary>
@@ -121,9 +128,6 @@ namespace MapSystem
             this.tileGroup = tileGroup;
         }
 
-       
-
-
         /// <summary>
         /// Moves the central position of the board tile to another point in the world.
         /// </summary>
@@ -205,6 +209,31 @@ namespace MapSystem
             // Add a bonus to the list
             bonuses.Add(bonus);
         }
+
+        public void Select()
+        {
+            onSelect?.Invoke();
+        }
+
+        public void Deselect()
+        {
+            onDeselect?.Invoke();
+        }
+
+        /// <summary>
+        /// Sets the tile to be selectable
+        /// </summary>
+        /// <param name="otherSeleced">True when something can be selected and something is already selected</param>
+        public void Selectable(bool otherSeleced)
+        {
+            onSelectable?.Invoke(otherSeleced);
+        }
+
+        public void Unselectable()
+        {
+            onUnselectable?.Invoke();
+        }
+
 
         // ---------------------------------------------- DEBUG FUNCTIONS --------------------------------------------
         public void DrawConnections()

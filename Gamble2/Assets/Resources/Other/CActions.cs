@@ -8,7 +8,8 @@ namespace Actions
     public enum ActionType
     {
         NoGroup,
-
+        UI,
+        Tiles,
         AllGroup
     }
 

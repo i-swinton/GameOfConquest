@@ -8,7 +8,9 @@ public class ConfirmUI : UIElement
     public enum ConfirmType
     {
         Battle, 
-        Fortify
+        Fortify,
+
+        None =-1
     }
 
     // ------------------------------------------------- Variables --------------------------------------------------------
@@ -37,6 +39,16 @@ public class ConfirmUI : UIElement
 
     [SerializeField]
     NumberScroll confirmScroll;
+
+    // ------------------------------------------------- Properties -----------------------------------------------------
+
+    public static ConfirmType confirmType
+    {
+        get
+        {
+            return instance.current;
+        }
+    }
 
     // --------------------------------------------------------- Public Functions -------------------------------------------
 
@@ -209,6 +221,9 @@ public class ConfirmUI : UIElement
     void CloseUI()
     {
         float closeSpeed = .1f;
+
+        // Deactivate the confirm type
+        current = ConfirmType.None;
 
         instance.actions.Add(
             new Actions.Move

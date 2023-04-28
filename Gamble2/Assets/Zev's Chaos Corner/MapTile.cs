@@ -44,6 +44,15 @@ public class MapTile : MonoBehaviour
         NodeRef = nodeRef;
         Name = name;
 
+        // Initialize the actions to the noderef
+        MapTileRender mtr = GetComponent<MapTileRender>();
+        NodeRef.onSelect += mtr.Select;
+        NodeRef.onDeselect += mtr.Deselect;
+        NodeRef.onSelectable += mtr.CanSelect;
+        // Insert Unselectable here
+
+
+
         Colid = GetComponent<PolygonCollider2D>();
 
         Center = Colid.bounds.center;
@@ -166,13 +175,18 @@ public class MapTile : MonoBehaviour
         {
             if (gm.HasChallengerCheck())
             {
+                // Do not let
                 if (gm.GetChallenger() == this)
                 {
-                    gm.ReleaseChallenger();
-                    MapDrawSystem.CancelArrow();
-                    ConfirmUI.CancelConfirm();
+                    // Prevent the deselection of fortification during the attack phase
+                    if (gm.GetState() != GameState.Attack)
+                    {
+                        gm.ReleaseChallenger();
+                        MapDrawSystem.CancelArrow();
+                        ConfirmUI.CancelConfirm();
+                    }
                 }
-                else
+                else 
                 {
                     MapSystem.Board board = BoardManager.instance.GetBoard();
                     // Check if the defender is connected to the challenger

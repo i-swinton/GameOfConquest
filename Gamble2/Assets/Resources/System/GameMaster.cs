@@ -39,6 +39,15 @@ public class GameMaster : MonoBehaviour
     // Singleton
     static GameMaster instance;
 
+    /// <summary>
+    /// Add an action to the central action list
+    /// </summary>
+    /// <param name="action">The action being added</param>
+    public static void AddAction(Actions.Action action)
+    {
+        
+        instance.actions.Add(action);
+    }
 
     private void Awake()
     {
@@ -155,14 +164,65 @@ public class GameMaster : MonoBehaviour
     public void SetChallenger(MapTile mt)
     {
         Challenger = mt;
-        actions.Add(new Actions.Scale(Vector3.one * 1.4f, Vector3.one, Challenger.gameObject, 0.2f,0.0f, ActionType.NoGroup, false, EaseType.Linear ));
-        foreach (MapTile mapTile in FindObjectsOfType<MapTile>())
+        // Show the challenger as selected
+        Challenger.NodeRef.Select();
+        //actions.Add(new Actions.Scale(Vector3.one * 1.4f, Vector3.one, Challenger.gameObject, 0.2f,0.0f, ActionType.NoGroup, false, EaseType.Linear ));
+     
+        // If I'm in attack mode, highlight the adjacent tiles
+        if(state == GameState.Attack)
         {
-            if (mt.NodeRef.Neighbors.Contains(mapTile.NodeRef))
+           // Iterate through all tiles and unhighlight and highlight accordingly
+           for(int i =0; i < gameBoard.Count; ++i)
             {
-                actions.Add(new Actions.Scale(Vector3.one * 1.1f, Vector3.one, mapTile.gameObject, 0.2f,0.0f, ActionType.NoGroup, false, EaseType.Linear ));
+                // Skip if the matching piece
+                if(gameBoard[i]== Challenger.NodeRef) { continue; }
+                // Add case for blocked/hidden later
+
+                // If adjacent and not sharing the onwer, mark as selectable
+                if(Challenger.NodeRef.Neighbors.Contains( gameBoard[i]) && gameBoard[i].Owner != Challenger.Player)
+                {
+                    gameBoard[i].Selectable(true);
+                }    
+                else // Otherwise mark as neutral
+                {
+                    gameBoard[i].Deselect();
+                }
+
             }
         }
+        else // Otherwise highlight fortifiable tiles
+        {
+            // Get the id of the node
+            var connectedTiles = gameBoard.GetConnectedTiles(Challenger.NodeRef.ID);
+
+
+            for(int i =0; i < gameBoard.Count; ++i)
+            {
+                // Skip if matching
+                if(gameBoard[i] == Challenger.NodeRef) { continue; }
+
+                // If node is connected, highlight
+                if(connectedTiles.Contains(gameBoard[i]))
+                {
+                    gameBoard[i].Selectable(true);
+                }
+                // Otherwise, deselect
+                else
+                {
+                    gameBoard[i].Deselect();
+                }
+
+            }
+        }
+
+        
+        //foreach (MapTile mapTile in FindObjectsOfType<MapTile>())
+        //{
+        //    if (mt.NodeRef.Neighbors.Contains(mapTile.NodeRef))
+        //    {
+        //        actions.Add(new Actions.Scale(Vector3.one * 1.1f, Vector3.one, mapTile.gameObject, 0.2f,0.0f, ActionType.NoGroup, false, EaseType.Linear ));
+        //    }
+        //}
     }
     
     public MapTile GetChallenger()
@@ -179,14 +239,53 @@ public class GameMaster : MonoBehaviour
     {
         if (Challenger != null)
         {
-            actions.Add(new Actions.Scale(Vector3.one, Vector3.one * 1.4f, Challenger.gameObject, 0.2f,0.0f, ActionType.NoGroup, false, EaseType.Linear ));
-            foreach (MapTile mapTile in FindObjectsOfType<MapTile>())
+            // Apply the de-highlighting effects
+
+            Challenger.NodeRef.Deselect();
+
+            for (int i = 0; i < gameBoard.Count; ++i)
             {
-                if (Challenger.NodeRef.Neighbors.Contains(mapTile.NodeRef))
+                //  No matter what state, hide the no turn player units
+                if(gameBoard[i].Owner != GetPlayer())
                 {
-                    actions.Add(new Actions.Scale(Vector3.one, Vector3.one * 1.1f, mapTile.gameObject, 0.2f,0.0f, ActionType.NoGroup, false, EaseType.Linear ));
+                    gameBoard[i].Deselect();
                 }
+                else
+                if(state != GameState.Draft) // If not the start of a new turn
+                {
+                    // Only highlight those which can attack/fotify
+                    if(gameBoard[i].UnitCount > 1)
+                    {
+                        gameBoard[i].Selectable(false);
+                    }
+                    else
+                    {
+                        gameBoard[i].Deselect();
+                    }
+                }
+                else // Deselect all when starting new turn
+                {
+                    gameBoard[i].Deselect();
+                }
+                //else if(state == GameState.Fortify)
+                //{
+                //    // Only highlight those which can fortify others
+                //    if(gameBoard[i].UnitCount )
+                //}
             }
+
+            //    actions.Add(new Actions.Scale(Vector3.one, Vector3.one * 1.4f, Challenger.gameObject, 0.2f,0.0f, ActionType.NoGroup, false, EaseType.Linear ));
+            //foreach (MapTile mapTile in FindObjectsOfType<MapTile>())
+            //{
+            //    if (Challenger.NodeRef.Neighbors.Contains(mapTile.NodeRef))
+            //    {
+            //        actions.Add(new Actions.Scale(Vector3.one, Vector3.one * 1.1f, mapTile.gameObject, 0.2f,0.0f, ActionType.NoGroup, false, EaseType.Linear ));
+            //    }
+            //}
+
+
+
+            // Reset challenger
             Challenger = null;
 
             MapDrawSystem.CancelArrow();
@@ -198,6 +297,44 @@ public class GameMaster : MonoBehaviour
         if(Defender!=null)
         {
             Defender = null;
+
+           //Defender.NodeRef.Deselect();
+
+            // Re-highlight all that is neseccary
+            // Iterate through all tiles and unhighlight and highlight accordingly
+            for (int i = 0; i < gameBoard.Count; ++i)
+            {
+                // If the challenger is empty
+                if(Challenger == null)
+                {
+                    if(state == GameState.Attack)
+                    {
+                        // 
+                    }
+                    else // Deselect all at the end of the turn
+                    {
+                        gameBoard[i].Deselect();
+                    }
+
+                    // Skip all things below
+                    continue;
+                }
+
+                // Skip if the matching piece
+                if (gameBoard[i] == Challenger.NodeRef) { continue; }
+                // Add case for blocked/hidden later
+
+                // If adjacent and not sharing the onwer, mark as selectable
+                if (Challenger.NodeRef.Neighbors.Contains(gameBoard[i]) && gameBoard[i].Owner != Challenger.Player)
+                {
+                    gameBoard[i].Selectable(true);
+                }
+                else // Otherwise mark as neutral
+                {
+                    gameBoard[i].Deselect();
+                }
+
+            }
         }
     }
 

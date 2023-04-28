@@ -30,17 +30,27 @@ public class MapTileRender : MonoBehaviour
 
     public void Select()
     {
+        GameMaster.AddAction(new Actions.Scale(Vector3.one * 1.4f, Vector3.one, 
+            gameObject, 0.2f,0.0f, Actions.ActionType.NoGroup, false, Actions.EaseType.Linear ));
+
         State = SelectState.Selected;
     }
     public void CanSelect(bool OtherSelected)
     {
         
+        GameMaster.AddAction(new Actions.Scale(Vector3.one * 1.1f, Vector3.one, 
+            gameObject, 0.2f,0.0f, Actions.ActionType.NoGroup, false, Actions.EaseType.Linear ));
+
 
         State = SelectState.CanSelect;
 
     }
     public void Deselect()
     {
+        GameMaster.AddAction(new Actions.Scale(Vector3.one, Vector3.one * 1.1f, gameObject, 0.2f,
+            0.0f, Actions.ActionType.Tiles, false, Actions.EaseType.Linear));
+
+        // Set the new state
         State = SelectState.CannotSelect;
 
     }
