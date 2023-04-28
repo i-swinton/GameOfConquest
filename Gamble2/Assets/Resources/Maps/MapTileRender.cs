@@ -24,7 +24,6 @@ public class MapTileRender : MonoBehaviour
         {
             _State = value;
             Mat.SetFloat("_State", (float)State);
-
         }
     }
 
@@ -69,10 +68,11 @@ public class MapTileRender : MonoBehaviour
     {
         if (value)
         {
-            State = SelectState.CanSelect;}
+            Mat.SetFloat("_Hovering", 1);
+        }
         else
         {
-            State = SelectState.CannotSelect;
+            Mat.SetFloat("_Hovering", 0);
         }
     }
 
