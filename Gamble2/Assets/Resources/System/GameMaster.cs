@@ -99,6 +99,11 @@ public class GameMaster : MonoBehaviour
             return;
         }
 
+        if(gameBoard ==null)
+        {
+            gameBoard = BoardManager.instance.GetBoard();
+        }
+
         text.text = "Player " + (turnTacker+1).ToString() + "\n" + state.ToString();
 
         // Update the action list
