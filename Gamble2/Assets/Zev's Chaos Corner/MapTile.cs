@@ -157,8 +157,9 @@ public class MapTile : MonoBehaviour
         {
             if (gm.GetPlayerTurn() == Player.playerID)
             {
+                
                 // Only allow if the unit count is greater than 1
-                if (NodeRef.UnitCount <= 1) { return; }
+                if (!CombatSystem.CanAttack(NodeRef)) { return; }
 
                 //Doesn't Have a Challenger
                 gm.SetChallenger(this);

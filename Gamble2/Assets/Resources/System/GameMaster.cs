@@ -254,9 +254,24 @@ public class GameMaster : MonoBehaviour
                 if(state != GameState.Draft) // If not the start of a new turn
                 {
                     // Only highlight those which can attack/fotify
-                    if(gameBoard[i].UnitCount > 1)
+                    if (gameBoard[i].UnitCount > 1)
                     {
-                        gameBoard[i].Selectable(false);
+                        if (state == GameState.Attack)
+                        {
+                            bool canAttack = CombatSystem.CanAttack(gameBoard[i]);
+                            if (canAttack)
+                            {
+                                gameBoard[i].Selectable(false);
+                            }
+                            else
+                            {
+                                gameBoard[i].Deselect();
+                            }
+                        }
+                        else
+                        {
+                            gameBoard[i].Selectable(false);
+                        }
                     }
                     else
                     {
@@ -394,6 +409,28 @@ public class GameMaster : MonoBehaviour
         turnTacker++;
         if (turnTacker >= PlayerAmount)
             turnTacker = 0;
+
+        // Update the display
+        if(gameBoard != null)
+        {
+            if(state == GameState.Reinforce)
+            {
+                for(int i=0; i < gameBoard.Count; ++i)
+                {
+                    if (gameBoard[i].Owner == players[turnTacker]) { gameBoard[i].Selectable(false); }
+                    else { gameBoard[i].Deselect(); }
+                }
+            }
+            else if(state == GameState.Claim)
+            {
+                for(int i =0; i < gameBoard.Count; ++i)
+                {
+                    if (gameBoard[i].Owner == null) { gameBoard[i].Selectable(false); }
+                    else { gameBoard[i].Deselect(); }
+                }
+            }
+
+        }
     }
 
     void ChangeState(GameState desiredState)
@@ -401,7 +438,49 @@ public class GameMaster : MonoBehaviour
         if(desiredState == GameState.Draft)
         {
             players[turnTacker].draftTroop += 3;
+
+            // Show locations
+            if(gameBoard != null)
+            {
+                for(int i =0; i < gameBoard.Count; ++i )
+                {
+                    if(gameBoard[i].Owner == players[turnTacker]) { gameBoard[i].Selectable(false); }
+                    else { gameBoard[i].Deselect(); }
+                }
+            }
         }
+        else if (state == GameState.Attack )
+        {
+            for (int i = 0; i < gameBoard.Count; ++i)
+            {
+                if (gameBoard[i].Owner != players[turnTacker]) { gameBoard[i].Deselect(); }
+                else if (gameBoard[i].UnitCount <= 1) { gameBoard[i].Deselect(); }
+                else 
+                {
+                    bool canAttack =CombatSystem.CanAttack(gameBoard[i]);
+
+                    if (canAttack)
+                    {
+                        gameBoard[i].Selectable(false);
+                    }
+                    else
+                    {
+                        gameBoard[i].Deselect();
+                    }
+                }
+            }
+        }
+        else if ( state == GameState.Fortify)
+        {
+            for (int i = 0; i < gameBoard.Count; ++i)
+            {
+                if (gameBoard[i].Owner != players[turnTacker]) { gameBoard[i].Deselect(); }
+                else if (gameBoard[i].UnitCount <= 1) { gameBoard[i].Deselect(); }
+                else { gameBoard[i].Selectable(false); }
+            }
+        }
+
+
         state = desiredState;
     }
 

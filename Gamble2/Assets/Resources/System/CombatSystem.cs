@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 
-public static class CombatSystem { 
+public static class CombatSystem {
     /// What is combat
     ///  Attack rolls
     ///  Defense rolls
@@ -21,6 +21,23 @@ public static class CombatSystem {
 
     // ------------------------------------------------------ Public Functions -------------------------------------------------
 
+    public static bool CanAttack(MapSystem.BoardTile tile)
+    {
+        if (tile.UnitCount <= 1)  return false; 
+
+       // Check the neighbors for someone attackable
+        foreach (MapSystem.BoardTile node in tile.Neighbors)
+        {
+            // If the owner does not match, we can attack
+            if (node.Owner != tile.Owner)
+            {
+                return true;
+
+            }
+        }
+
+        return false;
+    }
 
 
 
