@@ -29,8 +29,10 @@ public class NumberScroll : MonoBehaviour
         options.Clear();
         options.AddRange(opts);
 
-        // Set our display value
-        displayText.text = options[index];
+
+            // Set our display value
+            displayText.text = options[index];
+
     }
 
     public void Step(int direction)

@@ -197,7 +197,11 @@ namespace MapSystem
         /// <returns>If the tile is found, returns a reference to that tile. Otherwise, returns null.</returns>
         public BoardTile this[string name] => Find(name);
 
-
+        /// <summary>
+        /// Gets a list of all tiles connected to the given node that share a player.
+        /// </summary>
+        /// <param name="tile">The tile being checked for all connected nodes.</param>
+        /// <returns>Returns a list of nodes which are all disjoint to one another by having the same player. </returns>
         public List<BoardTile> GetConnectedTiles(int tile)
         {
             // Tiles
@@ -229,7 +233,9 @@ namespace MapSystem
                     if (closedList.Contains(neighbor)) { continue; }
 
                     // Otherwise, add to closed list
-                    closedList.Add(neighbor);
+                    //closedList.Add(neighbor);
+                    // And add it to the open list
+                    openList.Add(neighbor);
                 }
 
                 

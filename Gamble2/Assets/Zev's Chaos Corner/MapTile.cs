@@ -174,6 +174,13 @@ public class MapTile : MonoBehaviour
                 }
                 else
                 {
+                    MapSystem.Board board = BoardManager.instance.GetBoard();
+                    // Check if the defender is connected to the challenger
+                    if (!board.GetConnectedTiles(NodeRef.ID).Contains(gm.GetChallenger().NodeRef))
+                    {
+                        // Don't do anything if it does not
+                        return;
+                    }
                     
                     //NodeRef.TransferUnits(gm.GetChallenger().NodeRef, 1);
                     ////gm.GetChallenger().Units = gm.GetChallenger().NodeRef.UnitCount;
