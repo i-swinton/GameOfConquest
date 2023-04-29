@@ -197,9 +197,16 @@ namespace MapSystem
         {
             // Ignore if the players match
             if(owner == player) { return; }
+            
+            if(owner != null)
+            {
+                owner.territoryCount -= 1;
+            }
 
             // Change the owner to the new player
             owner = player;
+
+            player.territoryCount += 1;
             
         }
 

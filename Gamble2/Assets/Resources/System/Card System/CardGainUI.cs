@@ -83,7 +83,7 @@ public class CardGainUI : UIElement
 
 
 
-   public void AssignCards()
+    public void AssignCards()
     {
         for (int i = 0; i < cardList.Count; ++i)
         {
@@ -95,7 +95,11 @@ public class CardGainUI : UIElement
 
 
         IsVisible = false;
-        GameMaster.GetInstance().EndTurn();
+        // End the turn only if it is the end of the game.
+        if (GameMaster.GetInstance().GetState() == GameState.End)
+        {
+            GameMaster.GetInstance().EndTurn();
+        }
     }
 
     // Update is called once per frame

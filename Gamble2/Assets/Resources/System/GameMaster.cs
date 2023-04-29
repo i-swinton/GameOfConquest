@@ -9,6 +9,7 @@ public class GameMaster : MonoBehaviour
 {
     public Player Winner { get { return winningPlayer; } }
 
+    Player lastDeadPlayer;
 
     private int turnTacker = 0;
     public int PlayerAmount = 2;
@@ -29,10 +30,13 @@ public class GameMaster : MonoBehaviour
 
     private Actions.ActionList actions;
 
+    [Header("Game Settings")]
     [SerializeField]
     GameMode gameMode;
     MapSystem.Board gameBoard;
 
+    [SerializeField]
+    GameSettings settings;
 
     bool hasGameStarted;
 
@@ -73,6 +77,11 @@ public class GameMaster : MonoBehaviour
         return instance.gameMode.OverrideReinforcement();
     }
 
+    public static void LoadSettings(GameSettings settings)
+    {
+        instance.settings = settings;
+    }
+
     public void StartGame(int numberOfPlayers)
     {
         if(gameBoard == null)
@@ -83,7 +92,7 @@ public class GameMaster : MonoBehaviour
         hasGameStarted = true;
         PlayerAmount = numberOfPlayers;
 
-        state = GameState.Claim;
+        //state = GameState.Claim;
 
         if (PlayerAmount <= 1)
             PlayerAmount = 2;
@@ -104,6 +113,8 @@ public class GameMaster : MonoBehaviour
             //GameObject panel = Instantiate(playerPanelPrefab, pos, Quaternion.identity);
             //panel.GetComponent<PlayerPanel>().Setup(p);
         }
+
+        ChangeState(GameState.Claim);
 
         turnTacker = -1;
         IncrementTurnTracker();
@@ -156,7 +167,7 @@ public class GameMaster : MonoBehaviour
         if (gameMode)
         {
             // Check if the game is over
-            if (GetState()!= GameState.Claim && gameMode.CheckIfOver(this, gameBoard))
+            if (GetState()!= GameState.Claim && gameMode.CheckIfOver(this, gameBoard) && Winner == null)
             {
                 PlayWinSequence(gameMode.WinningPlayer(this, gameBoard));
             }
@@ -434,22 +445,6 @@ public class GameMaster : MonoBehaviour
         return true;
     }
 
-    bool ReinforcingDone()
-    {
-        foreach (Player player in players)
-        {
-            if (player.draftTroop > 0)
-                return false;
-        }
-
-        // If the game mode is not ready to finish reinforcing, then we are not done
-        if(!gameMode.ReinforcingComplete(this, gameBoard))
-        {
-            return false;
-        }
-
-        return true;
-    }
 
     void IncrementTurnTracker()
     {
@@ -484,7 +479,16 @@ public class GameMaster : MonoBehaviour
     {
         state = desiredState;
 
-        if (desiredState == GameState.Draft)
+        
+        if(state == GameState.Claim)
+        {
+            // Automatically fill the map with this mode
+            if(settings.AutoFillTiles)
+            {
+                AutoClaimMap();
+            }
+        }
+        else if (desiredState == GameState.Draft)
         {
             // Give the base three
             players[turnTacker].draftTroop += 3;
@@ -576,6 +580,78 @@ public class GameMaster : MonoBehaviour
 
     }
 
+    //--------------------------------------------- Reinforcing Functions --------------------------------
+    #region Reinforcing
+    bool ReinforcingDone()
+    {
+        foreach (Player player in players)
+        {
+            if (player.draftTroop > 0)
+                return false;
+        }
+
+        // If the game mode is not ready to finish reinforcing, then we are not done
+        if (!gameMode.ReinforcingComplete(this, gameBoard))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    Player GetNextDraftablePlayer(int index)
+    {
+        // Return the player index
+        if(players[index].draftTroop > 0) { return players[index]; }
+
+        int newIndex = index + 1;
+
+        while(newIndex != index)
+        {
+            if(newIndex >= players.Count) { newIndex = 0; }
+            // IF this player has troops, deploy those troops
+            if(players[newIndex].draftTroop > 0) { return players[newIndex]; }
+
+            newIndex++;
+        }
+
+
+#if UNITY_EDITOR
+        // If no one else is available, throw an exception
+        throw new Exception("Unable to find a player with troops");
+#else
+        return players[index];
+#endif
+    }
+
+
+    public void AutoClaimMap()
+    {
+        int openTiles = gameBoard.Count;
+
+        int i = 0;
+        while(openTiles > 0 && i < gameBoard.Count)
+        {
+            // Fix later
+            Player p = GetNextDraftablePlayer(RNG.Roll(0, PlayerAmount-1));
+            gameBoard[i].ChangeOwner(p);
+            gameBoard[i].AddUnits(new Unit(1));
+
+            // Decrement troop
+            p.draftTroop--;
+
+            // Decrement open tiles
+            openTiles--;
+            // Increment i
+            ++i;
+        }
+    }
+
+#endregion
+
+    // -------------------------------------- Getter Functions ---------------------------------------------
+#region Getter Functions
     public int GetPlayerTurn()
     {
         return turnTacker;
@@ -596,6 +672,7 @@ public class GameMaster : MonoBehaviour
         return players[index];
     }
 
+#endregion
     public void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
@@ -629,7 +706,15 @@ public class GameMaster : MonoBehaviour
             // If we have captured a territory, allow us to gain a card
             GetPlayer().canGetCard = true;
 
+            Player priorPlayer = Defender.NodeRef.Owner;
+           
+
             Defender.SetOwner(GetChallenger().Player);
+
+            if(priorPlayer.territoryCount <=0)
+            {
+                PlayerLossUI.PlayPlayerLoss(priorPlayer, 10.0f);
+            }
 
             int unitsToMove = Mathf.Clamp((-index), 1, 3);
 
@@ -703,10 +788,29 @@ public class GameMaster : MonoBehaviour
     }
 
     // ------------------------------------------- Win Functions ----------------------------------------------
+
+    public void ClosePlayerLoss()
+    {
+        // If that was the winning play, end the game
+        if(Winner != null)
+        {
+            // Perform Win
+            PlayWinSequence(Winner);
+        }
+        else if(lastDeadPlayer.cards.Count > 0)
+        {
+            // Give the player of this turn those cards
+            CardGainUI.GainCards(lastDeadPlayer.cards, GetPlayer(), gameBoard);
+        }
+    }
+
     public void PlayWinSequence(Player winner)
     {
         // Set the winner
         winningPlayer = winner;
+        // Don't  play the animation if the loss UI is active
+        if (PlayerLossUI.IsActive) { return; }
+
         // Display Win Text
         WinLossUI.Open("Victory!", true, winner);
         // Shut everything down
@@ -750,7 +854,9 @@ public class Player
     public List<TerritoryCard> cards;
     public List<MapSystem.Continent> continentsOwned;
 
-    public bool canGetCard;
+    public Sprite playerIcon;
 
+    public bool canGetCard;
+    public int territoryCount;
     // Insert spot for player UI
 }
