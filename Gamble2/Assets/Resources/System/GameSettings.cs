@@ -6,5 +6,5 @@ using UnityEngine;
 public class GameSettings 
 {
     public bool AutoFillTiles = false;
-    
+    public bool AutoReinforce = false;
 }

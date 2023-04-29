@@ -448,10 +448,14 @@ public class GameMaster : MonoBehaviour
 
     void IncrementTurnTracker()
     {
-        turnTacker++;
-        if (turnTacker >= PlayerAmount)
-            turnTacker = 0;
-
+        // Increment turn tracker to the next non-dead player
+        do
+        {
+            turnTacker++;
+            if (turnTacker >= PlayerAmount)
+                turnTacker = 0;
+        } while (!players[turnTacker].isAlive);
+        
         // Update the display
         if(gameBoard != null)
         {
@@ -486,6 +490,16 @@ public class GameMaster : MonoBehaviour
             if(settings.AutoFillTiles)
             {
                 AutoClaimMap();
+                
+                // Check if we can move on to the next phase
+                if(gameMode.ReinforcingComplete(this, gameBoard))
+                {
+                    // Enter the next phase
+                    ChangeState(GameState.Reinforce);
+                    return;
+                }
+
+
             }
         }
         else if (desiredState == GameState.Draft)
@@ -580,6 +594,54 @@ public class GameMaster : MonoBehaviour
 
     }
 
+    // --------------------------------------- Claiming Functions -------------------------------------------
+    Player GetNextDraftablePlayer(int index)
+    {
+        // Return the player index
+        if (players[index].draftTroop > 0) { return players[index]; }
+
+        int newIndex = index + 1;
+
+        while (newIndex != index)
+        {
+            if (newIndex >= players.Count) { newIndex = 0; }
+            // IF this player has troops, deploy those troops
+            if (players[newIndex].draftTroop > 0) { return players[newIndex]; }
+
+            newIndex++;
+        }
+
+
+#if UNITY_EDITOR
+        // If no one else is available, throw an exception
+        throw new Exception("Unable to find a player with troops");
+#else
+        return players[index];
+#endif
+    }
+
+
+    public void AutoClaimMap()
+    {
+        int openTiles = gameBoard.Count;
+
+        int i = 0;
+        while (openTiles > 0 && i < gameBoard.Count)
+        {
+            // Fix later
+            Player p = GetNextDraftablePlayer(RNG.Roll(0, PlayerAmount - 1));
+            gameBoard[i].ChangeOwner(p);
+            gameBoard[i].AddUnits(new Unit(1));
+
+            // Decrement troop
+            p.draftTroop--;
+
+            // Decrement open tiles
+            openTiles--;
+            // Increment i
+            ++i;
+        }
+    }
     //--------------------------------------------- Reinforcing Functions --------------------------------
     #region Reinforcing
     bool ReinforcingDone()
@@ -600,53 +662,7 @@ public class GameMaster : MonoBehaviour
     }
 
 
-    Player GetNextDraftablePlayer(int index)
-    {
-        // Return the player index
-        if(players[index].draftTroop > 0) { return players[index]; }
 
-        int newIndex = index + 1;
-
-        while(newIndex != index)
-        {
-            if(newIndex >= players.Count) { newIndex = 0; }
-            // IF this player has troops, deploy those troops
-            if(players[newIndex].draftTroop > 0) { return players[newIndex]; }
-
-            newIndex++;
-        }
-
-
-#if UNITY_EDITOR
-        // If no one else is available, throw an exception
-        throw new Exception("Unable to find a player with troops");
-#else
-        return players[index];
-#endif
-    }
-
-
-    public void AutoClaimMap()
-    {
-        int openTiles = gameBoard.Count;
-
-        int i = 0;
-        while(openTiles > 0 && i < gameBoard.Count)
-        {
-            // Fix later
-            Player p = GetNextDraftablePlayer(RNG.Roll(0, PlayerAmount-1));
-            gameBoard[i].ChangeOwner(p);
-            gameBoard[i].AddUnits(new Unit(1));
-
-            // Decrement troop
-            p.draftTroop--;
-
-            // Decrement open tiles
-            openTiles--;
-            // Increment i
-            ++i;
-        }
-    }
 
 #endregion
 
