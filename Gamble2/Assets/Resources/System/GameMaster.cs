@@ -68,6 +68,11 @@ public class GameMaster : MonoBehaviour
         return instance;
     }
 
+    public static bool OverrideReinforcement()
+    {
+        return instance.gameMode.OverrideReinforcement();
+    }
+
     public void StartGame(int numberOfPlayers)
     {
         if(gameBoard == null)
@@ -437,6 +442,12 @@ public class GameMaster : MonoBehaviour
                 return false;
         }
 
+        // If the game mode is not ready to finish reinforcing, then we are not done
+        if(!gameMode.ReinforcingComplete(this, gameBoard))
+        {
+            return false;
+        }
+
         return true;
     }
 
@@ -568,6 +579,19 @@ public class GameMaster : MonoBehaviour
         Gizmos.DrawSphere(EndOfUILine,0.5f);
         Gizmos.DrawLine(BeginningOfUILine, EndOfUILine);
     }
+    // --------------------------------------- Game Mode Functions -----------------------------------------------
+
+    /// <summary>
+    /// Asks the game mode to perform its own reinforcement step in-place of the standard one
+    /// </summary>
+    /// <param name="tile">The tile the reinforce step is targeting.</param>
+    public void GameModeReinforce(MapSystem.BoardTile tile)
+    {
+
+        // Perform reinforcing within the game mode
+        gameMode.PerformReinforcingStep(this, gameBoard, tile);
+    }
+
 
     //------------------------------------------ Combat Functions -------------------------------------------
     public void CompleteBattle(int index =-1)

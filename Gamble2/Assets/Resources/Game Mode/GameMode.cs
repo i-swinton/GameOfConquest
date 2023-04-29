@@ -13,4 +13,20 @@ public abstract class GameMode : ScriptableObject
     {
         return master.GetPlayer();
     }
+   
+
+    public virtual bool ReinforcingComplete(GameMaster master, MapSystem.Board board)
+    {
+        return true;
+    }
+
+    public virtual void PerformReinforcingStep(GameMaster master, MapSystem.Board board, MapSystem.BoardTile tile)
+    {
+        return;
+    }
+
+    public virtual bool OverrideReinforcement()
+    {
+        return false;
+    }
 }

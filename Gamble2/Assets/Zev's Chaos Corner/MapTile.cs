@@ -101,9 +101,16 @@ public class MapTile : MonoBehaviour
     {
         if (gm.GetPlayerTurn() == Player.playerID)
         {
-            NodeRef.Fortify(1);
-            Player.draftTroop--;
-            gm.EndTurn();
+            if (Player.draftTroop <= 0 || GameMaster.OverrideReinforcement())
+            {
+                GameMaster.GetInstance().GameModeReinforce(NodeRef);
+            }
+            else
+            {
+                NodeRef.Fortify(1);
+                Player.draftTroop--;
+                gm.EndTurn();
+            }
         }
     }
     

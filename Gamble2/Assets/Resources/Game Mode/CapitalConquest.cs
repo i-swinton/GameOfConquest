@@ -10,6 +10,8 @@ public class CapitalConquest : GameMode
     public float WinPercentage = 1;
 
     public List<BonusBase> CapitalBonuses;
+    public int CapitalUnitsAdd = 3;
+
     public override bool CheckIfOver(GameMaster master, Board board)
     {
 
@@ -43,4 +45,37 @@ public class CapitalConquest : GameMode
     {
         return CalcWinningPlayer(master, board); 
     }
+
+    public override void PerformReinforcingStep(GameMaster master, Board board, BoardTile tile)
+    {
+        // Apply the bonuses to the tiles
+        for (int i = 0; i < CapitalBonuses.Count; ++i)
+        {
+
+            tile.ApplyBonus(CapitalBonuses[i]);
+        }
+
+        // Give the tile additional troops for being capitalized
+        tile.Fortify(CapitalUnitsAdd);
+    }
+
+    public override bool ReinforcingComplete(GameMaster master, Board board)
+    {
+        // Check if the number of capitals are equal to the number of players
+
+        int captialCount = 0;
+
+        //base.PerformReinforcingStep(master, board, tile);
+        for (int i = 0; i < board.Count; ++i)
+        {
+            if (board[i].GetBonusOfType(BonusBase.BonusType.Capital)) { captialCount++; }
+            // If capitals match number of players, return true
+            if (captialCount == master.PlayerAmount) { return true; }
+        }
+
+        return false;
+    }
+
+   
+
 }
