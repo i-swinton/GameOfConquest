@@ -8,7 +8,10 @@ public class BonusBase : ScriptableObject
     {
         Unit,
         ExtraDie,
-        Capital
+        Capital,
+        DefenderDie,
+        AttackerDie,
+        Blizzard,
     }
 
     // ------------------------------------------ Variables --------------------------------
