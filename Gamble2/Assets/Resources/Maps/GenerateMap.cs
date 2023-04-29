@@ -6,6 +6,8 @@ public class GenerateMap : MonoBehaviour
 {
     public MapData Map;
 
+
+    public GameObject ContinentPrefab;
     public GameObject TilePrefab;
 
     public ContactFilter2D ConnectionFilter;
@@ -27,12 +29,11 @@ public class GenerateMap : MonoBehaviour
 
         for (int i = 0; i < Map.Contenents.Count; i++)
         {
-
-
+            GameObject continent = Instantiate(ContinentPrefab, transform);
             //Generates tiles within a continent
             for (int j = 0; j < Map.Contenents[i].Tiles.Length; j++)
             {
-                GameObject tile = Instantiate(TilePrefab, transform);
+                GameObject tile = Instantiate(TilePrefab, continent.transform);
                 tile.GetComponent<SpriteRenderer>().sprite = Map.Contenents[i].Tiles[j].Image;
                 tile.AddComponent<PolygonCollider2D>();
                 // Generate the tile
@@ -50,6 +51,8 @@ public class GenerateMap : MonoBehaviour
                 spawnedTiles.Add(tile.GetComponent<MapTile>());
             }
 
+            continent.GetComponent<ContinentRenderer>().LoadContinent(board.FindContinent(i));
+            continent.name = Map.Contenents[i].Name;
             //Adds continent to board
             //BoardManager.instance.GetBoard().AddContinent( new MapSystem.Continent(tiles, Contenents[i].Name, Contenents[i].bonus));
             
