@@ -8,6 +8,7 @@ public class BonusBase : ScriptableObject
     {
         Unit,
         ExtraDie,
+        Capital
     }
 
     // ------------------------------------------ Variables --------------------------------

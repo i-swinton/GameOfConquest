@@ -163,6 +163,7 @@ namespace MapSystem
         }
         
 
+
         public void TransferUnits(ref Unit otherUnits, int amount)
         {
             // Subtract from the other units
@@ -235,7 +236,24 @@ namespace MapSystem
         }
 
         
+        /// <summary>
+        /// Get a bonus of a given type on the board tile. 
+        /// </summary>
+        /// <param name="bType">The type of bonus on the board tile.</param>
+        /// <returns>If the bonus of that type exists, returns </returns>
+        public BonusBase GetBonusOfType(BonusBase.BonusType bType)
+        {
+            for(int i =0; i < bonuses.Count; ++i)
+            {
+                if(bonuses[i].MyType == bType)
+                {
+                    return bonuses[i];
+                }
+            }
 
+            // If there is no bonus in that base, return null
+            return null;
+        }
 
         // ---------------------------------------------- DEBUG FUNCTIONS --------------------------------------------
         public void DrawConnections()
