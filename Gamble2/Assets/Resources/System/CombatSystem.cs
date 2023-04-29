@@ -241,6 +241,8 @@ public static class CombatSystem {
                         }
                         break;
                     }
+                    // Defender Die Bonus
+                    // Attacker Die Bonus
             }
         }
 

@@ -791,7 +791,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9259e0798acbe6c4da6f17b265f76b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideElement: {fileID: 316266207353261026}
+  hideElement: {fileID: 316266208796772010}
   isVisible: 0
   title: {fileID: 316266207353261024}
   playerNameTag: {fileID: 316266207106260694}

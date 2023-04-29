@@ -32,7 +32,7 @@ public class CapitalConquest : GameMode
             if (board[i].GetBonusOfType(BonusBase.BonusType.Capital) != null)
             {
                 playerCounts[board[i].Owner.playerID]++;
-                if (playerCounts[board[i].Owner.playerID] > capitalCount)
+                if (playerCounts[board[i].Owner.playerID] >= capitalCount)
                 {
                     return board[i].Owner ;
                 }
@@ -57,6 +57,9 @@ public class CapitalConquest : GameMode
 
         // Give the tile additional troops for being capitalized
         tile.Fortify(CapitalUnitsAdd);
+
+        // Make sure to end the turn of the player
+        master.EndTurn();
     }
 
     public override bool ReinforcingComplete(GameMaster master, Board board)
