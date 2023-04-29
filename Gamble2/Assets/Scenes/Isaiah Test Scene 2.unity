@@ -1949,6 +1949,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Map: {fileID: 11400000, guid: 771de78332a522a43a833df3f165ce83, type: 2}
+  ContinentPrefab: {fileID: 4228148056073159526, guid: 5f6d46c890760c940a3c05cc49589e87, type: 3}
   TilePrefab: {fileID: 1043854607677495953, guid: 132dd8a0d5b3def478f1c1e1cf8653a3, type: 3}
   ConnectionFilter:
     useTriggers: 0

@@ -508,6 +508,30 @@ public class GameMaster : MonoBehaviour
                 players[turnTacker].draftTroop += total;
             }
 
+            int tileCount = 0;
+            // Search through all of the player's tiles for additional bonuses
+            for(int i =0; i < gameBoard.Count; ++i)
+            {
+                // The tile belongs to the given player
+                if(gameBoard[i].Owner == GetPlayer())
+                {
+                    // Read the in the bonuses to units
+                    BonusBase bonus = gameBoard[i].GetBonusOfType(BonusBase.BonusType.Unit);
+                    if (bonus != null)
+                    {
+                        // Adds the additional units
+                        players[turnTacker].draftTroop += ((UnitBonus)bonus).Count; 
+                    }
+                    // Count the tile
+                    tileCount++;
+                }
+            }
+
+
+
+            // Get plus one unit per X tiles
+            players[turnTacker].draftTroop += tileCount/gameMode.TilesPerTroop;
+
             // Show locations
             if(gameBoard != null)
             {

@@ -29,4 +29,17 @@ public abstract class GameMode : ScriptableObject
     {
         return false;
     }
+
+    [Tooltip("The number of tiles per each extra troop a player can get")]
+    [SerializeField] int tilesPerTroop = 3;
+
+    public virtual int TilesPerTroop
+    {
+        get
+        {
+            if(tilesPerTroop < 1) { return 1; }
+            return tilesPerTroop;
+        }
+    }
+
 }

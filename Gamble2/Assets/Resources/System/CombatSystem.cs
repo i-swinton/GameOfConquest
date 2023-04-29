@@ -241,8 +241,30 @@ public static class CombatSystem {
                         }
                         break;
                     }
-                    // Defender Die Bonus
-                    // Attacker Die Bonus
+                // Attacker Die Bonus
+                case BonusBase.BonusType.AttackerDie:
+                    {
+                        // Skip if not an attacker
+                        if(combatantType != Combat.CombatantType.Attacker) { break; }
+                        DieBonus dieBonus = (DieBonus)bonus;
+                        for (int i = 0; i < dieBonus.NumberOfDice(tile, combatantType); ++i)
+                        {
+                            rolls.Add(RNG.Roll(1, 6));
+                        }
+                        break;
+                    }
+                // Attacker Die Bonus
+                case BonusBase.BonusType.DefenderDie:
+                    {
+                        // Skip if not an defender
+                        if (combatantType != Combat.CombatantType.Defender) { break; }
+                        DieBonus dieBonus = (DieBonus)bonus;
+                        for (int i = 0; i < dieBonus.NumberOfDice(tile, combatantType); ++i)
+                        {
+                            rolls.Add(RNG.Roll(1, 6));
+                        }
+                        break;
+                    }
             }
         }
 
