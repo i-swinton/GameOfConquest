@@ -494,7 +494,7 @@ public class GameMaster : MonoBehaviour
                 // Check if we can move on to the next phase
                 if(AllTerroritesClaim())
                 {
-                    ReinforceSelections();
+                    //ReinforceSelections();
                     // Enter the next phase
                     ChangeState(GameState.Reinforce);
 
@@ -730,7 +730,7 @@ public class GameMaster : MonoBehaviour
     //-------------------------------------------- Draft Functions ------------------------------------
    void DraftSelections()
     {
-        ReinforceSelections();
+        //ReinforceSelections();
     }
 
 
