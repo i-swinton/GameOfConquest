@@ -374,6 +374,8 @@ public class GameMaster : MonoBehaviour
                 if(AllTerroritesClaim())
                     ChangeState(GameState.Reinforce);
                 IncrementTurnTracker();
+                // Let players know if someone owns a whole continent
+                UpdateContinentsOwned();
                 break;
             case GameState.Reinforce:
                 IncrementTurnTracker();
