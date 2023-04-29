@@ -93,6 +93,9 @@ public class MapTile : MonoBehaviour
             NodeRef.ChangeOwner( gm.GetPlayer());
             Player.draftTroop--;
             NodeRef.AddUnits(new Unit(1));
+
+            EffectSystem.SpawnText(NodeRef.Position, Player.playerColor).Text = "+1";
+
             gm.EndTurn();
         }
     }
@@ -108,6 +111,8 @@ public class MapTile : MonoBehaviour
             else
             {
                 NodeRef.Fortify(1);
+                EffectSystem.SpawnText(NodeRef.Position, Player.playerColor).Text = $"+1";
+
                 Player.draftTroop--;
                 gm.EndTurn();
             }
@@ -119,6 +124,8 @@ public class MapTile : MonoBehaviour
         if (gm.GetPlayerTurn() == Player.playerID)
         {
             NodeRef.Fortify(1);
+            EffectSystem.SpawnText(NodeRef.Position, Player.playerColor).Text = $"+1";
+
             Player.draftTroop--;
             
             if (Player.draftTroop <= 0)

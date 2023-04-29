@@ -7,6 +7,17 @@ public class PopUpText : MonoBehaviour
     [SerializeField] TMPro.TextMeshPro text;
     Actions.ActionList actions;
 
+    public string Text
+    {
+        get
+        {
+            return text.text;
+        }
+        set
+        {
+            text.text = value;
+        }
+    }
 
     private void Awake()
     {
@@ -31,6 +42,8 @@ public class PopUpText : MonoBehaviour
         // Set the font size
         text.fontSize = fontSize;
         Vector3 endPos = spawnPosition + moveDirection.normalized * speed;
+
+        text.color = color;
 
         // Move in the given direction and fade away
         actions.Add(

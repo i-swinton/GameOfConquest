@@ -58,6 +58,9 @@ public class CapitalConquest : GameMode
         // Give the tile additional troops for being capitalized
         tile.Fortify(CapitalUnitsAdd);
 
+        EffectSystem.SpawnText(tile.Position, tile.Owner.playerColor).Text = $"+{CapitalUnitsAdd}";
+
+
         // Make sure to end the turn of the player
         master.EndTurn();
     }

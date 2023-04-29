@@ -494,8 +494,10 @@ public class GameMaster : MonoBehaviour
                 // Check if we can move on to the next phase
                 if(AllTerroritesClaim())
                 {
+                    ReinforceSelections();
                     // Enter the next phase
                     ChangeState(GameState.Reinforce);
+
                     return;
                 }
 
@@ -510,6 +512,7 @@ public class GameMaster : MonoBehaviour
                 AutoReinforce();
                 if(gameMode.ReinforcingComplete(this,gameBoard))
                 {
+                    DraftSelections();
                     ChangeState(GameState.Draft);
                     return;
                 }
@@ -655,6 +658,15 @@ public class GameMaster : MonoBehaviour
             ++i;
         }
     }
+
+    void ClaimSelections()
+    {
+        for (int i = 0; i < gameBoard.Count; ++i)
+        {
+            if (gameBoard[i].Owner == null) { gameBoard[i].Selectable(false); }
+            else { gameBoard[i].Deselect(); }
+        }
+    }
     //--------------------------------------------- Reinforcing Functions --------------------------------
     #region Reinforcing
     bool ReinforcingDone()
@@ -701,12 +713,30 @@ public class GameMaster : MonoBehaviour
 
         
     }    
+    
+
+    void ReinforceSelections()
+    {
+        for (int i = 0; i < gameBoard.Count; ++i)
+        {
+            if (gameBoard[i].Owner == players[turnTacker]) { gameBoard[i].Selectable(false); }
+            else { gameBoard[i].Deselect(); }
+        }
+    }
 
 
-#endregion
+
+    #endregion
+    //-------------------------------------------- Draft Functions ------------------------------------
+   void DraftSelections()
+    {
+        ReinforceSelections();
+    }
+
+
 
     // -------------------------------------- Getter Functions ---------------------------------------------
-#region Getter Functions
+    #region Getter Functions
     public int GetPlayerTurn()
     {
         return turnTacker;
@@ -756,6 +786,10 @@ public class GameMaster : MonoBehaviour
         int AtkUnitsLost = 0, DefUnitsLost = 0;
         CombatSystem.BattleTiles(GetChallenger().NodeRef, Defender.NodeRef,(Combat.CombatRollType)(-index), out AtkUnitsLost, out DefUnitsLost);
 
+        EffectSystem.SpawnText(Challenger.NodeRef.Position, Challenger.Player.playerColor).Text = $"-{AtkUnitsLost}";
+        EffectSystem.SpawnText(Defender.NodeRef.Position, Defender.Player.playerColor).Text = $"-{DefUnitsLost}";
+
+
         if (Defender.Units <= 0)
         {
             // If we have captured a territory, allow us to gain a card
@@ -796,6 +830,8 @@ public class GameMaster : MonoBehaviour
     {
         // Transfer over the units
         Defender.NodeRef.TransferUnits( Challenger.NodeRef, amount);
+        EffectSystem.SpawnText(Challenger.NodeRef.Position, Challenger.Player.playerColor).Text = $"-{amount}";
+        EffectSystem.SpawnText(Defender.NodeRef.Position, Defender.Player.playerColor).Text = $"+{amount}";
 
         ReleaseChallenger();
         ReleaseDefender();

@@ -403,6 +403,7 @@ GameObject:
   - component: {fileID: 265174797}
   - component: {fileID: 265174796}
   - component: {fileID: 265174795}
+  - component: {fileID: 265174798}
   m_Layer: 0
   m_Name: Game Master
   m_TagString: Untagged
@@ -441,6 +442,9 @@ MonoBehaviour:
   playerPanelPrefab: {fileID: 2996229461121013388, guid: 141fc8e2b35ef5941a0a1b98da900f77, type: 3}
   text: {fileID: 1857778260}
   gameMode: {fileID: 11400000, guid: 257af75c3b962ce4394fa964ff617ac1, type: 2}
+  settings:
+    AutoFillTiles: 0
+    AutoReinforce: 0
 --- !u!4 &265174797
 Transform:
   m_ObjectHideFlags: 0
@@ -457,6 +461,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &265174798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 265174794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7e664ae1761b44c8cf267646cab89d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textPrefab: {fileID: 1690439675573781534, guid: 1cca89c4fa26ef24d9e4a7a78ba1891a, type: 3}
+  defaultDuration: 1
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  defaultFontSize: 15
+  defaultDirection: {x: 0, y: 1, z: 0}
+  defaultSpeed: 1
 --- !u!1 &454313212
 GameObject:
   m_ObjectHideFlags: 0
