@@ -576,6 +576,9 @@ MonoBehaviour:
   playerPanelPrefab: {fileID: 2996229461121013388, guid: 141fc8e2b35ef5941a0a1b98da900f77, type: 3}
   text: {fileID: 1857778260}
   gameMode: {fileID: 11400000, guid: f189433e6dbbc324da4dfe2926b82405, type: 2}
+  settings:
+    AutoFillTiles: 1
+    AutoReinforce: 0
 --- !u!4 &265174797
 Transform:
   m_ObjectHideFlags: 0

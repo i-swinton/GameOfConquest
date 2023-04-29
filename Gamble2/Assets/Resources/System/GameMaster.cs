@@ -492,7 +492,7 @@ public class GameMaster : MonoBehaviour
                 AutoClaimMap();
                 
                 // Check if we can move on to the next phase
-                if(gameMode.ReinforcingComplete(this, gameBoard))
+                if(AllTerroritesClaim())
                 {
                     // Enter the next phase
                     ChangeState(GameState.Reinforce);
@@ -500,6 +500,19 @@ public class GameMaster : MonoBehaviour
                 }
 
 
+            }
+        }
+        else if(state == GameState.Reinforce)
+        {
+            if(settings.AutoReinforce)
+            {
+                // Reinforce automatically 
+                AutoReinforce();
+                if(gameMode.ReinforcingComplete(this,gameBoard))
+                {
+                    ChangeState(GameState.Draft);
+                    return;
+                }
             }
         }
         else if (desiredState == GameState.Draft)
@@ -661,7 +674,33 @@ public class GameMaster : MonoBehaviour
         return true;
     }
 
+    public void AutoReinforce()
+    {
+        // Generate lists of tiles for each player
+        List<MapSystem.BoardTile>[] tiles = new List<MapSystem.BoardTile>[PlayerAmount];
+        for(int i=0; i <gameBoard.Count; ++i)
+        {
+            // Skip ownerless tiles
+            if(gameBoard[i].Owner == null) { continue; }
+            // Create the list if it doesn't exist
+            if(tiles[gameBoard[i].Owner.playerID] == null) { tiles[gameBoard[i].Owner.playerID] = new List<MapSystem.BoardTile>(); }
+            tiles[gameBoard[i].Owner.playerID].Add(gameBoard[i]);
+        }
 
+        // Then loop through each of the players and randomly decrement draft troops
+        for(int i=0; i < tiles.Length; ++i)
+        {
+            while(players[i].draftTroop > 0)
+            {
+                // Add one draft troop to a random tile
+                tiles[i][RNG.Roll(0, tiles[i].Count-1)].Fortify(1);
+                players[i].draftTroop--;
+            }
+        }
+        
+
+        
+    }    
 
 
 #endregion
