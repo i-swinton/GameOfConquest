@@ -34,6 +34,8 @@ namespace MapSystem
         public System.Action<bool> onSelectable;
         public System.Action onUnselectable;
 
+        public System.Action<BonusBase> onBindBonus;
+
         //--------------------------------------------- Properties---------------------------------------------------
 
         /// <summary>
@@ -209,6 +211,8 @@ namespace MapSystem
         {
             // Add a bonus to the list
             bonuses.Add(bonus);
+
+            onBindBonus?.Invoke(bonus);
         }
 
         public void Select()
