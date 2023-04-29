@@ -11,15 +11,37 @@ public enum SelectState
     OtherSelected
 }
 
+//Show blizards and capitals
 public class MapTileRender : MonoBehaviour
 {
+    MapTile Tile;
     SpriteRenderer Renderer;
     [SerializeField] Material Mat;
     public SelectState _State;
 
+    Vector3 Center;
     bool otherSel;
 
-    public SelectState State { get{
+    [SerializeField] List<BonusRender> DisplayFeatures;
+
+    [System.Serializable]
+    struct BonusRender
+    {
+        public BonusBase Bonus;
+        public GameObject Display;
+        public static bool operator ==(BonusRender b1, BonusBase b2)
+        {
+            return b1.Bonus.GetType() == b2.GetType();
+        }
+        public static bool operator !=(BonusRender b1, BonusBase b2)
+        {
+            return b1.Bonus.GetType() != b2.GetType();
+        }
+
+    }
+
+    public SelectState State{
+        get {
             return _State;
         }
         set
@@ -29,6 +51,23 @@ public class MapTileRender : MonoBehaviour
         }
     }
 
+    // Start is called before the first frame update
+    public void LoadTile()
+    {
+        Tile = GetComponent<MapTile>();
+
+        Center = Tile.Center;// GetComponent<PolygonCollider2D>().bounds.center;
+
+
+        //Creates a clone of the material
+        Mat = new Material(Mat);
+
+        Renderer = GetComponent<SpriteRenderer>();
+        Renderer.material = Mat;
+
+
+        Tile.NodeRef.onBindBonus += DisplayBonus;
+    }
 
     public void Select()
     {
@@ -73,18 +112,6 @@ public class MapTileRender : MonoBehaviour
         Mat.SetColor("_PlayerColor", color);
     }
     
-    // Start is called before the first frame update
-    void Awake()
-    {
-
-        //Creates a clone of the material
-        Mat = new Material(Mat);
-
-        Renderer = GetComponent<SpriteRenderer>();
-        Renderer.material = Mat;
-
-
-    }
     
     public void SetHeilight(bool value)
     {
@@ -98,6 +125,21 @@ public class MapTileRender : MonoBehaviour
         }
     }
 
+    public void DisplayBonus(BonusBase bonus)
+    {
+        Vector3 scale = transform.localScale;
+        transform.localScale = Vector3.one;
+
+        foreach (BonusRender item in DisplayFeatures)
+        {
+            if(item == bonus)
+            {
+                GameObject displayFeature = Instantiate(item.Display, transform);
+                displayFeature.transform.position= Center + Vector3.back;
+            }
+        }
+        transform.localScale = scale;
+    }
 
     public void DebugLog()
     {
@@ -116,3 +158,4 @@ public class MapTileRender : MonoBehaviour
 
     }
 }
+

@@ -36,6 +36,7 @@ public class GenerateMap : MonoBehaviour
                 GameObject tile = Instantiate(TilePrefab, continent.transform);
                 tile.GetComponent<SpriteRenderer>().sprite = Map.Contenents[i].Tiles[j].Image;
                 tile.AddComponent<PolygonCollider2D>();
+
                 // Generate the tile
                 tile.GetComponent<MapTile>().GenTile(
                     board[board.FindContinent(i).Tiles[j]]
@@ -46,6 +47,7 @@ public class GenerateMap : MonoBehaviour
 
 
                 tile.name = tile.GetComponent<MapTile>().NodeRef.Name + tile.GetComponent<MapTile>().NodeRef.ID;
+                tile.GetComponent<MapTileRender>().LoadTile();
 
                 // Add the tiles to the list
                 spawnedTiles.Add(tile.GetComponent<MapTile>());
