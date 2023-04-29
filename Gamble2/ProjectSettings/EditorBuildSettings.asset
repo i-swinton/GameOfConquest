@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/IsaiahTestScene.unity
     guid: 731f8d218c93c0a439469cd1afd612c0
+  - enabled: 1
+    path: Assets/Scenes/Isaiah Test Scene Network.unity
+    guid: 4e29172a5f252624e9f57ba42c0f14f3
   m_configObjects: {}
