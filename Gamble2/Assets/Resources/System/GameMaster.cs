@@ -121,7 +121,7 @@ public class GameMaster : NetworkBehaviour
     {
         DebugNetworklLog.Log("Added Controller");
         instance.playerControllers.Add(cpc);
-
+        instance.isNetworked = true;
     }
 
     public static GameMaster GetInstance()
