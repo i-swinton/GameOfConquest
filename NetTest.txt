@@ -1,0 +1,4 @@
+<Path to Project>\HelloWorld.exe -mode server
+
+<path to project>\Gamble2.exe -mode server & <path to project>\Gamble2.exe -mode client
+

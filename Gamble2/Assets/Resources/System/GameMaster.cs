@@ -3,11 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using Actions;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class GameMaster : MonoBehaviour
+public class GameMaster : NetworkBehaviour
 {
     public Player Winner { get { return winningPlayer; } }
+
+
 
     Player lastDeadPlayer;
 
@@ -43,6 +47,13 @@ public class GameMaster : MonoBehaviour
     // Singleton
     static GameMaster instance;
 
+    // Networking Variables
+    bool isNetworked;
+
+    public bool IsNetworked { get { return isNetworked; } }
+
+    List<ClientPlayerController> playerControllers;
+
     /// <summary>
     /// Add an action to the central action list
     /// </summary>
@@ -53,10 +64,16 @@ public class GameMaster : MonoBehaviour
         instance.actions.Add(action);
     }
 
+    [ServerRpc]
+    public void StartGameDebugServerRPC(int playerCount)
+    {
+        PrototypeQuickSetupScript.instance.NetInit(playerCount);
+    }
+
     private void Awake()
     {
         instance = this;
-
+        playerControllers = new List<ClientPlayerController>();
     }
 
     // Start is called before the first frame update
@@ -65,6 +82,12 @@ public class GameMaster : MonoBehaviour
         hasGameStarted = false;
         actions = new ActionList();
         gameBoard = BoardManager.instance.GetBoard();
+    }
+
+    public static void AddPlayerController(ClientPlayerController cpc)
+    {
+        instance.playerControllers.Add(cpc);
+
     }
 
     public static GameMaster GetInstance()
@@ -112,6 +135,13 @@ public class GameMaster : MonoBehaviour
             //Vector3 pos = Vector2.Lerp(BeginningOfUILine, EndOfUILine, t);
             //GameObject panel = Instantiate(playerPanelPrefab, pos, Quaternion.identity);
             //panel.GetComponent<PlayerPanel>().Setup(p);
+        }
+
+        // Connect to player controllers to players
+        for(int i=0; i < playerControllers.Count; ++i)
+        {
+            playerControllers[i].SetPlayerIdentity(players[i]);
+            isNetworked = true;
         }
 
         ChangeState(GameState.Claim);

@@ -88,6 +88,15 @@ public class MapTile : MonoBehaviour
 
     void MouseDown_Claim()
     {
+        // If we are networked, only allow the player to click on their turn
+        if(GameMaster.GetInstance().IsNetworked)
+        {
+            // Check if the player does not match the current player
+            if(!ClientPlayerController.IsCurrentPlayer(gm))
+            {
+                return;
+            }
+        }
         if (Player == null)
         {
             NodeRef.ChangeOwner( gm.GetPlayer());
