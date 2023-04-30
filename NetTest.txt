@@ -1,4 +1,6 @@
 <Path to Project>\HelloWorld.exe -mode server
 
+D:\Projects\GoC\GameOfConquest\Builds
 <path to project>\Gamble2.exe -mode server & <path to project>\Gamble2.exe -mode client
 
+D:\Projects\GoC\GameOfConquest\Builds\Gamble2.exe -mode server & D:\Projects\GoC\GameOfConquest\Builds\Gamble2.exe -mode client
