@@ -54,6 +54,19 @@ public class GameMaster : NetworkBehaviour
 
     List<ClientPlayerController> playerControllers;
 
+    // ------------------------------------ Properties -----------------------------------------------------
+
+    public static bool HasStarted
+    {
+        get
+        {
+            return instance.hasGameStarted;
+        }
+    }
+
+    // ------------------------------------ Static Functions ---------------------------------------------------
+
+
     /// <summary>
     /// Add an action to the central action list
     /// </summary>
@@ -64,11 +77,26 @@ public class GameMaster : NetworkBehaviour
         instance.actions.Add(action);
     }
 
+    // -------------------------------------- Networking Functions ----------------------------------------------------------
+    #region Server Functions
     [ServerRpc]
     public void StartGameDebugServerRPC(int playerCount)
     {
+        // Tell the rest of the clients to start their games
+        StartGameDebugClientRPC(playerCount);
+    }
+
+    #endregion
+    #region Client Functions
+    [ClientRpc]
+    public void StartGameDebugClientRPC(int playerCount)
+    {
         PrototypeQuickSetupScript.instance.NetInit(playerCount);
     }
+
+    #endregion
+
+    // ------------------------------------ Starting Functions ------------------------------------------------------------
 
     private void Awake()
     {

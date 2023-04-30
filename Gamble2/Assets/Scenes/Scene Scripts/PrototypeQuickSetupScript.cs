@@ -28,6 +28,7 @@ public class PrototypeQuickSetupScript : UIElement
 
     public void NetInit(int numOfPlayers)
     {
+        if (GameMaster.HasStarted) { return; }
         GameMaster.GetInstance().StartGame(numOfPlayers);
         IsVisible= true;
     }
