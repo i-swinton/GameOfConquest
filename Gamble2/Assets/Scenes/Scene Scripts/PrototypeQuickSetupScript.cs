@@ -15,7 +15,7 @@ public class PrototypeQuickSetupScript : UIElement
     {
         if (GameMaster.GetInstance().IsNetworked)
         {
-
+            GameMaster.GetInstance().StartGameDebugServerRPC(numOfPlayers);
             return;
         }
 

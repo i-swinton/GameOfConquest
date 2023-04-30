@@ -31,7 +31,9 @@ public static ClientPlayerController Instance
         if(IsOwner)
         {
             instance= this;
+            DebugNetworklLog.SetTitle(IsClient ? "Client" : "Host");
         }
+        
 
         GameMaster.AddPlayerController(this);
 

@@ -10,6 +10,9 @@ public class DebugNetworklLog : UIElement
     [SerializeField]
     TMPro.TextMeshProUGUI[] textDisplays;
 
+    [SerializeField]
+    TMPro.TextMeshProUGUI title;
+
 
     private void Awake()
     {
@@ -21,7 +24,10 @@ public class DebugNetworklLog : UIElement
     {
         instance.AddLog(text);
     }
-
+    public static void SetTitle(string title)
+    {
+        instance.title.text = "Log: " + title;
+    }
     void AddLog(string text)
     {
         // Copy the text downwards
