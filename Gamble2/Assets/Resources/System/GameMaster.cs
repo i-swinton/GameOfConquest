@@ -114,6 +114,7 @@ public class GameMaster : NetworkBehaviour
 
     public static void AddPlayerController(ClientPlayerController cpc)
     {
+        DebugNetworklLog.Log("Added Controller");
         instance.playerControllers.Add(cpc);
 
     }

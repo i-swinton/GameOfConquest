@@ -33,7 +33,10 @@ public static ClientPlayerController Instance
             instance= this;
         }
 
+        GameMaster.AddPlayerController(this);
+
         DebugNetworklLog.Log("Spawning Player: " + name);
+
     }
 
     public void SetPlayerIdentity(Player player)
