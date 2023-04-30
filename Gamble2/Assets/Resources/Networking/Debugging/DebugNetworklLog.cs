@@ -9,8 +9,13 @@ public class DebugNetworklLog : UIElement
 
     [SerializeField]
     TMPro.TextMeshProUGUI[] textDisplays;
-    
-    
+
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
 
     public static void Log(string text)
     {
