@@ -82,6 +82,9 @@ public class GameMaster : NetworkBehaviour
     [ServerRpc]
     public void StartGameDebugServerRPC(int playerCount)
     {
+
+        DebugNetworklLog.Log("Start Game Server");
+
         // Tell the rest of the clients to start their games
         StartGameDebugClientRPC(playerCount);
     }
@@ -91,6 +94,8 @@ public class GameMaster : NetworkBehaviour
     [ClientRpc]
     public void StartGameDebugClientRPC(int playerCount)
     {
+        DebugNetworklLog.Log("Starting Game Client");
+
         PrototypeQuickSetupScript.instance.NetInit(playerCount);
     }
 

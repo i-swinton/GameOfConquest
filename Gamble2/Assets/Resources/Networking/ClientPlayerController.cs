@@ -31,7 +31,7 @@ public static ClientPlayerController Instance
         if(IsOwner)
         {
             instance= this;
-            DebugNetworklLog.SetTitle(IsClient ? "Client" : "Host");
+            DebugNetworklLog.SetTitle(IsHost ? "Host" : "Client");
         }
         
 
