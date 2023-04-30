@@ -25,9 +25,11 @@ public class DebugNetworklLog : UIElement
     void AddLog(string text)
     {
         // Copy the text downwards
-        for(int i= textDisplays.Length-1;  i >0; ++i )
+        for(int i= textDisplays.Length-1;  i >0; --i )
         {
             textDisplays[i].text = textDisplays[i - 1].text;
         }
+
+        textDisplays[0].text = text;
     }
 }
