@@ -32,11 +32,15 @@ public static ClientPlayerController Instance
         {
             instance= this;
         }
+
+        DebugNetworklLog.Log("Spawning Player: " + name);
     }
 
     public void SetPlayerIdentity(Player player)
     {
+        this.player = player;
 
+        DebugNetworklLog.Log("Player Connected: " + player.Name);
     }
 
     // Start is called before the first frame update
