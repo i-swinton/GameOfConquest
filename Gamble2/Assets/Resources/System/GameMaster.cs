@@ -85,16 +85,23 @@ public class GameMaster : NetworkBehaviour
 
         DebugNetworklLog.Log("Start Game Server");
 
+        int randomSeed = (int)Time.time;
+
+
+
         // Tell the rest of the clients to start their games
-        StartGameDebugClientRPC(playerCount);
+        StartGameDebugClientRPC(playerCount,randomSeed);
     }
 
     #endregion
     #region Client Functions
     [ClientRpc]
-    public void StartGameDebugClientRPC(int playerCount)
+    public void StartGameDebugClientRPC(int playerCount, int randomSeed)
     {
         DebugNetworklLog.Log("Starting Game Client");
+
+        // Set the random to match across all the instances of the game
+        RNG.SeedRandom(randomSeed);
 
         PrototypeQuickSetupScript.instance.NetInit(playerCount);
     }
@@ -104,6 +111,19 @@ public class GameMaster : NetworkBehaviour
     public void OnTileClickClientRPC(int nodeID, int mapTileID)
     {
         OnTileClick(nodeID, mapTileID);
+    }
+
+
+    [ClientRpc]
+    public void OnPerformCardIn_ClientRPC(TerritoryCard[] cards, int playerID)
+    {
+
+    }
+
+    [ClientRpc]
+    public void EndTurn_ClientRPC()
+    {
+        EndTurn();
     }
     #endregion
 

@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-
-public struct TerritoryCard 
+public struct TerritoryCard : INetworkSerializeByMemcpy
 {
     // ------------------------------------------ Variables -----------------------------------------
     int unitCount;
@@ -65,4 +65,7 @@ public struct TerritoryCard
         unitType = type;
         this.cardType = (CardSystem.CardType)RNG.Roll(0,3);
     }
+
+
+
 }

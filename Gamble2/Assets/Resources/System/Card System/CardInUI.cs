@@ -88,8 +88,16 @@ public class CardInUI : UIElement
     public override void Show()
     {
         base.Show();
-
-        LoadCardInUI(GameMaster.GetInstance().GetPlayer());
+        if (GameMaster.GetInstance().IsNetworked)
+        {
+            // Load your own card UI
+            LoadCardInUI(GameMaster.GetInstance().GetPlayerAt( ClientPlayerController.LocalPlayer));
+        }
+        else
+        {
+            // Load the current player's card UI
+            LoadCardInUI(GameMaster.GetInstance().GetPlayer());
+        }
     }
 
     public void LoadCardInUI(Player player)

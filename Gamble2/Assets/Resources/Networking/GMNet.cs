@@ -30,4 +30,16 @@ public class GMNet : NetworkBehaviour
         // Perform the action on all instances of the game
         GameMaster.GetInstance().OnTileClickClientRPC(nodeID, mapTileID);
     }
+
+    [ServerRpc]
+    public void OnPerformCardInServerRPC(TerritoryCard[] cards, int playerInt)
+    {
+        GameMaster.GetInstance().OnPerformCardIn_ClientRPC(cards, playerInt);
+    }
+
+    [ServerRpc]
+    public void EndTurn_ServerRPC()
+    {
+        GameMaster.GetInstance().EndTurn_ClientRPC();
+    }
 }
