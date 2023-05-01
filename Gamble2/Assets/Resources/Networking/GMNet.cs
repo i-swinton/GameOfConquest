@@ -46,12 +46,12 @@ public class GMNet : NetworkBehaviour
     [ServerRpc]
     public void ConfirmBattle_ServerRPC(int value)
     {
-
+        GameMaster.GetInstance().ConfirmBattle_ClientRPC(value);
     }
 
     [ServerRpc]
     public void ConfirmFortify_ServerRPC(int value)
     {
-
+        GameMaster.GetInstance().ConfirmFortify_ClientRPC(value);
     }
 }

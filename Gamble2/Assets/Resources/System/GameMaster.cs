@@ -516,6 +516,19 @@ public class GameMaster : NetworkBehaviour
         }
     }
 
+    public void ForceTurnEnd()
+    {
+        // Network, otherwise end turn via server
+        if(IsNetworked)
+        {
+            GMNet.Instance.EndTurn_ServerRPC();
+        }
+        else // End Turn normally if networked
+        {
+            EndTurn();
+        }
+    }
+
     public void UpdateContinentsOwned()
     {
         // Clear all player continents

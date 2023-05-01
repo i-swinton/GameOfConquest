@@ -1761,7 +1761,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 265174796}
         m_TargetAssemblyTypeName: GameMaster, Assembly-CSharp
-        m_MethodName: EndTurn
+        m_MethodName: ForceTurnEnd
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
