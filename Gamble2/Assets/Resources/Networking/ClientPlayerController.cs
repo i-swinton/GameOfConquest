@@ -23,6 +23,15 @@ public static ClientPlayerController Instance
         return Instance.Player.playerID != GameMaster.GetInstance().GetPlayer().playerID;
     }
 
+    public static int LocalPlayer
+    {
+        get
+        {
+            return Instance.Player.playerID;
+        }
+    }
+
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -37,7 +46,12 @@ public static ClientPlayerController Instance
 
         GameMaster.AddPlayerController(this);
 
-        DebugNetworklLog.Log("Spawning Player: " + name);
+        if(IsOwner)
+        {
+            DebugNetworklLog.SetTitle((IsHost ? "Host" : "Client") + ": " + player.playerID);
+        }
+
+        DebugNetworklLog.Log("Spawning Player for "+(IsHost? "Host":"Client")+": " + name);
 
     }
 

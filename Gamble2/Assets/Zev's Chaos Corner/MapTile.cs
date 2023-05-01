@@ -94,6 +94,9 @@ public class MapTile : MonoBehaviour
         // If the current player in a networked game is not the turn player, don't do anything
         if (GameMaster.GetInstance().IsNetworked)
         {
+
+            DebugNetworklLog.Log($"Turn is player {GameMaster.GetInstance().GetPlayer()}.");
+            
             if (!ClientPlayerController.IsCurrentPlayer(gm))
             {
                 return;
