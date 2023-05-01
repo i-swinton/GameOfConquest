@@ -16,8 +16,12 @@ public class GMNet : NetworkBehaviour
     // Set the instance
     public override void OnNetworkSpawn()
     {
+        
         base.OnNetworkSpawn();
-        instance = this;
+        if (IsOwner)
+        {
+            instance = this;
+        }
     }
     
     [ServerRpc]
