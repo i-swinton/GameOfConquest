@@ -46,10 +46,7 @@ public static ClientPlayerController Instance
 
         GameMaster.AddPlayerController(this);
 
-        if(IsOwner)
-        {
-            DebugNetworklLog.SetTitle((IsHost ? "Host" : "Client") + ": " + player.playerID);
-        }
+      
 
         DebugNetworklLog.Log("Spawning Player for "+(IsHost? "Host":"Client")+": " + name);
 
@@ -60,6 +57,11 @@ public static ClientPlayerController Instance
         this.player = player;
 
         DebugNetworklLog.Log("Player Connected: " + player.Name);
+
+        if (IsOwner)
+        {
+            DebugNetworklLog.SetTitle((IsHost ? "Host" : "Client") + ": " + player.playerID);
+        }
     }
 
     // Start is called before the first frame update
