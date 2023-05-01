@@ -99,8 +99,11 @@ public class MapTile : MonoBehaviour
             
             if (!ClientPlayerController.IsCurrentPlayer(gm))
             {
+                DebugNetworklLog.Log("Is not current player");
                 return;
             }
+
+            DebugNetworklLog.Log("Continue");
 
             // Send the RPC to the GMNet belonging to this player
             GMNet.Instance.OnMapTileClickServerRPC(NodeRef.ID, ID); 
