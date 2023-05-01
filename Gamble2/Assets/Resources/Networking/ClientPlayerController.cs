@@ -20,7 +20,7 @@ public static ClientPlayerController Instance
 
     public static bool IsCurrentPlayer(GameMaster master)
     {
-        return Instance.Player.playerID != GameMaster.GetInstance().GetPlayer().playerID;
+        return Instance.Player.playerID == GameMaster.GetInstance().GetPlayer().playerID;
     }
 
     public static int LocalPlayer
