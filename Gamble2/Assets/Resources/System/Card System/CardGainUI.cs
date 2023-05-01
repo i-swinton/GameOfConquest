@@ -26,7 +26,16 @@ public class CardGainUI : UIElement
 
     public static void GainCards(List<TerritoryCard> cards, Player target, MapSystem.Board board)
     {
-        foreach(var card in cards)
+        if (GameMaster.GetInstance().IsNetworked)
+        {
+            // If we aren't the player getting the card, don't show the cards
+            if (target.playerID != ClientPlayerController.LocalPlayer)
+            {
+                return;
+            }
+        }
+
+        foreach (var card in cards)
         {
             UIDisplayCard newCard = Instantiate(instance.cardPrefab, instance.targetStarPos.position, Quaternion.identity);
             instance.cardList.Add(newCard);
@@ -40,6 +49,15 @@ public class CardGainUI : UIElement
     }
     public static void GainCards(TerritoryCard card, Player target, MapSystem.Board board)
     {
+        if(GameMaster.GetInstance().IsNetworked)
+        {
+            // If we aren't the player getting the card, don't show the card
+            if(target.playerID != ClientPlayerController.LocalPlayer)
+            {
+                return;
+            }
+        }
+
 
         UIDisplayCard newCard = Instantiate(instance.cardPrefab, instance.targetStarPos.position, Quaternion.identity,instance.hideElement.transform);
         instance.cardList.Add(newCard);

@@ -42,4 +42,16 @@ public class GMNet : NetworkBehaviour
     {
         GameMaster.GetInstance().EndTurn_ClientRPC();
     }
+
+    [ServerRpc]
+    public void ConfirmBattle_ServerRPC(int value)
+    {
+
+    }
+
+    [ServerRpc]
+    public void ConfirmFortify_ServerRPC(int value)
+    {
+
+    }
 }

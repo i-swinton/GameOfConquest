@@ -125,6 +125,20 @@ public class GameMaster : NetworkBehaviour
     {
         EndTurn();
     }
+
+    [ClientRpc]
+    public void ConfirmBattle_ClientRPC(int value)
+    {
+        // Complete the battle for all players
+        CompleteBattle(value);
+    }
+
+    [ClientRpc]
+    public void ConfirmFortify_ClientRPC(int value)
+    {
+        // Complete the fortify for all players
+        CompleteFortify(value);
+    }
     #endregion
 
     // ------------------------------------ Starting Functions ------------------------------------------------------------
@@ -914,8 +928,12 @@ public class GameMaster : NetworkBehaviour
                         // Draw the arrow displaying who is attacking on the map
                         MapDrawSystem.SpawnArrow(GetChallenger().NodeRef.Position, mapTile.NodeRef.Position);
 
-                        // Pull up the confirm menu
-                        ConfirmUI.BeginConfirm($"Attack {mapTile.NodeRef.Name}?", ConfirmUI.ConfirmType.Battle, GetChallenger().NodeRef);
+                        // Only pull up the UI if you are the turn player
+                        if (!IsNetworked ||(IsNetworked && ClientPlayerController.IsCurrentPlayer(this)))
+                        {
+                            // Pull up the confirm menu
+                            ConfirmUI.BeginConfirm($"Attack {mapTile.NodeRef.Name}?", ConfirmUI.ConfirmType.Battle, GetChallenger().NodeRef);
+                        }
 
                     }
                 }
@@ -976,8 +994,12 @@ public class GameMaster : NetworkBehaviour
                     // Draw the arrow displaying who is attacking on the map
                     MapDrawSystem.SpawnArrow(GetChallenger().NodeRef.Position, mapTile.NodeRef.Position);
 
-                    // Pull up the confirm menu
-                    ConfirmUI.BeginConfirm("Fortify", ConfirmUI.ConfirmType.Fortify, GetChallenger().NodeRef, mapTile.NodeRef);
+                    // If you are the current player, open up the attack menu
+                    if (!IsNetworked || (IsNetworked && ClientPlayerController.IsCurrentPlayer(this)))
+                    {
+                        // Pull up the confirm menu
+                        ConfirmUI.BeginConfirm("Fortify", ConfirmUI.ConfirmType.Fortify, GetChallenger().NodeRef, mapTile.NodeRef);
+                    }
                 }
             }
             else
@@ -1126,11 +1148,22 @@ public class GameMaster : NetworkBehaviour
                 {
                     if (value <= 0)
                     {
+                        if(IsNetworked)
+                        {
+                            GMNet.Instance.ConfirmBattle_ServerRPC(value);
+                            return;
+                        }
+                       
                         // NOTE: Will want to make fortify changes here as well.
                         CompleteBattle(value);
                     }
                     else
                     {
+                        if (IsNetworked)
+                        {
+                            GMNet.Instance.ConfirmFortify_ServerRPC(value);
+                            return;
+                        }
                         CompleteFortify(value);
                     }
 
@@ -1138,6 +1171,11 @@ public class GameMaster : NetworkBehaviour
                 }
             case GameState.Fortify:
                 {
+                    if (IsNetworked)
+                    {
+                        GMNet.Instance.ConfirmFortify_ServerRPC(value);
+                        return;
+                    }
                     CompleteFortify(value);
                     break;
                 }
