@@ -95,7 +95,7 @@ public class MapTile : MonoBehaviour
         if (GameMaster.GetInstance().IsNetworked)
         {
 
-            DebugNetworklLog.Log($"Turn is player {GameMaster.GetInstance().GetPlayer()}.");
+            DebugNetworklLog.Log($"Turn is {GameMaster.GetInstance().GetPlayer().playerID} player {ClientPlayerController.LocalPlayer}.");
             
             if (!ClientPlayerController.IsCurrentPlayer(gm))
             {
