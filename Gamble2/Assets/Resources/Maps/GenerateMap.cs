@@ -12,6 +12,23 @@ public class GenerateMap : MonoBehaviour
 
     public ContactFilter2D ConnectionFilter;
 
+    public List<MapTile> mapTiles;
+
+
+    static GenerateMap instance;
+
+
+    private void Awake()
+    {
+        mapTiles = new List<MapTile>();
+        instance = this;
+    }
+
+    public static MapTile GetTile(int id)
+    {
+        return instance.mapTiles[id];
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -51,6 +68,8 @@ public class GenerateMap : MonoBehaviour
 
                 // Add the tiles to the list
                 spawnedTiles.Add(tile.GetComponent<MapTile>());
+
+                tile.GetComponent<MapTile>().SetIndex(spawnedTiles.Count-1);
             }
 
             continent.GetComponent<ContinentRenderer>().LoadContinent(board.FindContinent(i));
@@ -62,6 +81,9 @@ public class GenerateMap : MonoBehaviour
 
         GenerateConnections(board, spawnedTiles);
         ForceConnections(board, Map.namedPairs);
+
+        // Set the map tiles for future reference
+        mapTiles = spawnedTiles;
     }
 
     public void ForceConnections(MapSystem.Board board, List<NodeConnectionPairNamed> pairs)

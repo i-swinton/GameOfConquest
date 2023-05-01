@@ -99,6 +99,12 @@ public class GameMaster : NetworkBehaviour
         PrototypeQuickSetupScript.instance.NetInit(playerCount);
     }
 
+
+    [ClientRpc]
+    public void OnTileClickClientRPC(int nodeID, int mapTileID)
+    {
+        OnTileClick(nodeID, mapTileID);
+    }
     #endregion
 
     // ------------------------------------ Starting Functions ------------------------------------------------------------
@@ -674,7 +680,21 @@ public class GameMaster : NetworkBehaviour
 
     }
 
+    //---------------------------------------- On Click Functions -----------------------------------------
+    public void OnTileClick(int tileIndex, int mapTileID)
+    {
+        switch (GetState())
+        {
+            case GameState.Claim: ClaimTiles(gameBoard[tileIndex]); break;
+            case GameState.Reinforce: ReinforceTile(gameBoard[tileIndex]); break;
+            case GameState.Draft: DraftTile(gameBoard[tileIndex]); break;
+            case GameState.Attack: AttackTile(GenerateMap.GetTile(mapTileID)); break;
+            case GameState.Fortify: FortifyTile(GenerateMap.GetTile(mapTileID)); break;
+        }
+    }
+
     // --------------------------------------- Claiming Functions -------------------------------------------
+    #region Claiming Functions
     Player GetNextDraftablePlayer(int index)
     {
         // Return the player index
@@ -731,6 +751,21 @@ public class GameMaster : NetworkBehaviour
             else { gameBoard[i].Deselect(); }
         }
     }
+
+    public void ClaimTiles(MapSystem.BoardTile tile)
+    {
+        if (tile.Owner == null)
+        {
+            tile.ChangeOwner(GetPlayer());
+            tile.Owner.draftTroop--;
+            tile.AddUnits(new Unit(1));
+
+            EffectSystem.SpawnText(tile.Position, tile.Owner.playerColor).Text = "+1";
+
+            EndTurn();
+        }
+    }
+    #endregion
     //--------------------------------------------- Reinforcing Functions --------------------------------
     #region Reinforcing
     bool ReinforcingDone()
@@ -778,7 +813,6 @@ public class GameMaster : NetworkBehaviour
         
     }    
     
-
     void ReinforceSelections()
     {
         for (int i = 0; i < gameBoard.Count; ++i)
@@ -788,16 +822,156 @@ public class GameMaster : NetworkBehaviour
         }
     }
 
+    public void ReinforceTile(MapSystem.BoardTile tile)
+    {
+        if (GetPlayerTurn() == tile.Owner.playerID)
+        {
+            if (tile.Owner.draftTroop <= 0 || GameMaster.OverrideReinforcement())
+            {
+                GameMaster.GetInstance().GameModeReinforce(tile);
+            }
+            else
+            {
+                tile.Fortify(1);
+                EffectSystem.SpawnText(tile.Position, tile.Owner.playerColor).Text = $"+1";
 
+                tile.Owner.draftTroop--;
+                EndTurn();
+            }
+        }
+    }
 
     #endregion
     //-------------------------------------------- Draft Functions ------------------------------------
-   void DraftSelections()
+
+    #region Draft Functions
+    void DraftSelections()
     {
         //ReinforceSelections();
     }
 
+    public void DraftTile(MapSystem.BoardTile tile)
+    {
+        if (GetPlayerTurn() == tile.Owner.playerID)
+        {
+            tile.Fortify(1);
+            EffectSystem.SpawnText(tile.Position, tile.Owner.playerColor).Text = $"+1";
 
+            tile.Owner.draftTroop--;
+
+            if (tile.Owner.draftTroop <= 0)
+                EndTurn();
+        }
+    }
+
+    #endregion
+
+    //-------------------------------------------- Attack Functions -------------------------------------------
+    #region Attack Functions
+
+    public void AttackTile(MapTile mapTile)
+    {
+        if (HasChallengerCheck())
+        {
+            //Has a Challenger
+            if (GetChallenger() == this)
+            {
+                ReleaseChallenger();
+                // Stop drawing the cancel arrow
+                MapDrawSystem.CancelArrow();
+                ConfirmUI.CancelConfirm();
+            }
+            else
+            {
+                // Battle two challengers
+                if (GetChallenger().Player.playerID != mapTile.Player.playerID)
+                {
+                    if (GetChallenger().NodeRef.Neighbors.Contains(mapTile.NodeRef))
+                    {
+                        // Mark this tile as the challenger
+                        SetDefender(mapTile);
+
+                        // Draw the arrow displaying who is attacking on the map
+                        MapDrawSystem.SpawnArrow(GetChallenger().NodeRef.Position, mapTile.NodeRef.Position);
+
+                        // Pull up the confirm menu
+                        ConfirmUI.BeginConfirm($"Attack {mapTile.NodeRef.Name}?", ConfirmUI.ConfirmType.Battle, GetChallenger().NodeRef);
+
+                    }
+                }
+            }
+
+        }
+        else
+        {
+            if (GetPlayerTurn() == mapTile.Player.playerID)
+            {
+
+                // Only allow if the unit count is greater than 1
+                if (!CombatSystem.CanAttack(mapTile.NodeRef)) { return; }
+
+                //Doesn't Have a Challenger
+                SetChallenger(mapTile);
+            }
+        }
+    }
+    #endregion
+
+    //------------------------------------------------- Fortify Functions ---------------------------------------
+    #region Fortify Functions
+    public void FortifyTile(MapTile mapTile)
+    {
+        if (GetPlayerTurn() == mapTile.Player.playerID)
+        {
+            if (HasChallengerCheck())
+            {
+                // Do not let
+                if (GetChallenger() == this)
+                {
+                    // Prevent the deselection of fortification during the attack phase
+                    if (GetState() != GameState.Attack)
+                    {
+                        ReleaseChallenger();
+                        MapDrawSystem.CancelArrow();
+                        ConfirmUI.CancelConfirm();
+                    }
+                }
+                else
+                {
+                    MapSystem.Board board = BoardManager.instance.GetBoard();
+                    // Check if the defender is connected to the challenger
+                    if (!board.GetConnectedTiles(mapTile.NodeRef.ID).Contains(GetChallenger().NodeRef))
+                    {
+                        // Don't do anything if it does not
+                        return;
+                    }
+
+                    //NodeRef.TransferUnits(gm.GetChallenger().NodeRef, 1);
+                    ////gm.GetChallenger().Units = gm.GetChallenger().NodeRef.UnitCount;
+                    ////Units = NodeRef.UnitCount;
+                    //gm.ReleaseChallenger();
+                    // Mark this tile as the challenger
+                    SetDefender(mapTile);
+
+                    // Draw the arrow displaying who is attacking on the map
+                    MapDrawSystem.SpawnArrow(GetChallenger().NodeRef.Position, mapTile.NodeRef.Position);
+
+                    // Pull up the confirm menu
+                    ConfirmUI.BeginConfirm("Fortify", ConfirmUI.ConfirmType.Fortify, GetChallenger().NodeRef, mapTile.NodeRef);
+                }
+            }
+            else
+            {
+                // Only allow if the unit count is greater than 1
+                if (mapTile.NodeRef.UnitCount <= 1) { return; }
+
+                //Doesn't Have a Challenger
+                SetChallenger(mapTile);
+            }
+        }
+    }
+
+    #endregion
 
     // -------------------------------------- Getter Functions ---------------------------------------------
     #region Getter Functions
@@ -822,6 +996,8 @@ public class GameMaster : NetworkBehaviour
     }
 
 #endregion
+
+    // --------------------------------------- Debug Functions ----------------------------------------------
     public void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
@@ -844,6 +1020,7 @@ public class GameMaster : NetworkBehaviour
 
 
     //------------------------------------------ Combat Functions -------------------------------------------
+    #region Combat Functions
     public void CompleteBattle(int index =-1)
     {
 
@@ -888,8 +1065,11 @@ public class GameMaster : NetworkBehaviour
         }
     }
 
+    #endregion
+
     // ------------------------------------------ Fortify Functions ----------------------------------------------
 
+    #region Fortify Functions
     public void CompleteFortify(int amount)
     {
         // Transfer over the units
@@ -913,7 +1093,10 @@ public class GameMaster : NetworkBehaviour
         }
     }
 
+    #endregion
+
     // ------------------------------------------ Confirm Functions --------------------------------------------
+    #region Confirm Functions
     public void Confirm(int value)
     {
         switch(GetState())
@@ -942,8 +1125,10 @@ public class GameMaster : NetworkBehaviour
         }
     }
 
-    // ------------------------------------------- Win Functions ----------------------------------------------
+    #endregion
 
+    // ------------------------------------------- Win Functions ----------------------------------------------
+    #region Win Loss Functions
     public void ClosePlayerLoss()
     {
         // If that was the winning play, end the game
@@ -970,6 +1155,7 @@ public class GameMaster : NetworkBehaviour
         WinLossUI.Open("Victory!", true, winner);
         // Shut everything down
     }
+    #endregion
 }
 
 public enum GameState{

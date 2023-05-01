@@ -38,4 +38,13 @@ public class DebugNetworklLog : UIElement
 
         textDisplays[0].text = text;
     }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            IsVisible = !IsVisible;
+        }
+
+    }
 }

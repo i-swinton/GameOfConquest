@@ -38,6 +38,21 @@ public class MapTile : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private GameMaster gm;
 
+    public int ID
+    {
+        get
+        {
+            return id;
+        }
+    }
+
+    int id;
+
+    public void SetIndex(int ind)
+    {
+        id = ind;
+    }
+
     // Start is called before the first frame update
     public void GenTile(MapSystem.BoardTile nodeRef, string name)
     {
@@ -76,14 +91,29 @@ public class MapTile : MonoBehaviour
 
     public void OnClick()
     {
-        switch (gm.GetState())
+        // If the current player in a networked game is not the turn player, don't do anything
+        if (GameMaster.GetInstance().IsNetworked)
         {
-            case GameState.Claim: MouseDown_Claim(); break;
-            case GameState.Reinforce: MouseDown_Reinforce(); break;
-            case GameState.Draft: MouseDown_Draft(); break;
-            case GameState.Attack: MouseDown_Attack(); break; 
-            case GameState.Fortify: MouseDown_Fortify();  break;
+            if (!ClientPlayerController.IsCurrentPlayer(gm))
+            {
+                return;
+            }
+
+            // Send the RPC to the GMNet belonging to this player
+            GMNet.Instance.OnMapTileClickServerRPC(NodeRef.ID, ID); 
         }
+        else
+        {
+            gm.OnTileClick(NodeRef.ID, ID);
+        }
+        //switch (gm.GetState())
+        //{
+        //    case GameState.Claim: MouseDown_Claim(); break;
+        //    case GameState.Reinforce: MouseDown_Reinforce(); break;
+        //    case GameState.Draft: MouseDown_Draft(); break;
+        //    case GameState.Attack: MouseDown_Attack(); break; 
+        //    case GameState.Fortify: MouseDown_Fortify();  break;
+        //}
     }
 
     void MouseDown_Claim()
@@ -97,97 +127,127 @@ public class MapTile : MonoBehaviour
                 return;
             }
         }
-        if (Player == null)
+        else if (Player == null)
         {
-            NodeRef.ChangeOwner( gm.GetPlayer());
-            Player.draftTroop--;
-            NodeRef.AddUnits(new Unit(1));
-
-            EffectSystem.SpawnText(NodeRef.Position, Player.playerColor).Text = "+1";
-
-            gm.EndTurn();
+            gm.ClaimTiles(NodeRef);
         }
     }
     
     void MouseDown_Reinforce()
     {
-        if (gm.GetPlayerTurn() == Player.playerID)
-        {
-            if (Player.draftTroop <= 0 || GameMaster.OverrideReinforcement())
-            {
-                GameMaster.GetInstance().GameModeReinforce(NodeRef);
-            }
-            else
-            {
-                NodeRef.Fortify(1);
-                EffectSystem.SpawnText(NodeRef.Position, Player.playerColor).Text = $"+1";
+        //if (gm.GetPlayerTurn() == Player.playerID)
+        //{
+        //    if (Player.draftTroop <= 0 || GameMaster.OverrideReinforcement())
+        //    {
+        //        GameMaster.GetInstance().GameModeReinforce(NodeRef);
+        //    }
+        //    else
+        //    {
+        //        NodeRef.Fortify(1);
+        //        EffectSystem.SpawnText(NodeRef.Position, Player.playerColor).Text = $"+1";
 
-                Player.draftTroop--;
-                gm.EndTurn();
+        //        Player.draftTroop--;
+        //        gm.EndTurn();
+        //    }
+        //}
+        // If we are networked, only allow the player to click on their turn
+        if (GameMaster.GetInstance().IsNetworked)
+        {
+            // Check if the player does not match the current player
+            if (!ClientPlayerController.IsCurrentPlayer(gm))
+            {
+                return;
             }
+        }
+         if (Player == null)
+        {
+            gm.ReinforceTile(NodeRef);
         }
     }
     
     void MouseDown_Draft()
     {
-        if (gm.GetPlayerTurn() == Player.playerID)
-        {
-            NodeRef.Fortify(1);
-            EffectSystem.SpawnText(NodeRef.Position, Player.playerColor).Text = $"+1";
+        //if (gm.GetPlayerTurn() == Player.playerID)
+        //{
+        //    NodeRef.Fortify(1);
+        //    EffectSystem.SpawnText(NodeRef.Position, Player.playerColor).Text = $"+1";
 
-            Player.draftTroop--;
-            
-            if (Player.draftTroop <= 0)
-                gm.EndTurn();
+        //    Player.draftTroop--;
+
+        //    if (Player.draftTroop <= 0)
+        //        gm.EndTurn();
+        //}
+        // If we are networked, only allow the player to click on their turn
+        if (GameMaster.GetInstance().IsNetworked)
+        {
+            // Check if the player does not match the current player
+            if (!ClientPlayerController.IsCurrentPlayer(gm))
+            {
+                return;
+            }
+        }
+        {
+            gm.DraftTile(NodeRef);
         }
     }
     
     void MouseDown_Attack()
     {
-        
-        if (gm.HasChallengerCheck())
+        if (GameMaster.GetInstance().IsNetworked)
         {
-            //Has a Challenger
-            if (gm.GetChallenger() == this)
+            // Check if the player does not match the current player
+            if (!ClientPlayerController.IsCurrentPlayer(gm))
             {
-                gm.ReleaseChallenger();
-                // Stop drawing the cancel arrow
-                MapDrawSystem.CancelArrow();
-                ConfirmUI.CancelConfirm();
-            }
-            else
-            {
-                // Battle two challengers
-                if (gm.GetChallenger().Player.playerID != Player.playerID)
-                {
-                    if (gm.GetChallenger().NodeRef.Neighbors.Contains(NodeRef))
-                    {
-                        // Mark this tile as the challenger
-                        gm.SetDefender(this);
-
-                        // Draw the arrow displaying who is attacking on the map
-                        MapDrawSystem.SpawnArrow(gm.GetChallenger().NodeRef.Position, NodeRef.Position);
-
-                        // Pull up the confirm menu
-                        ConfirmUI.BeginConfirm($"Attack {NodeRef.Name}?", ConfirmUI.ConfirmType.Battle,gm.GetChallenger().NodeRef);
-
-                    }
-                }
-            }
-            
-        }
-        else
-        {
-            if (gm.GetPlayerTurn() == Player.playerID)
-            {
-                
-                // Only allow if the unit count is greater than 1
-                if (!CombatSystem.CanAttack(NodeRef)) { return; }
-
-                //Doesn't Have a Challenger
-                gm.SetChallenger(this);
+                return;
             }
         }
+         if (Player == null)
+        {
+            gm.AttackTile(this);
+        }
+        //if (gm.HasChallengerCheck())
+        //{
+        //    //Has a Challenger
+        //    if (gm.GetChallenger() == this)
+        //    {
+        //        gm.ReleaseChallenger();
+        //        // Stop drawing the cancel arrow
+        //        MapDrawSystem.CancelArrow();
+        //        ConfirmUI.CancelConfirm();
+        //    }
+        //    else
+        //    {
+        //        // Battle two challengers
+        //        if (gm.GetChallenger().Player.playerID != Player.playerID)
+        //        {
+        //            if (gm.GetChallenger().NodeRef.Neighbors.Contains(NodeRef))
+        //            {
+        //                // Mark this tile as the challenger
+        //                gm.SetDefender(this);
+
+        //                // Draw the arrow displaying who is attacking on the map
+        //                MapDrawSystem.SpawnArrow(gm.GetChallenger().NodeRef.Position, NodeRef.Position);
+
+        //                // Pull up the confirm menu
+        //                ConfirmUI.BeginConfirm($"Attack {NodeRef.Name}?", ConfirmUI.ConfirmType.Battle,gm.GetChallenger().NodeRef);
+
+        //            }
+        //        }
+        //    }
+
+        //}
+        //else
+        //{
+        //    if (gm.GetPlayerTurn() == Player.playerID)
+        //    {
+
+        //        // Only allow if the unit count is greater than 1
+        //        if (!CombatSystem.CanAttack(NodeRef)) { return; }
+
+        //        //Doesn't Have a Challenger
+        //        gm.SetChallenger(this);
+        //    }
+        //}
     }
     
     
@@ -195,54 +255,67 @@ public class MapTile : MonoBehaviour
     void MouseDown_Fortify()
     {
 
-        if (gm.GetPlayerTurn() == Player.playerID)
+        if (GameMaster.GetInstance().IsNetworked)
         {
-            if (gm.HasChallengerCheck())
+            // Check if the player does not match the current player
+            if (!ClientPlayerController.IsCurrentPlayer(gm))
             {
-                // Do not let
-                if (gm.GetChallenger() == this)
-                {
-                    // Prevent the deselection of fortification during the attack phase
-                    if (gm.GetState() != GameState.Attack)
-                    {
-                        gm.ReleaseChallenger();
-                        MapDrawSystem.CancelArrow();
-                        ConfirmUI.CancelConfirm();
-                    }
-                }
-                else 
-                {
-                    MapSystem.Board board = BoardManager.instance.GetBoard();
-                    // Check if the defender is connected to the challenger
-                    if (!board.GetConnectedTiles(NodeRef.ID).Contains(gm.GetChallenger().NodeRef))
-                    {
-                        // Don't do anything if it does not
-                        return;
-                    }
-                    
-                    //NodeRef.TransferUnits(gm.GetChallenger().NodeRef, 1);
-                    ////gm.GetChallenger().Units = gm.GetChallenger().NodeRef.UnitCount;
-                    ////Units = NodeRef.UnitCount;
-                    //gm.ReleaseChallenger();
-                    // Mark this tile as the challenger
-                    gm.SetDefender(this);
-
-                    // Draw the arrow displaying who is attacking on the map
-                    MapDrawSystem.SpawnArrow(gm.GetChallenger().NodeRef.Position, NodeRef.Position);
-
-                    // Pull up the confirm menu
-                    ConfirmUI.BeginConfirm("Fortify", ConfirmUI.ConfirmType.Fortify, gm.GetChallenger().NodeRef, NodeRef);
-                }
-            }
-            else
-            {
-                // Only allow if the unit count is greater than 1
-                if(NodeRef.UnitCount <= 1) { return; }
-
-                //Doesn't Have a Challenger
-                gm.SetChallenger(this);
+                return;
             }
         }
+        if (Player == null)
+        {
+            gm.FortifyTile(this);
+        }
+
+        //if (gm.GetPlayerTurn() == Player.playerID)
+        //{
+        //    if (gm.HasChallengerCheck())
+        //    {
+        //        // Do not let
+        //        if (gm.GetChallenger() == this)
+        //        {
+        //            // Prevent the deselection of fortification during the attack phase
+        //            if (gm.GetState() != GameState.Attack)
+        //            {
+        //                gm.ReleaseChallenger();
+        //                MapDrawSystem.CancelArrow();
+        //                ConfirmUI.CancelConfirm();
+        //            }
+        //        }
+        //        else 
+        //        {
+        //            MapSystem.Board board = BoardManager.instance.GetBoard();
+        //            // Check if the defender is connected to the challenger
+        //            if (!board.GetConnectedTiles(NodeRef.ID).Contains(gm.GetChallenger().NodeRef))
+        //            {
+        //                // Don't do anything if it does not
+        //                return;
+        //            }
+                    
+        //            //NodeRef.TransferUnits(gm.GetChallenger().NodeRef, 1);
+        //            ////gm.GetChallenger().Units = gm.GetChallenger().NodeRef.UnitCount;
+        //            ////Units = NodeRef.UnitCount;
+        //            //gm.ReleaseChallenger();
+        //            // Mark this tile as the challenger
+        //            gm.SetDefender(this);
+
+        //            // Draw the arrow displaying who is attacking on the map
+        //            MapDrawSystem.SpawnArrow(gm.GetChallenger().NodeRef.Position, NodeRef.Position);
+
+        //            // Pull up the confirm menu
+        //            ConfirmUI.BeginConfirm("Fortify", ConfirmUI.ConfirmType.Fortify, gm.GetChallenger().NodeRef, NodeRef);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        // Only allow if the unit count is greater than 1
+        //        if(NodeRef.UnitCount <= 1) { return; }
+
+        //        //Doesn't Have a Challenger
+        //        gm.SetChallenger(this);
+        //    }
+        //}
     }
 
     private void OnDrawGizmos()
