@@ -30,7 +30,7 @@ public class PrototypeQuickSetupScript : UIElement
     {
         if (GameMaster.HasStarted) { return; }
         GameMaster.GetInstance().StartGame(numOfPlayers);
-        IsVisible= true;
+        IsVisible= false;
     }
 
 
