@@ -921,7 +921,7 @@ public class GameMaster : NetworkBehaviour
         if (HasChallengerCheck())
         {
             //Has a Challenger
-            if (GetChallenger() == this)
+            if (GetChallenger() == mapTile)
             {
                 ReleaseChallenger();
                 // Stop drawing the cancel arrow
@@ -977,7 +977,7 @@ public class GameMaster : NetworkBehaviour
             if (HasChallengerCheck())
             {
                 // Do not let
-                if (GetChallenger() == this)
+                if (GetChallenger() == mapTile)
                 {
                     // Prevent the deselection of fortification during the attack phase
                     if (GetState() != GameState.Attack)
@@ -1103,12 +1103,15 @@ public class GameMaster : NetworkBehaviour
 
             int unitsToMove = Mathf.Clamp((-index), 1, 3);
 
-            // Pull up the confirm for fortify
-            ConfirmUI.BeginConfirm("Fortify", ConfirmUI.ConfirmType.Fortify,
-                GetChallenger().NodeRef, GetDefender().NodeRef,
-                Mathf.Clamp(unitsToMove , 1, Challenger.Units-1));
-            //Defender.NodeRef.Fortify(3);
-
+            // If we are networked, don't open network ui
+            if (!IsNetworked || (IsNetworked && ClientPlayerController.IsCurrentPlayer(this)))
+            {
+                // Pull up the confirm for fortify
+                ConfirmUI.BeginConfirm("Fortify", ConfirmUI.ConfirmType.Fortify,
+                    GetChallenger().NodeRef, GetDefender().NodeRef,
+                    Mathf.Clamp(unitsToMove, 1, Challenger.Units - 1));
+                //Defender.NodeRef.Fortify(3);
+            }
         }
         else
         {

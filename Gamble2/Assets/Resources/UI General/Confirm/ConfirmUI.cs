@@ -215,6 +215,8 @@ public class ConfirmUI : UIElement
     }
     public static void CancelConfirm()
     {
+        // Don't do anything if the instance is not visible
+        if (!instance.IsVisible) { return; }
         instance.CloseUI();
     }
 

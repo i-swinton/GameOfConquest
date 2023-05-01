@@ -116,7 +116,7 @@ public class CardGainUI : UIElement
         // End the turn only if it is the end of the game.
         if (GameMaster.GetInstance().GetState() == GameState.End)
         {
-            GameMaster.GetInstance().EndTurn();
+            GameMaster.GetInstance().ForceTurnEnd();
         }
     }
 
