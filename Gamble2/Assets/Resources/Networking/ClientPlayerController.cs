@@ -10,6 +10,17 @@ public class ClientPlayerController : NetworkBehaviour
 
     static ClientPlayerController instance;
 
+    static int id = 0;
+
+    int currentID = 0;
+
+    public int InternalID
+    {
+        get
+        {
+            return currentID;
+        }
+    }
 
     public Player Player
     {
@@ -36,16 +47,25 @@ public static ClientPlayerController Instance
     {
         base.OnNetworkSpawn();
 
+        // Set the current ID, and increment the id
+        currentID = id;
+        id++;
+        
         // Mark the Player Controller on the user side
         if(IsOwner)
         {
             instance= this;
             DebugNetworklLog.SetTitle(IsHost ? "Host" : "Client");
         }
-        
 
-        GameMaster.AddPlayerController(this);
-
+        if (GameMaster.GetInstance() != null)
+        {
+            GameMaster.AddPlayerController(this);
+        }
+        else
+        {
+            NetworkPlayerDataCarrier.LoadInPlayer(this);
+        }
       
 
         DebugNetworklLog.Log("Spawning Player for "+(IsHost? "Host":"Client")+": " + name);

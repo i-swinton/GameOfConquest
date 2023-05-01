@@ -9,6 +9,9 @@ using UnityEngine.Networking;
 
 public class GameMaster : NetworkBehaviour
 {
+    [Header("References")]
+    UnityEngine.UI.Button endTurnButton;
+
     public Player Winner { get { return winningPlayer; } }
 
 
@@ -267,6 +270,20 @@ public class GameMaster : NetworkBehaviour
                 CompleteBattle(-4);
             }
         }
+
+        // Networked, make sure other players can't end their turns
+        if (IsNetworked)
+        {
+            if (ClientPlayerController.IsCurrentPlayer(this))
+            {
+                endTurnButton.interactable = true;
+            }
+            else
+            {
+                endTurnButton.interactable = false;
+            }
+        }
+
 
         if (gameMode)
         {
