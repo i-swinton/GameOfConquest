@@ -13,6 +13,7 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
     {
         instance = this;
         data = new NetworkSystem.GameData();
+        data.settings = new GameSettings();
     }
     
     public static List<ClientPlayerController> Controllers
@@ -44,7 +45,7 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
         {
             GameMaster.AddPlayerController(instance.data.cpcs[i]);
         }
-        Debug.Log("Settings are: " + instance.data.settings);
+        Debug.Log("Settings are: " + (instance.data.settings != null?"Exists":"Null"));
         master.StartGame(instance.data.cpcs.Count,instance.data.settings);
 
     }
