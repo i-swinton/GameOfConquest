@@ -57,7 +57,7 @@ public class NetworkLobbyScript : NetworkBehaviour
     public void Connect()
     {
         Debug.Log("Current end point:" + NetworkManager.GetComponent<UnityTransport>().ConnectionData.ServerEndPoint);
-        //NetworkManager.GetComponent<UnityTransport>().ConnectionData.Address = addressText.text;
+        NetworkManager.GetComponent<UnityTransport>().ConnectionData.Address = addressText.text.Substring(0,addressText.text.Length-1);
         Debug.Log(portText.text.Substring(0, portText.text.Length - 1));
         NetworkManager.GetComponent<UnityTransport>().ConnectionData.Port = ushort.Parse(portText.text.Substring(0,portText.text.Length-1));
 
