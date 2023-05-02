@@ -10,6 +10,7 @@ using UnityEngine.Networking;
 public class GameMaster : NetworkBehaviour
 {
     [Header("References")]
+    [SerializeField]
     UnityEngine.UI.Button endTurnButton;
 
     public Player Winner { get { return winningPlayer; } }
