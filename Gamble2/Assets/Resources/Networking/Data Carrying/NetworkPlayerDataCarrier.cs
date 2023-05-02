@@ -45,7 +45,7 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
             GameMaster.AddPlayerController(instance.data.cpcs[i]);
         }
 
-        master.StartGame(instance.data.cpcs.Count);
+        master.StartGame(instance.data.cpcs.Count,instance.data.settings);
 
     }
 
@@ -56,5 +56,6 @@ namespace NetworkSystem
     public class GameData
     {
         public List<ClientPlayerController> cpcs;
+        public GameSettings settings;
     }
 }

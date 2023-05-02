@@ -184,11 +184,25 @@ public class GameMaster : NetworkBehaviour
         instance.settings = settings;
     }
 
+    /// <summary>
+    /// Starts a game with the current settings and the given number of players
+    /// </summary>
+    /// <param name="numberOfPlayers">The number of players.</param>
     public void StartGame(int numberOfPlayers)
+    {
+        StartGame(numberOfPlayers, null);
+    }
+
+    public void StartGame(int numberOfPlayers,GameSettings gameSettings)
     {
         if(gameBoard == null)
         {
             gameBoard = BoardManager.instance.GetBoard();
+        }
+        // Set the game settings
+        if(gameSettings != null)
+        {
+            settings = gameSettings;
         }
         // Set the game as started
         hasGameStarted = true;
