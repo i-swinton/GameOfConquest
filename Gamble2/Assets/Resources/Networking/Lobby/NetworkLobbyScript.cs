@@ -91,6 +91,7 @@ public class NetworkLobbyScript : NetworkBehaviour
     public void StartClient()
     {
         NetworkManager.Singleton.StartClient();
+
     }
 
     public void StartServer()

@@ -27,6 +27,8 @@ public class NetworkSpawnControlPanel : MonoBehaviour
     public void StartClient()
     {
         NetworkManager.Singleton.StartClient();
+        Debug.Log("Current end point:" + NetworkManager.Singleton.GetComponent<UnityTransport>().ConnectionData.ServerEndPoint);
+
     }
 
     public void StartServer()
