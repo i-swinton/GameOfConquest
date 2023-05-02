@@ -46,6 +46,7 @@ public class GameMaster : NetworkBehaviour
     GameSettings settings;
 
     bool hasGameStarted;
+    bool isReady;
 
     // Singleton
     static GameMaster instance;
@@ -232,13 +233,10 @@ public class GameMaster : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if(!hasGameStarted)
         {
-            if(Input.GetKeyDown(KeyCode.Return))
-            {
-                StartGame(2);
-
-            }
+            NetworkPlayerDataCarrier.InitializeGame(this);
 
             return;
         }

@@ -16,18 +16,42 @@ public class NetworkLobbyScript : NetworkBehaviour
 
     [Header("Host Panel References")]
     [SerializeField] TMPro.TextMeshProUGUI[] playerTexts;
-  
+    int index;
+    [SerializeField] string gameplayScene;
 
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] InputField inputField;
+
+    private void Start()
     {
-        
+        //inputField.te
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        if (NetworkPlayerDataCarrier.Controllers.Count - 1 != index)
+        {
+            UpdatePlayerText();
+        }
+    }
+
+
+    void UpdatePlayerText()
+    {
+        for(int i =0; i < NetworkPlayerDataCarrier.Controllers.Count; ++i)
+        {
+            playerTexts[i].text = $"{(IsHost?"Host ":"Client ")} "+NetworkPlayerDataCarrier.Controllers[i].InternalID;
+        }
+
+        index = NetworkPlayerDataCarrier.Controllers.Count-1;
+    }
+    bool ContainsPlayer()
+    {
+        for(int i =0; i < index; ++i)
+        {
+            
+        }
+
+        return false;
     }
 
     public void Connect()
@@ -72,5 +96,8 @@ public class NetworkLobbyScript : NetworkBehaviour
         NetworkManager.Singleton.StartServer();
     }
 
-    
+    public void LoadGame()
+    {
+        NetworkManager.SceneManager.LoadScene(gameplayScene, UnityEngine.SceneManagement.LoadSceneMode.Single);
+    }
 }
