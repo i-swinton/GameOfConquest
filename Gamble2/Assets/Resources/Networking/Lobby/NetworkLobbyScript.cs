@@ -57,7 +57,7 @@ public class NetworkLobbyScript : NetworkBehaviour
     public void Connect()
     {
         NetworkManager.GetComponent<UnityTransport>().ConnectionData.Address = addressText.text;
-        NetworkManager.GetComponent<UnityTransport>().ConnectionData.Port = ushort.Parse(portText.text);
+        NetworkManager.GetComponent<UnityTransport>().ConnectionData.Port = ushort.Parse(portText.text.Substring(0,portText.text.Length-2));
 
         // Connect to the server
         //NetworkManager.Singleton.StartClient();
