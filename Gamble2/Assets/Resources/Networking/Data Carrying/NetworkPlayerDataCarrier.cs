@@ -44,7 +44,7 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
         {
             GameMaster.AddPlayerController(instance.data.cpcs[i]);
         }
-
+        Debug.Log("Settings are: " + instance.data.settings);
         master.StartGame(instance.data.cpcs.Count,instance.data.settings);
 
     }
