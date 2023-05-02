@@ -204,6 +204,7 @@ public class GameMaster : NetworkBehaviour
         {
             settings = gameSettings;
             DebugNetworklLog.Log("Setting new settings");
+            Debug.Log("Settings set");
         }
         // Set the game as started
         hasGameStarted = true;
