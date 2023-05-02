@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 
 
 public class NetworkSpawnControlPanel : MonoBehaviour
@@ -31,5 +32,7 @@ public class NetworkSpawnControlPanel : MonoBehaviour
     public void StartServer()
     {
         NetworkManager.Singleton.StartServer();
+        Debug.Log("Current end point:" + NetworkManager.Singleton.GetComponent<UnityTransport>().ConnectionData.ServerEndPoint);
+
     }
 }
