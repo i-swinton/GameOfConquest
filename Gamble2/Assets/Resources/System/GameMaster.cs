@@ -203,6 +203,7 @@ public class GameMaster : NetworkBehaviour
         if(gameSettings != null)
         {
             settings = gameSettings;
+            DebugNetworklLog.Log("Setting new settings");
         }
         // Set the game as started
         hasGameStarted = true;

@@ -6,7 +6,7 @@ using Unity.Netcode;
 public class NetworkPlayerDataCarrier : MonoBehaviour
 {
     static NetworkPlayerDataCarrier instance;
-    NetworkSystem.GameData data;
+    [SerializeField]NetworkSystem.GameData data;
     
 
     private void Awake()
@@ -53,6 +53,7 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
 
 namespace NetworkSystem
 {
+    [System.Serializable]
     public class GameData
     {
         public List<ClientPlayerController> cpcs;

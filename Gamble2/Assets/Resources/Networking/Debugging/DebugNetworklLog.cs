@@ -22,6 +22,7 @@ public class DebugNetworklLog : UIElement
 
     public static void Log(string text)
     {
+        if(instance!=null)
         instance.AddLog(text);
     }
     public static void SetTitle(string title)
