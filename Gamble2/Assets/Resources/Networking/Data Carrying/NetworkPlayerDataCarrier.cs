@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
+
 public class NetworkPlayerDataCarrier : MonoBehaviour
 {
     static NetworkPlayerDataCarrier instance;
@@ -76,6 +77,22 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
 
 }
 
+// Tells the Netcode how to serialize and deserialize Url in the future.
+// The class name doesn't matter here.
+public static class SerializationExtensions
+{
+    public static void ReadValueSafe(this FastBufferReader reader, out NetworkSystem.GameSettingStruct gss)
+    {
+        reader.ReadValueSafe(out NetworkSystem.GameSettingStruct val);
+        gss = new NetworkSystem.GameSettingStruct(val);
+    }
+
+    public static void WriteValueSafe(this FastBufferWriter writer, in NetworkSystem.GameSettingStruct gss)
+    {
+        writer.WriteValueSafe(gss);
+    }
+}
+
 namespace NetworkSystem
 {
     [System.Serializable]
@@ -85,4 +102,7 @@ namespace NetworkSystem
         public GameSettings settings;
         public GameMode mode;
     }
+
+
+
 }

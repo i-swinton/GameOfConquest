@@ -106,20 +106,20 @@ public class NetworkLobbyScript : NetworkBehaviour
         // Load in the game settings
         //NetworkPlayerDataCarrier.LoadGameData_ServerRPC(MatchSettingsPanels.GetGameMode(), MatchSettingsPanels.GetSettings());
         LoadGameData_ServerRPC(MatchSettingsPanels.GetGameModeIndex(), 
-            MatchSettingsPanels.GetGameSettingsList());
+           new NetworkSystem.GameSettingStruct( MatchSettingsPanels.GetGameSettingsList()));
 
         //NetworkManager.SceneManager.LoadScene(gameplayScene, UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 
     [ServerRpc]
-    public  void LoadGameData_ServerRPC(int modeIndex, List<bool> settings)
+    public  void LoadGameData_ServerRPC(int modeIndex, NetworkSystem.GameSettingStruct settings)
     {
         // Broadcast the data to all of the clients
         LoadGameData_ClientRPC(modeIndex, settings);
     }
 
     [ClientRpc]
-    public  void LoadGameData_ClientRPC(int modeIndex, List<bool> settings)
+    public  void LoadGameData_ClientRPC(int modeIndex, NetworkSystem.GameSettingStruct settings)
     {
         //DebugNetworklLog.Log("Setting data on "+instance)
         NetworkPlayerDataCarrier.LoadGameData(GameModeList.GetGameMode(modeIndex), new GameSettings(settings));
@@ -132,4 +132,6 @@ public class NetworkLobbyScript : NetworkBehaviour
             NetworkManager.SceneManager.LoadScene(gameplayScene, UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
     }
+
+   
 }
