@@ -65,6 +65,8 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
 
     public static void InitializeGame(GameMaster master)
     {
+        //  Check instance
+        if (instance == null) return;
         // Add in the players
         for(int i=0; i < instance.data.cpcs.Count; ++i)
         {

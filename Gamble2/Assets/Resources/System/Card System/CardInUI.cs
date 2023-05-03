@@ -58,7 +58,11 @@ public class CardInUI : UIElement
         set
         {
             canCardIn = value;
-            turnInButton.interactable = canCardIn;
+
+            turnInButton.interactable = canCardIn && (!GameMaster.GetInstance().IsNetworked ||
+                (GameMaster.GetInstance().IsNetworked && ClientPlayerController.IsCurrentPlayer(GameMaster.GetInstance()))
+                )
+                && GameMaster.GetInstance().GetState() == GameState.Draft;
         }
     }
 
@@ -354,6 +358,8 @@ public class CardInUI : UIElement
         CheckCardIn();
 
     }
+
+    
 
     private void OnDrawGizmosSelected()
     {
