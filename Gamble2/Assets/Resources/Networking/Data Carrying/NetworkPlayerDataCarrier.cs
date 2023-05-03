@@ -59,18 +59,7 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
         instance.onLoadInGame?.Invoke();
     }
 
-    [ServerRpc]
-    public static void LoadGameData_ServerRPC(int modeIndex, List<bool> settings)
-    {
-        // Broadcast the data to all of the clients
-        LoadGameData_ClientRPC(modeIndex, settings);
-    }
 
-    [ClientRpc]
-    public static void LoadGameData_ClientRPC(int modeIndex, List<bool> settings)
-    {
-        LoadGameData(GameModeList.GetGameMode(modeIndex), new GameSettings(settings));
-    }
 
 
     public static void InitializeGame(GameMaster master)
