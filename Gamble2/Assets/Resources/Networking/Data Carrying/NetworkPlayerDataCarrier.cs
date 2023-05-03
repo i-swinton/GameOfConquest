@@ -12,8 +12,9 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        data = new NetworkSystem.GameData();
-        data.settings = new GameSettings();
+        //data = new NetworkSystem.GameData();
+
+        
     }
     
     public static List<ClientPlayerController> Controllers
