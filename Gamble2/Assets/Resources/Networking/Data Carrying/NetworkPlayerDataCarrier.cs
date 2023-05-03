@@ -83,13 +83,18 @@ public static class SerializationExtensions
 {
     public static void ReadValueSafe(this FastBufferReader reader, out NetworkSystem.GameSettingStruct gss)
     {
-        reader.ReadValueSafe(out NetworkSystem.GameSettingStruct val);
+        reader.ReadValueSafe(out int val);
+
+
+        //gss = new NetworkSystem.GameSettingStruct();
+
         gss = new NetworkSystem.GameSettingStruct(val);
     }
 
     public static void WriteValueSafe(this FastBufferWriter writer, in NetworkSystem.GameSettingStruct gss)
     {
-        writer.WriteValueSafe(gss);
+        // Write value safe
+        writer.WriteValueSafe(gss.ToInt());
     }
 }
 
