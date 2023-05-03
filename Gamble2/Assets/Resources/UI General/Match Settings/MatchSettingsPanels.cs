@@ -43,6 +43,26 @@ public class MatchSettingsPanels : MonoBehaviour
         return GameModeList.GetGameMode(instance.pairs[(int)MatchSettingPair.SettingType.GameMode].GetValue());
     }
 
+    public static int GetGameModeIndex()
+    {
+        return instance.pairs[(int)MatchSettingPair.SettingType.GameMode].GetValue();
+    }
+
+    public static List<bool> GetGameSettingsList()
+    {
+        List<bool> list = new List<bool>();
+
+        // Fill the list with the settings on the side
+        for(int i=0; i < instance.pairs.Count; ++i)
+        {
+            list.Add(instance.pairs[i].GetBool());
+        }
+
+
+        // Return the list
+        return list;
+    }
+
     public static void LoadGameState(GameMode gameMode, GameSettings settings)
     {
         //

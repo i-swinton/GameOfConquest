@@ -101,9 +101,21 @@ public class NetworkLobbyScript : NetworkBehaviour
 
     public void LoadGame()
     {
+        NetworkPlayerDataCarrier.Instance.onLoadInGame += BeginGameScene;
+        
         // Load in the game settings
-        NetworkPlayerDataCarrier.LoadGameData(MatchSettingsPanels.GetGameMode(), MatchSettingsPanels.GetSettings());
+        //NetworkPlayerDataCarrier.LoadGameData_ServerRPC(MatchSettingsPanels.GetGameMode(), MatchSettingsPanels.GetSettings());
+        NetworkPlayerDataCarrier.LoadGameData_ServerRPC(MatchSettingsPanels.GetGameModeIndex(), 
+            MatchSettingsPanels.GetGameSettingsList());
 
-        NetworkManager.SceneManager.LoadScene(gameplayScene, UnityEngine.SceneManagement.LoadSceneMode.Single);
+        //NetworkManager.SceneManager.LoadScene(gameplayScene, UnityEngine.SceneManagement.LoadSceneMode.Single);
+    }
+
+    public void BeginGameScene()
+    {
+        if(IsHost)
+        {
+            NetworkManager.SceneManager.LoadScene(gameplayScene, UnityEngine.SceneManagement.LoadSceneMode.Single);
+        }
     }
 }

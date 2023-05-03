@@ -14,6 +14,9 @@ public class MatchSettingPair : MonoBehaviour
     [SerializeField] TextMeshProUGUI settingText;
     [SerializeField] TextMeshProUGUI titleText;
 
+    [SerializeField] Button prevButton;
+    [SerializeField] Button nextButton;
+
    public enum SettingType
     {
         GameMode,
@@ -126,6 +129,18 @@ public class MatchSettingPair : MonoBehaviour
         else { settingIndex = 0; }
 
         UpdateDisplay();
+    }
+
+    public void HideButtons()
+    {
+        prevButton.gameObject.SetActive(false);
+        nextButton.gameObject.SetActive(false);
+    }
+
+    public void ShowButtons()
+    {
+        prevButton.gameObject.SetActive(true);
+        nextButton.gameObject.SetActive(true);
     }
 
     // Multi-Optioned functions

@@ -7,7 +7,10 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
 {
     static NetworkPlayerDataCarrier instance;
     [SerializeField]NetworkSystem.GameData data;
-    
+
+    public System.Action onLoadInGame;
+
+    public static System.Action OnLoadInGame;
 
     private void Awake()
     {
@@ -15,6 +18,14 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
         //data = new NetworkSystem.GameData();
 
         
+    }
+
+    public static NetworkPlayerDataCarrier Instance
+    {
+        get
+        {
+            return instance;
+        }
     }
     
     public static List<ClientPlayerController> Controllers
@@ -44,6 +55,21 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
 
         // Set the game mode
         instance.data.mode = mode;
+
+        instance.onLoadInGame?.Invoke();
+    }
+
+    [ServerRpc]
+    public static void LoadGameData_ServerRPC(int modeIndex, List<bool> settings)
+    {
+        // Broadcast the data to all of the clients
+        LoadGameData_ClientRPC(modeIndex, settings);
+    }
+
+    [ClientRpc]
+    public static void LoadGameData_ClientRPC(int modeIndex, List<bool> settings)
+    {
+        LoadGameData(GameModeList.GetGameMode(modeIndex), new GameSettings(settings));
     }
 
 

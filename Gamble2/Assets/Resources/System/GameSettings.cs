@@ -12,4 +12,11 @@ public class GameSettings
     {
         Debug.Log("Writing game settings");
     }
+
+    public GameSettings(List<bool> settings)
+    {
+        AutoFillTiles = settings[(int)MatchSettingPair.SettingType.AutoClaim];
+        AutoReinforce = settings[(int)MatchSettingPair.SettingType.AutoReinforce] ;
+    }
+
 }
