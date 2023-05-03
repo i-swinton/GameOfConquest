@@ -4,6 +4,16 @@ using UnityEngine;
 
 public abstract class GameMode : ScriptableObject
 {
+    [SerializeField] string modeName;
+
+    public string Name
+    {
+        get
+        {
+            return modeName;
+        }
+    }
+
     public virtual bool CheckIfOver(GameMaster master, MapSystem.Board board)
     {
         return false;

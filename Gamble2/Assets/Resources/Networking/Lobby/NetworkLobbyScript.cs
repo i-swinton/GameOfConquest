@@ -101,6 +101,9 @@ public class NetworkLobbyScript : NetworkBehaviour
 
     public void LoadGame()
     {
+        // Load in the game settings
+        NetworkPlayerDataCarrier.LoadGameData(MatchSettingsPanels.GetGameMode(), MatchSettingsPanels.GetSettings());
+
         NetworkManager.SceneManager.LoadScene(gameplayScene, UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 }

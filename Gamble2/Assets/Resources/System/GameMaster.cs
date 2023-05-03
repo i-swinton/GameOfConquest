@@ -192,12 +192,21 @@ public class GameMaster : NetworkBehaviour
     {
         StartGame(numberOfPlayers, null);
     }
+    public void StartGame(int numberOfPlayers, GameSettings gameSettings)
+    {
+        StartGame(numberOfPlayers, settings, null);
+    }
 
-    public void StartGame(int numberOfPlayers,GameSettings gameSettings)
+    public void StartGame(int numberOfPlayers,GameSettings gameSettings, GameMode mode)
     {
         if(gameBoard == null)
         {
             gameBoard = BoardManager.instance.GetBoard();
+        }
+        // Set the game's mode if not available
+        if(mode != null)
+        {
+            gameMode = mode;
         }
         // Set the game settings
         if(gameSettings != null)

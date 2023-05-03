@@ -37,6 +37,14 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
 
     }
 
+    public static void LoadGameData(GameMode mode, GameSettings settings)
+    {
+        // Set the settings to the given value
+        instance.data.settings = settings;
+
+        // Set the game mode
+        instance.data.mode = mode;
+    }
 
 
     public static void InitializeGame(GameMaster master)
@@ -47,7 +55,7 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
             GameMaster.AddPlayerController(instance.data.cpcs[i]);
         }
         Debug.Log("Settings are: " + (instance.data.settings != null?"Exists":"Null"));
-        master.StartGame(instance.data.cpcs.Count,instance.data.settings);
+        master.StartGame(instance.data.cpcs.Count,instance.data.settings, instance.data.mode);
 
     }
 
@@ -60,5 +68,6 @@ namespace NetworkSystem
     {
         public List<ClientPlayerController> cpcs;
         public GameSettings settings;
+        public GameMode mode;
     }
 }

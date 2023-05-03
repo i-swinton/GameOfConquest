@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76d3e0598114f4142b8e9df265d209a2, type: 3}
   m_Name: Capital Conquest
   m_EditorClassIdentifier: 
+  modeName: Capital Conquest
   tilesPerTroop: 3
   WinPercentage: 1
   CapitalBonuses:
