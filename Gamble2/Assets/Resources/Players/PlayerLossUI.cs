@@ -60,6 +60,11 @@ public class PlayerLossUI : UIElement
             if(duration <= 0 || Input.GetMouseButtonDown(0))
             {
                 IsVisible = false;
+
+                if(!GameMaster.GetInstance().IsNetworked || (ClientPlayerController.IsCurrentPlayer(GameMaster.GetInstance())) )
+                {
+                    GameMaster.GetInstance().PlayWinSequence();
+                }
             }
         }
         else

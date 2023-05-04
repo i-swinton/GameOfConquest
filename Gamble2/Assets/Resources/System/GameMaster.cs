@@ -1270,6 +1270,13 @@ public class GameMaster : NetworkBehaviour
         WinLossUI.Open("Victory!", true, winner);
         // Shut everything down
     }
+
+    public void PlayWinSequence()
+    {
+        // Display Win Text
+        WinLossUI.Open("Victory!", true, Winner);
+        // Shut everything down
+    }
     #endregion
 }
 

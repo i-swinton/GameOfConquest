@@ -142,6 +142,8 @@ public class CardInUI : UIElement
 
         uiCard.name = "Card " + cards.Count;
 
+        // Set the initial position 
+        //uiCard.GetComponentInChildren<DragUI>().ForceLastPosition
 
         AdjustItems();
     }
@@ -186,6 +188,8 @@ public class CardInUI : UIElement
         // If it is further than the drop threshold, return to the original spot
         if(closestDistance > dropThreshold)
         {
+            Debug.Log("End of drag: " + cardTransform.position + " to " + lastPosition);
+
             cardTransform.position = lastPosition;
             cardTransform.GetComponentInChildren<DragUI>().ForceLastPosition(lastPosition);
             return;

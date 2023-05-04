@@ -10,7 +10,7 @@ public class GameSettings
 
     public GameSettings()
     {
-        Debug.Log("Writing game settings");
+        //Debug.Log("Writing game settings");
     }
 
     public GameSettings(List<bool> settings)

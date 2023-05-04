@@ -12,15 +12,20 @@ public class DragUI : MonoBehaviour
 
     Vector2 lastPosition;
 
+    bool forcedLast;
+
     public System.Action<Vector2, Transform, Vector2> OnDragEnd;
 
     private void Start()
     {
-        if(canvas==null)
+        if (canvas == null)
         {
             canvas = GetComponentInParent<Canvas>();
         }
-        lastPosition = targetTransform.position;
+        if (!forcedLast)
+        {
+            lastPosition = targetTransform.position;
+        }
     }
 
     public void DragHandler(BaseEventData data)
@@ -64,5 +69,6 @@ public class DragUI : MonoBehaviour
     public void ForceLastPosition(Vector2 pos)
     {
         lastPosition = pos;
+        forcedLast = true;
     }
 }
