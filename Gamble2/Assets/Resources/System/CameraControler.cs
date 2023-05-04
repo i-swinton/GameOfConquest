@@ -23,11 +23,19 @@ public class CameraControler : MonoBehaviour
 
     Vector3 PreMosPos;
 
+    [Tooltip("The limitations on panning the camera")]
+    public Vector2 PanBoundsX;
+    public Vector2 PanBoundsY;
+
     // Update is called once per frame
     void Update()
     {
-        PanCamera();
-        ZoomCamera();
+        // Only allow us to pan when the ui is not blocking
+        if (!UIElement.IsBlocking)
+        {
+            PanCamera();
+            ZoomCamera();
+        }
     }
 
     void PanCamera()
@@ -42,10 +50,17 @@ public class CameraControler : MonoBehaviour
         if (Input.GetKey(KeyCode.Mouse0))
         {
             Vector3 mouseDelta = PreMosPos - Input.mousePosition;
-
-            transform.position += new Vector3(mouseDelta.x * PanSpeed, mouseDelta.y * PanSpeed) * Time.deltaTime;
+            Vector3 pos = transform.position;
+            
+            pos += new Vector3(mouseDelta.x * PanSpeed, mouseDelta.y * PanSpeed) * Time.deltaTime;
 
             PreMosPos = Input.mousePosition;
+
+            pos.x = Mathf.Clamp(pos.x, PanBoundsX.x, PanBoundsX.y);
+            pos.y = Mathf.Clamp(pos.y, PanBoundsY.x, PanBoundsY.y);
+
+            // Clamp the position
+            transform.position = pos ;
         }
 
     }

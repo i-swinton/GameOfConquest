@@ -11,6 +11,14 @@ public class UIElement : MonoBehaviour
 
     [SerializeField]
     bool isVisible = true;
+
+    [SerializeField]
+    protected bool blockingUI = false;
+
+
+    static bool isBlocking = false;
+
+
     /// <summary>
     /// Is the piece of UI currently visible?
     /// </summary>
@@ -24,6 +32,14 @@ public class UIElement : MonoBehaviour
         }
     }
 
+    public static bool IsBlocking
+    {
+        get
+        {
+            return isBlocking;
+        }
+    }
+
     /// <summary>
     /// Hides the piece of UI
     /// </summary>
@@ -31,6 +47,11 @@ public class UIElement : MonoBehaviour
     {
         hideElement.SetActive(false);
         isVisible = false;
+
+        if(blockingUI)
+        {
+            isBlocking = false;
+        }
     }
 
     /// <summary>
@@ -40,6 +61,11 @@ public class UIElement : MonoBehaviour
     {
         hideElement.SetActive(true);
         isVisible = true;
+
+        if(blockingUI)
+        {
+            isBlocking = true;
+        }
     }
 
    

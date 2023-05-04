@@ -208,6 +208,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 55
   PanSpeed: 2
+  PanBoundsX: {x: -20, y: 20}
+  PanBoundsY: {x: -20, y: 20}
 --- !u!1 &4571614638912062417
 GameObject:
   m_ObjectHideFlags: 0

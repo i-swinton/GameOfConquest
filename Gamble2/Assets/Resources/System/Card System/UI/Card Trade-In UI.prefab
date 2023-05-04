@@ -732,6 +732,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hideElement: {fileID: 5362836390006172853}
   isVisible: 0
+  blockingUI: 1
   cardInAnchors:
   - {fileID: 5362836388733766061}
   - {fileID: 5362836388541070689}
