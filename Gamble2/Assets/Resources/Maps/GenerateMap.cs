@@ -29,6 +29,20 @@ public class GenerateMap : MonoBehaviour
         return instance.mapTiles[id];
     }
 
+    public static MapTile GetTile(MapSystem.BoardTile tile)
+    {
+        for(int i =0; i < instance.mapTiles.Count; ++i)
+        {
+            // If the instance matches, return
+            if(instance.mapTiles[i].NodeRef == tile)
+            {
+                return instance.mapTiles[i];
+            }
+        }
+
+        return null;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
