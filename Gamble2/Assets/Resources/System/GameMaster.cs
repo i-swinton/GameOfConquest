@@ -69,6 +69,14 @@ public class GameMaster : NetworkBehaviour
         }
     }
 
+    public static bool IsAITurn
+    {
+        get
+        {
+            return !instance.GetPlayer().isHuman;
+        }
+    }
+
     // ------------------------------------ Static Functions ---------------------------------------------------
 
 
@@ -194,10 +202,10 @@ public class GameMaster : NetworkBehaviour
     }
     public void StartGame(int numberOfPlayers, GameSettings gameSettings)
     {
-        StartGame(numberOfPlayers, settings, null);
+        StartGame(numberOfPlayers, new AI.AIPlayerData(0), settings, null);
     }
 
-    public void StartGame(int numberOfPlayers,GameSettings gameSettings, GameMode mode)
+    public void StartGame(int numberOfPlayers,AI.AIPlayerData computerPlayers,GameSettings gameSettings, GameMode mode)
     {
         if(gameBoard == null)
         {
@@ -224,7 +232,9 @@ public class GameMaster : NetworkBehaviour
         if (PlayerAmount <= 1)
             PlayerAmount = 2;
 
-        for (int i = 0; i < PlayerAmount; i++)
+        PlayerAmount += computerPlayers.PlayerCount;
+
+        for (int i = 0; i < numberOfPlayers; i++)
         {
             Player p = new Player();
             p.playerID = i;
@@ -239,6 +249,27 @@ public class GameMaster : NetworkBehaviour
             //Vector3 pos = Vector2.Lerp(BeginningOfUILine, EndOfUILine, t);
             //GameObject panel = Instantiate(playerPanelPrefab, pos, Quaternion.identity);
             //panel.GetComponent<PlayerPanel>().Setup(p);
+        }
+        // Load in the player count
+        for(int i = 0; i < computerPlayers.PlayerCount; ++i)
+        {
+            Player p = new Player();
+            p.playerID = players.Count;
+            float t = (float)players.Count / PlayerAmount;
+            Color color = Color.HSVToRGB(Mathf.Lerp(0.0f, 1.0f, t), 1.0f, 1.0f);
+            color.a = 1.0f;
+            p.playerColor = color;
+            players.Add(p);
+
+            PlayerPanelUI.SpawnPlayerPanel(p);
+            p.isHuman = false;
+
+            // Mark as bot
+            AIPlayer bot = new AIPlayer(p);
+            p.aiBrain = bot;
+
+            // Start the bot
+            p.aiBrain.Initialize(p, this, null);
         }
 
         // Connect to player controllers to players
@@ -321,8 +352,19 @@ public class GameMaster : NetworkBehaviour
             Debug.LogWarning("The Game Mode is missing. If you want to win, you are going to need that");
         }
 
+        // Handle updating AI
+        if(GetPlayer().isHuman == false)
+        {
+            float dt = Time.deltaTime;
+            GetPlayer().aiBrain.Update( dt);
+        }
+
     }
-    
+
+    //------------------------------------- Defender and Challenger functions --------------------------------------
+
+    #region Defenders and Challengers
+
     public void SetDefender(MapTile mt)
     {
         Defender = mt;
@@ -528,6 +570,10 @@ public class GameMaster : NetworkBehaviour
         return Challenger != null;
     }
 
+    #endregion
+
+    // ------------------------------------------------- State Changing Functions ----------------------------------------------
+    #region State Changing
     public void EndTurn()
     {
         switch (state) {
@@ -767,6 +813,8 @@ public class GameMaster : NetworkBehaviour
 
 
     }
+
+    #endregion
 
     //---------------------------------------- On Click Functions -----------------------------------------
     public void OnTileClick(int tileIndex, int mapTileID)
@@ -1298,6 +1346,8 @@ public class Player
         draftTroop = 20;
         continentsOwned = new List<MapSystem.Continent>();
         cards = new List<TerritoryCard>();
+
+        isHuman = true;   
     }
 
     public string Name
@@ -1319,7 +1369,11 @@ public class Player
 
     public Sprite playerIcon;
 
+    public AIPlayer aiBrain;
+
     public bool canGetCard;
     public int territoryCount;
     // Insert spot for player UI
+
+    public bool isHuman;
 }

@@ -19,7 +19,13 @@ namespace AI
         /// <param name="other"></param>
         public BehaviorTree(BehaviorTree other)
         {
-            other.root = other.root.Clone();
+            root = other.root.Clone();
+            player = other.player;
+        }
+
+        public BehaviorTree(AIPlayer player)
+        {
+            this.player = player;
         }
 
         
@@ -155,6 +161,15 @@ namespace AI
         /// </summary>
         /// <returns></returns>
         public abstract TreeNode Clone();
+
+        public override string ToString()
+        {
+            if (parent != null)
+            {
+                return parent.ToString() + "->" + Name;
+            }
+            return Name;
+        }
     }
 
 

@@ -19,7 +19,9 @@ public class PrototypeQuickSetupScript : UIElement
             return;
         }
 
-        GameMaster.GetInstance().StartGame(numOfPlayers);
+        AI.AIPlayerData adp = new AI.AIPlayerData(0);
+        if(numOfPlayers == 3) { adp = new(1); }
+        GameMaster.GetInstance().StartGame(numOfPlayers, adp, null, null) ;
 
 
 

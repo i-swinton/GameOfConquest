@@ -339,35 +339,43 @@ namespace AI
 
         public override NodeState Update(float dt)
         {
-            if(player.PlayerRef.draftTroop >0)
+            if (GameMaster.GetInstance().GetState() == GameState.Draft)
             {
-                // Pick a random location
-                int randomTile = RNG.Roll(0, board.Count - 1);
-                MapSystem.BoardTile tile = board[randomTile];
-                
-
-                // Make sure that location is owned
-                while(tile.Owner != player.PlayerRef)
+                if (player.PlayerRef.draftTroop > 0)
                 {
-                    randomTile++;
-                    if (randomTile >= board.Count)
-                    {
-                        randomTile = 0;
-                    }
+                    // Pick a random location
+                    int randomTile = RNG.Roll(0, board.Count - 1);
+                    MapSystem.BoardTile tile = board[randomTile];
 
-                    tile = board[randomTile];
+
+                    // Make sure that location is owned
+                    while (tile.Owner != player.PlayerRef)
+                    {
+                        randomTile++;
+                        if (randomTile >= board.Count)
+                        {
+                            randomTile = 0;
+                        }
+
+                        tile = board[randomTile];
+                    }
+                    // Add to that location
+
+                    GameMaster.GetInstance().DraftTile(tile);
                 }
-                // Add to that location
-                
-                GameMaster.GetInstance().DraftTile(tile);
+                else // If we are out of draft troops say we are complete
+                {
+                    return NodeState.Complete;
+                }
+
+                // Otherwise we are working on it
+                return NodeState.Working;
             }
-            else // If we are out of draft troops say we are complete
+            else
             {
                 return NodeState.Complete;
             }
 
-            // Otherwise we are working on it
-            return NodeState.Working;
         }
 
 
@@ -457,13 +465,18 @@ namespace AI
                 start %= board.Count;
 
                 // 
+
+                // Only look at nodes belonging to player
+                if(board[i].Owner != player) { continue; }
+
                 foreach (MapSystem.BoardTile node in board[start].Neighbors)
                 {
                     // See if the owner is different
                     if (node.Owner != null && node.Owner != player)
                     {
+                        enemyTile = node;
                         // Return the node
-                        return node;
+                        return board[i];
                     }
                 }
                 
@@ -506,6 +519,145 @@ namespace AI
         public override TreeNode Clone()
         {
             AttackRandomNode clone = new(Parent, tree);
+            // Loop through the children for cloning
+
+            for (int i = 0; i < children.Count; ++i)
+            {
+                // Recurse down the tree to add the children
+                clone.AddNode(children[i].Clone());
+            }
+
+            // Return the clone
+            return clone;
+        }
+    }
+
+
+    public class ClaimRandomNode : LeafNode
+    {
+        MapSystem.Board board;
+        GameMaster gm;
+
+        public ClaimRandomNode(TreeNode _parent, BehaviorTree _tree) : base(_parent, _tree)
+        {
+            // Set the board
+            board = BoardManager.instance.GetBoard();
+
+            // Set the game master
+            gm = GameMaster.GetInstance();
+        }
+
+        public override string Name => "Claim Random";
+
+        public override NodeState Update(float dt)
+        {
+            // Report complete once the claim step is finished
+            if(gm.GetState() != GameState.Claim)
+            {
+                return NodeState.Complete;
+            }
+
+            // If we can claim a territory, find and claim an empty territory
+            if(gm.GetPlayerTurn() == tree.player.PlayerRef.playerID)
+            {
+                int index = RNG.Roll(0, board.Count - 1);
+
+                for(int i=0; i < board.Count; ++i)
+                {
+                    // If an empty tile, claim it
+                    if(board[index].Owner == null)
+                    {
+                        // Claim the board tile
+                        gm.ClaimTiles(board[index]);
+
+                        // Keep  on working
+                        return NodeState.Working;
+                    }
+
+                    // Increment and clamp board
+                    index++;
+                    index %= board.Count;
+                }
+            }
+
+            // Otherwise, keep working
+            return NodeState.Working;
+        }
+
+        public override TreeNode Clone()
+        {
+            ClaimRandomNode clone = new(Parent, tree);
+            // Loop through the children for cloning
+
+            for (int i = 0; i < children.Count; ++i)
+            {
+                // Recurse down the tree to add the children
+                clone.AddNode(children[i].Clone());
+            }
+
+            // Return the clone
+            return clone;
+        }
+
+    }
+
+
+    public class ReinforceRandomNode : LeafNode
+    {
+        AIPlayer player;
+        MapSystem.Board board;
+
+        public ReinforceRandomNode(TreeNode _parent, BehaviorTree _tree) : base(_parent, _tree)
+        {
+
+            // Set the player
+            player = _tree.player;
+            board = BoardManager.instance.GetBoard();
+
+        }
+
+        public override string Name => "Reinforce Random";
+
+        public override NodeState Update(float dt)
+        {
+            // Skip if not in reinforce state
+            if(GameMaster.GetInstance().GetState() != GameState.Reinforce) { return NodeState.Complete; }
+            //if(GameMaster.GetInstance().GetState() == GameState.Reinforce) { return NodeState.Complete; }
+            if (player.PlayerRef.draftTroop > 0)
+            {
+                // Pick a random location
+                int randomTile = RNG.Roll(0, board.Count - 1);
+                MapSystem.BoardTile tile = board[randomTile];
+
+
+                // Make sure that location is owned
+                while (tile.Owner != player.PlayerRef)
+                {
+                    randomTile++;
+                    if (randomTile >= board.Count)
+                    {
+                        randomTile = 0;
+                    }
+
+                    tile = board[randomTile];
+                }
+                // Add to that location
+
+                GameMaster.GetInstance().ReinforceTile(tile);
+            }
+            else // If we are out of draft troops say we are complete
+            {
+                return NodeState.Complete;
+            }
+
+            // Otherwise we are working on it
+            return NodeState.Working;
+        }
+
+
+        public override TreeNode Clone()
+        {
+            ReinforceRandomNode clone = new(Parent, tree);
             // Loop through the children for cloning
 
             for (int i = 0; i < children.Count; ++i)

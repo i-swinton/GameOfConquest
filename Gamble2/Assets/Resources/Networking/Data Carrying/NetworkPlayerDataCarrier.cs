@@ -73,7 +73,9 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
             GameMaster.AddPlayerController(instance.data.cpcs[i]);
         }
         Debug.Log("Settings are: " + (instance.data.settings != null?"Exists":"Null"));
-        master.StartGame(instance.data.cpcs.Count,instance.data.settings, instance.data.mode);
+
+        //NOTE: Add a computer player count insert here as well
+        master.StartGame(instance.data.cpcs.Count,new AI.AIPlayerData(0),instance.data.settings, instance.data.mode);
 
     }
 
