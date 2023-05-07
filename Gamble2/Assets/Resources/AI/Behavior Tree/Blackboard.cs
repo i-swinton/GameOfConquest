@@ -11,6 +11,19 @@ namespace AI
 
         public BlackboarData this[string key] => GetValue(key);
 
+        public void UpdateValue(string key, MapSystem.Continent value)
+        {
+            // If it does not have a key for this value, then add that value to the dictionary
+            if (!blackboard.ContainsKey(key))
+            {
+                BlackboarData data = new BlackboarData(value);
+                blackboard.Add(key, data);
+
+                return;
+            }
+            // Otherwise update the given value
+            blackboard[key].SetValue(value);
+        }
         public void UpdateValue(string key, int value)
         {
             // If it does not have a key for this value, then add that value to the dictionary

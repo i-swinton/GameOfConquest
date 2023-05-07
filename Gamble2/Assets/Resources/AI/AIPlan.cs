@@ -14,10 +14,35 @@ namespace AI
         int currentIndex;
 
         AIGoal goal;
+
+        AIPlayer targetPlayer;
+
+        
+
         public void AddToActionSpace(AIAction action)
         {
             // Adds the action to the search space
             actionSpace.Add(action);
+        }
+
+        public void SetGoal(AIGoal newGoal)
+        {
+            goal = newGoal;
+        }
+        
+        public void SetPlayer(AIPlayer player)
+        {
+            targetPlayer = player;
+        }
+
+        public void FormPlan()
+        {
+            PlanToGoal(out currentPlan);
+        }
+
+        public AIPlan()
+        {
+            actionSpace = new List<AIAction>();
         }
 
         /// <summary>
@@ -37,7 +62,7 @@ namespace AI
             for (int i = 0; i < actionSpace.Count; ++i)
             {
                 // Find the first any action in the space
-                if (actionSpace[i].IsAnyAction)
+                if (actionSpace[i].IsAnyAction|| (AIAction.Match(targetPlayer.WorldState, actionSpace[i])) )
                 {
                     openList.Add(actionSpace[i]);
                     break;
@@ -158,10 +183,33 @@ namespace AI
             // If the current plan does not exist, return
             if(currentPlan == null || currentPlan.Count ==0) { return; }
 
-            // If the current index is 
+            // If the current index is at the end
             if(currentIndex >= currentPlan.Count)
             {
 
+                // Replan
+                PlanToGoal(out currentPlan);
+                // Reset the index
+                currentIndex = 0;
+
+                return;
+            }
+
+            // If the current action is completable, continue the plan
+
+            ActionStatus result = currentPlan[currentIndex].PerformAction(player);
+            if (result == ActionStatus.Complete)
+            {
+                ++currentIndex;
+            }
+            // If the current actions fails, replan
+            else if(result == ActionStatus.Failed)
+            {
+
+                PlanToGoal(out currentPlan) ;
+
+                currentIndex = 0;
+                return;
             }
 
         }

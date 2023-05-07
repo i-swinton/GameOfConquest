@@ -106,7 +106,15 @@ namespace AI
             states[(int)StateKeys.GameState] = States.Any;
             states[(int)StateKeys.GameMode] = States.Any;
 
-            states[(int)StateKeys.DraftTroops] = States.Any; 
+            states[(int)StateKeys.DraftTroops] = States.Any;
+
+            states[(int)StateKeys.CanAttack] = States.Any;
+            states[(int)StateKeys.Owns] = States.Any;
+            states[(int)StateKeys.TargetContinent] = States.Any;
+            states[(int)StateKeys.TargetTroopCount] = States.Any;
+            states[(int)StateKeys.TroopCount] = States.Any;
+            //states[(int)StateKeys.] = States.Any;
+
         }
 
         /// <summary>
@@ -139,6 +147,10 @@ namespace AI
         {
             get
             {
+                if (states[(int)key] == null)
+                {
+                    states[(int)key] = new WorldStateObject();
+                }
                 return (States)states[key];
             }
             set
@@ -159,6 +171,15 @@ namespace AI
         public int GetValue(StateKeys key)
         {
             return (int)this[key];
+        }
+
+        public WorldStateObject Get(StateKeys key)
+        {
+            return states[(int)key];
+        }
+        public WorldStateObject Get(int index)
+        {
+            return states[index];
         }
 
         public void SetValue(int key, int value)
@@ -208,6 +229,26 @@ namespace AI
             return obj;
         }
 
+        public static bool operator==(WorldStateObject x, WorldStateObject y)
+        {
+            if (x is null) { return y is null; }
+            else if (y is null) { return x is null; }
+            // Since it is state data
+            if(y.stateData == States.Any) { return true; }
+
+            // Then just match the x/y
+            return x.stateData == y.stateData;
+        }
+
+        public static bool operator!=(WorldStateObject x, WorldStateObject y)
+        {
+            if (x is null) { return !(y is null); }
+            else if (y is null) { return !(x is null); }
+
+            // IF the second is any, than the two match
+            if (y.stateData == States.Any) { return false; }
+            return x.stateData != y.stateData;
+        }
         
     }
 

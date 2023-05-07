@@ -17,6 +17,8 @@ public class AIPlayer
 
     AI.BehaviorTree currentTree;
 
+    AI.AIPlan plan;
+
     public Player PlayerRef
     {
         get
@@ -33,6 +35,13 @@ public class AIPlayer
         }
     }
 
+    public AI.WorldState WorldState
+    {
+        get
+        {
+            return worldState;
+        }
+    }
 
     public AIPlayer(Player player)
     {
@@ -40,6 +49,10 @@ public class AIPlayer
         bb = new AI.Blackboard();
 
         selfRef = player;
+
+        plan = new AI.AIPlan();
+
+        worldState = new AI.WorldState(0);
     }
 
     public void Initialize(Player player, GameMaster master, AIPersonality persona)
@@ -53,6 +66,13 @@ public class AIPlayer
         {
             this.persona = persona;
         }
+
+        // Set the goal
+        plan.SetGoal(new AI.ConquerContinent(1, this));
+        plan.SetPlayer(this);
+        plan.AddToActionSpace(new AI.ClaimContinentNode());
+
+        plan.FormPlan();
 
         // Create the behavior tree
         currentTree = new AI.BehaviorTree(this);
@@ -99,12 +119,32 @@ public class AIPlayer
 
         // Initialize the root
         currentTree.SetRoot(root);
+        UpdateWorldState();
+    }
+
+    public void UpdateWorldState()
+    {
+        // Update the game mode
+        worldState[AI.StateKeys.GameMode] = AI.AIAssist.Convert(GameMaster.GetInstance().GetState());
+        // Draft troops
+        worldState[AI.StateKeys.DraftTroops] = PlayerRef.draftTroop > 0 ? AI.States.Nonzero : AI.States.Zero;
+
+        // For testing reasons, set target
+        if(bb["TargetCon"].GetContinent() != null)
+        {
+            var targetCon = bb["TargetCon"].GetContinent();
+
+            worldState[AI.StateKeys.TargetContinent] =(( targetCon.LastOwningPlayer != null) ? AI.States.Full : AI.States.Empty);
+        }
     }
 
     public void Update(float dt)
     {
         // Update the current tree
-        currentTree.Update(dt);
+        //currentTree.Update(dt);
+
+        // If the plan
+        plan.Update(dt, this);
     }
 
 }

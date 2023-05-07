@@ -15,8 +15,8 @@ namespace AI
     public class AIAction
     {
         
-        protected WorldState precondition;
-        protected WorldState effects;
+        protected WorldState precondition = new WorldState(0);
+        protected WorldState effects = new WorldState(0);
 
         // The weight of the action
         protected int weight = 1;
@@ -102,10 +102,32 @@ namespace AI
             return true;
         }
 
+        public static bool Match(WorldState start, AIAction action)
+        {
+            for (int i = 0; i < WorldState.Size; ++i)
+            {
+                if (start[i] == States.Any) { continue; }
+
+                // If they don't match, return
+                if (!(action.MatchPre(i, start)))
+                {
+                    return false;
+                }
+            }
+            // If we made it here, there are no exceptions
+            return true;
+        }
+
+        //public static bool Match(WorldState state1)
+
         public bool Match(int index, WorldState goal)
         {
             // Compare the two state values
-            return effects[index] == goal[index];
+            return effects.Get(index) == goal.Get(index);
+        }
+        public bool MatchPre(int index, WorldState start)
+        {
+            return precondition[index] == start[index];
         }
 
         public virtual ActionStatus PerformAction(AIPlayer player)
@@ -150,6 +172,9 @@ namespace AI
     {
         public ClaimContinentNode()
         {
+            precondition = new WorldState(0);
+            effects = new WorldState(0);
+
             precondition[StateKeys.GameState] = States.Claim;
 
             // Claims continent
