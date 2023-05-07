@@ -4,272 +4,332 @@ using UnityEngine;
 
 namespace AI
 {
-    public enum ActionStatus
+    namespace Options
     {
-        Complete,
-        Working,
-        Failed
-    }
-
-
-    public class AIAction
-    {
-        
-        protected WorldState precondition = new WorldState(0);
-        protected WorldState effects = new WorldState(0);
-
-        // The weight of the action
-        protected int weight = 1;
-
-        public int g;
-        public int h;
-        int f =-1;
-
-        public AIAction prior = null;
-
-        protected BehaviorTree tree;
-
-        public int FCost
+        public enum ActionStatus
         {
-            get
-            {
-                if (f == -1) { f = g + h; }
-
-                return f;
-            }
+            Complete,
+            Working,
+            Failed
         }
 
-        public bool IsAnyAction
+
+        public class AIAction
         {
-            get
+
+            protected WorldState precondition = new WorldState(0);
+            protected WorldState effects = new WorldState(0);
+
+            // The weight of the action
+            protected int weight = 1;
+
+            public int g;
+            public int h;
+            int f = -1;
+
+            public AIAction prior = null;
+
+            protected BehaviorTree tree;
+
+            public int FCost
             {
-                for(int i= 0; i < WorldState.Size; ++i)
+                get
                 {
-                    // If I find any conditions that don't match "any", return false
-                    if(precondition[i] != States.Any)
+                    if (f == -1) { f = g + h; }
+
+                    return f;
+                }
+            }
+
+            public bool IsAnyAction
+            {
+                get
+                {
+                    for (int i = 0; i < WorldState.Size; ++i)
+                    {
+                        // If I find any conditions that don't match "any", return false
+                        if (precondition[i] != States.Any)
+                        {
+                            return false;
+                        }
+                    }
+
+                    // If we didn't find any exceptions, then the worldstate is an any world state
+                    return true;
+                }
+            }
+
+
+            public virtual bool Match(int index, AIAction other)
+            {
+                // Compare the two state values
+                return effects[index] == other.precondition[index];
+            }
+
+            public static bool Match(AIAction first, AIAction second)
+            {
+                // 
+                for (int i = 0; i < WorldState.Size; ++i)
+                {
+
+                    // Effects and Precondition
+                    //if(first.effects[i] == States.Any) { continue; }
+                    if (second.precondition[i] == States.Any) { continue; }
+
+                    // If they don't match
+                    if (!(first.Match(i, second)))
+                    {
+                        return false;
+                    }
+
+                }
+
+                // If I do not find any exceptions 
+                return true;
+            }
+
+            public static bool Match(AIAction end, WorldState goal)
+            {
+                for (int i = 0; i < WorldState.Size; ++i)
+                {
+                    if (end.effects[i] == States.Any) { continue; }
+
+                    // If they don't match, return
+                    if (!(end.Match(i, goal)))
                     {
                         return false;
                     }
                 }
-
-                // If we didn't find any exceptions, then the worldstate is an any world state
+                // If we made it here, there are no exceptions
                 return true;
             }
-        }
 
-        
-        public virtual bool Match(int index, AIAction other)
-        {
-            // Compare the two state values
-            return effects[index] == other.precondition[index];
-        }
-
-        public static bool Match(AIAction first, AIAction second)
-        {
-            // 
-            for(int i=0; i < WorldState.Size; ++i)
+            public static bool Match(WorldState start, AIAction action)
             {
-
-                // Effects and Precondition
-                //if(first.effects[i] == States.Any) { continue; }
-                if(second.precondition[i] == States.Any) { continue; }
-
-                // If they don't match
-                if(!(first.Match(i, second)))
+                for (int i = 0; i < WorldState.Size; ++i)
                 {
-                    return false;
-                }
+                    if (start[i] == States.Any) { continue; }
 
+                    // If they don't match, return
+                    if (!(action.MatchPre(i, start)))
+                    {
+                        return false;
+                    }
+                }
+                // If we made it here, there are no exceptions
+                return true;
             }
 
-            // If I do not find any exceptions 
-            return true;
-        }
+            //public static bool Match(WorldState state1)
 
-        public static bool Match(AIAction end, WorldState goal)
-        {
-            for(int i=0; i < WorldState.Size; ++i)
+            public bool Match(int index, WorldState goal)
             {
-                if(end.effects[i] == States.Any) { continue; }
-
-                // If they don't match, return
-                if(!(end.Match(i, goal)))
-                {
-                    return false;
-                }
+                // Compare the two state values
+                return effects.Get(index) == goal.Get(index);
             }
-            // If we made it here, there are no exceptions
-            return true;
-        }
-
-        public static bool Match(WorldState start, AIAction action)
-        {
-            for (int i = 0; i < WorldState.Size; ++i)
+            public bool MatchPre(int index, WorldState start)
             {
-                if (start[i] == States.Any) { continue; }
-
-                // If they don't match, return
-                if (!(action.MatchPre(i, start)))
-                {
-                    return false;
-                }
+                return precondition.Get(index) == start.Get(index);
             }
-            // If we made it here, there are no exceptions
-            return true;
-        }
 
-        //public static bool Match(WorldState state1)
-
-        public bool Match(int index, WorldState goal)
-        {
-            // Compare the two state values
-            return effects.Get(index) == goal.Get(index);
-        }
-        public bool MatchPre(int index, WorldState start)
-        {
-            return precondition[index] == start[index];
-        }
-
-        public virtual ActionStatus PerformAction(AIPlayer player)
-        {
-            // If not overridden, then just claim the action is done
-            return ActionStatus.Complete;
-        }
-
-    }
-
-    
-
-    public class AttackTarget : AIAction
-    {
-        public AttackTarget()
-        {
-            // Adjust the world state
-            precondition[StateKeys.GameState] = States.Attack;
-
-            //
-            
-        }
-    }
-
-    public class AttackAdjacent : AIAction
-    {
-        public AttackAdjacent()
-        {
-
-        }
-    }
-        
-    public class AttackSameContinent :AIAction
-    {
-        public AttackSameContinent()
-        {
-
-        }
-    }
-    //----------------------------------------- Claiming Actions ------------------------------------------------
-    public class ClaimContinentNode : AIAction
-    {
-        public ClaimContinentNode()
-        {
-            precondition = new WorldState(0);
-            effects = new WorldState(0);
-
-            precondition[StateKeys.GameState] = States.Claim;
-
-            // Claims continent
-            // Picks points around the continet
-            // If filled, picks other
-
-            precondition[StateKeys.DraftTroops] = States.Nonzero;
-
-            // We have a target continent
-            precondition[StateKeys.TargetContinent] = States.NotFull;
-
-            // The continent is filled as a result
-            effects[StateKeys.TargetContinent] = States.Empty;
-
-        }
-
-
-        public override ActionStatus PerformAction(AIPlayer player)
-        {
-            //return base.PerformAction(player);
-
-            // If we have no target, just state we completed this action
-            if(!player.Blackboard.Contains("TargetCon"))
+            public virtual ActionStatus PerformAction(AIPlayer player)
             {
+                // If not overridden, then just claim the action is done
                 return ActionStatus.Complete;
             }
 
-            // Get the continent
-            MapSystem.Continent con = player.Blackboard["TargetCon"].GetContinent();
+        }
 
-            // Grab an open tile
-            MapSystem.BoardTile target = con.GetRandomTile(null);
 
-            // If there are non to find, return true
-            if(target == null)
+
+        public class AttackTarget : AIAction
+        {
+            public AttackTarget()
             {
-                return ActionStatus.Complete;
+                // Adjust the world state
+                precondition[StateKeys.GameState] = States.Attack;
+
+                //
+
+            }
+        }
+
+        public class AttackAdjacent : AIAction
+        {
+            public AttackAdjacent()
+            {
+
+            }
+        }
+
+        public class AttackSameContinent : AIAction
+        {
+            public AttackSameContinent()
+            {
+
+            }
+        }
+        //----------------------------------------- Claiming Actions ------------------------------------------------
+        public class ClaimContinentNode : AIAction
+        {
+            public ClaimContinentNode()
+            {
+                precondition = new WorldState(0);
+                effects = new WorldState(0);
+
+                precondition[StateKeys.GameState] = States.Claim;
+
+                // Claims continent
+                // Picks points around the continet
+                // If filled, picks other
+
+                precondition[StateKeys.DraftTroops] = States.Nonzero;
+
+                // We have a target continent
+                precondition[StateKeys.TargetContinent] = States.NotFull;
+
+                // The continent is filled as a result
+                effects[StateKeys.TargetContinent] = States.Full;
+
             }
 
-            var gm = GameMaster.GetInstance();
 
-            // Claim the given tile
-            gm.ClaimTiles(target);
+            public override ActionStatus PerformAction(AIPlayer player)
+            {
+                //return base.PerformAction(player);
+
+                // If we have no target, just state we completed this action
+                if (!player.Blackboard.Contains("TargetCon"))
+                {
+                    return ActionStatus.Complete;
+                }
+
+                // Get the continent
+                MapSystem.Continent con = player.Blackboard["TargetCon"].GetContinent();
+
+                // Grab an open tile
+                MapSystem.BoardTile target = con.GetRandomTile(null);
+
+                // If there are non to find, return true
+                if (target == null)
+                {
+                    return ActionStatus.Complete;
+                }
+
+                var gm = GameMaster.GetInstance();
+
+                // Claim the given tile
+                gm.ClaimTiles(target);
 
 
 
-            // Update world state
+                // Update world state
 
-            return ActionStatus.Working;
+                return ActionStatus.Working;
+            }
+
         }
+
+        //---------------------------------------------- Reinforce Actions -----------------------------------------------
+        public class ReinforceContinentNode : AIAction
+        {
+            public ReinforceContinentNode()
+            {
+                precondition[StateKeys.GameState] = States.Reinforce;
+
+                // Claims continent
+                // Picks points around the continet
+                // If filled, picks other
+
+                precondition[StateKeys.DraftTroops] = States.Nonzero;
+
+                // We have a target continent
+                precondition[StateKeys.TargetContinent] = States.Full;
+
+                // Unit owns a location on that continent
+                //precondition[stat]
+
+                // The continent is filled as a result
+                effects[StateKeys.DraftTroops] = States.Zero;
+            }
+
+            public override ActionStatus PerformAction(AIPlayer player)
+            {
+                // If we have no target, just state we completed this action
+                if (!player.Blackboard.Contains("TargetCon"))
+                {
+                    return ActionStatus.Complete;
+                }
+                // We are done once we are out of draft troops
+                if(player.PlayerRef.draftTroop <=0)
+                {
+                    return ActionStatus.Complete;
+                }
+
+                // Get the continent
+                MapSystem.Continent con = player.Blackboard["TargetCon"].GetContinent();
+
+                // Grab an open tile
+                MapSystem.BoardTile target = con.GetRandomTile(player.PlayerRef);
+
+
+                // If there are non to find, return true
+                if (target == null)
+                {
+                    return ActionStatus.Complete;
+                }
+
+                var gm = GameMaster.GetInstance();
+
+                // Claim the given tile
+                gm.ReinforceTile(target);
+
+                return ActionStatus.Working;
+            }
+
+        }
+
+        // ----------------------------------------- State Change Actions -------------------------------------------
+
+        public class GoToAttackState : AIAction
+        {
+            public GoToAttackState()
+            {
+                precondition[StateKeys.GameState] = States.Draft;
+                precondition[StateKeys.DraftTroops] = States.None;
+
+                effects[StateKeys.GameState] = States.Attack;
+            }
+        }
+
+        public class GoToFortifyState : AIAction
+        {
+            public GoToFortifyState()
+            {
+                precondition[StateKeys.GameState] = States.Attack;
+                effects[StateKeys.GameState] = States.Fortify;
+            }
+
+            public override string ToString()
+            {
+                return "Actions: Fortify";
+            }
+        }
+
+        public class GoToEndState : AIAction
+        {
+            public GoToEndState()
+            {
+                precondition[StateKeys.GameState] = States.Fortify;
+                effects[StateKeys.GameState] = States.End;
+            }
+
+            public override string ToString()
+            {
+                return "Action: End";
+            }
+        }
+
 
     }
-
-    
-
- // ----------------------------------------- State Change Actions -------------------------------------------
-
-    public class GoToAttackState : AIAction
-    {
-        public GoToAttackState()
-        {
-            precondition[StateKeys.GameState] = States.Draft;
-            precondition[StateKeys.DraftTroops] = States.None;
-
-            effects[StateKeys.GameState] = States.Attack;
-        }
-    }
-
-    public class GoToFortifyState : AIAction
-    {
-        public GoToFortifyState()
-        {
-            precondition[StateKeys.GameState] = States.Attack;
-            effects[StateKeys.GameState] = States.Fortify;
-        }
-
-        public override string ToString()
-        {
-            return "Actions: Fortify";
-        }
-    }
-
-    public class GoToEndState : AIAction
-    {
-        public GoToEndState()
-        {
-            precondition[StateKeys.GameState] = States.Fortify;
-            effects[StateKeys.GameState] = States.End;
-        }
-
-        public override string ToString()
-        {
-            return "Action: End";
-        }
-    }
-
-    
 }

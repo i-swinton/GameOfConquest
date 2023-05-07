@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AI
 {
-
+    using Options;
     public class AIPlan
     {
         List<AIAction> actionSpace;
@@ -13,7 +13,9 @@ namespace AI
 
         int currentIndex;
 
-        AIGoal goal;
+        Goals.AIGoal goal;
+
+        List<Goals.AIGoal> goals;
 
         AIPlayer targetPlayer;
 
@@ -25,9 +27,14 @@ namespace AI
             actionSpace.Add(action);
         }
 
-        public void SetGoal(AIGoal newGoal)
+        public void SetGoal(Goals.AIGoal newGoal)
         {
             goal = newGoal;
+        }
+
+        public void AddGoal(Goals.AIGoal newGoal)
+        {
+            goals.Add(newGoal);
         }
         
         public void SetPlayer(AIPlayer player)
@@ -37,12 +44,20 @@ namespace AI
 
         public void FormPlan()
         {
-            PlanToGoal(out currentPlan);
+            for (int i = 0; i < goals.Count; ++i)
+            {
+                // If we can find a plan, use that plan
+                if(PlanToGoal(out currentPlan, i))
+                {
+                    return;
+                }
+            }
         }
 
         public AIPlan()
         {
             actionSpace = new List<AIAction>();
+            goals = new List<Goals.AIGoal>();
         }
 
         /// <summary>
@@ -50,8 +65,11 @@ namespace AI
         /// </summary>
         /// <param name="plan"></param>
         /// <returns>Returns true if a plan is found. Otherwise, returns false.</returns>
-        public bool PlanToGoal(out List<AIAction> plan)
+        public bool PlanToGoal(out List<AIAction> plan, int currentGoal)
         {
+            // Set the current goL
+            goal = goals[currentGoal];
+
             plan = new List<AIAction>();
 
             // Perform a dijkstra search 
@@ -78,6 +96,7 @@ namespace AI
                 // Add to the closed list
                 closedList.Add(node);
 
+                #region Return Goal
                 // If this node ends at the goal 
                 if (AIAction.Match(node, goal.GoalState))
                 {
@@ -93,12 +112,13 @@ namespace AI
                         current = current.prior;
 
                         ittr++;
-                        if (ittr > actionSpace.Count) { throw new System.Exception("Inifinite loop found when recursing path"); }
+                        if (ittr > actionSpace.Count) { throw new System.Exception("Infinite loop found when recursing path"); }
                     }
 
                     // Return the plan and report that we have found it
                     return true;
                 }
+                #endregion
 
                 for (int i = 0; i < actionSpace.Count; ++i)
                 {
@@ -180,15 +200,15 @@ namespace AI
 
         public void Update(float dt, AIPlayer player)
         {
-            // If the current plan does not exist, return
-            if(currentPlan == null || currentPlan.Count ==0) { return; }
+            // If the current plan does not exist, make one and return
+            if(currentPlan == null || currentPlan.Count ==0) { FormPlan(); return; }
 
             // If the current index is at the end
             if(currentIndex >= currentPlan.Count)
             {
 
                 // Replan
-                PlanToGoal(out currentPlan);
+                FormPlan();
                 // Reset the index
                 currentIndex = 0;
 
@@ -206,7 +226,8 @@ namespace AI
             else if(result == ActionStatus.Failed)
             {
 
-                PlanToGoal(out currentPlan) ;
+                //PlanToGoal(out currentPlan) ;
+                FormPlan();
 
                 currentIndex = 0;
                 return;

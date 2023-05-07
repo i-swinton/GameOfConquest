@@ -63,6 +63,7 @@ namespace AI
 
         // Owns
         Owns,
+        OwnsPartially,
 
         // Target
         TargetPlayer,
@@ -110,6 +111,7 @@ namespace AI
 
             states[(int)StateKeys.CanAttack] = States.Any;
             states[(int)StateKeys.Owns] = States.Any;
+            states[(int)StateKeys.OwnsPartially] = States.Any;
             states[(int)StateKeys.TargetContinent] = States.Any;
             states[(int)StateKeys.TargetTroopCount] = States.Any;
             states[(int)StateKeys.TroopCount] = States.Any;
@@ -274,5 +276,14 @@ namespace AI
 
     }
     
+    public class WorldStateGraphList : WorldStateObject
+    {
+        public List<MapSystem.BoardTile> tiles = new List<MapSystem.BoardTile>();
+        
+        public WorldStateGraphList()
+        {
+            
+        }
+    }
     
 }

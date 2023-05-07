@@ -59,6 +59,9 @@ public class GameMaster : NetworkBehaviour
 
     List<ClientPlayerController> playerControllers;
 
+    //----------------------------------------- Actions -------------------------------------------------
+    public System.Action<int> onTurnBegin;
+
     // ------------------------------------ Properties -----------------------------------------------------
 
     public static bool HasStarted
@@ -681,6 +684,10 @@ public class GameMaster : NetworkBehaviour
             }
 
         }
+
+
+        // Let anyone know the turn has changed that needs to 
+        onTurnBegin?.Invoke(turnTacker);
     }
 
     void ChangeState(GameState desiredState)
