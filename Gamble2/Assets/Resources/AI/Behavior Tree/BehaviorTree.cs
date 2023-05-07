@@ -138,6 +138,14 @@ namespace AI
 
         public abstract void AddNode(TreeNode node);
 
+        public virtual void RemoveNode(TreeNode node)
+        {
+            children.Remove(node);
+        }
+        public virtual void RemoveNode(int index)
+        {
+            children.RemoveAt(index);
+        }
 
         /// <summary>
         /// Actions performed whenever leaving a tree node. Performed on either exit or cancel.

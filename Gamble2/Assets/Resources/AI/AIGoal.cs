@@ -9,9 +9,9 @@ namespace AI
     {
         // Get the end world goal state
         [SerializeField]
-        States[] worldGoal = new States[(int)StateKeys.Count];
+        WorldState worldGoal = new WorldState();
 
-        public States[] GoalState
+        public WorldState GoalState
         {
             get
             {

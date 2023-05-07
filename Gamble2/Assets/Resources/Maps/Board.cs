@@ -424,6 +424,32 @@ namespace MapSystem
             return tiles.Contains(boardTile.ID);
         }
 
+        public BoardTile GetRandomTile(Player ownerType)
+        {
+            // Count -1
+            int index = RNG.Roll(0, tiles.Count - 1);
+
+            BoardTile found = null;
+
+            for(int i=0; i < tiles.Count; ++i)
+            {
+                // If the owners match, set found tile
+                if(board[tiles[index]].Owner == ownerType)
+                {
+                    found = board[tiles[index]];
+                    break;
+                }
+
+                // Otherwise, increment index within bounds
+                ++index;
+                index %= tiles.Count;
+
+            }
+
+            // Return the found tile
+            return found;
+        }
+
     }
 
     //--------------------------------------------------- Errors --------------------------------------------------------------

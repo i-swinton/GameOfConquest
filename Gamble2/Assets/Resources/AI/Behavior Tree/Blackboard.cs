@@ -81,6 +81,8 @@ namespace AI
         public string stringVal;
         public float floatVal;
 
+        public MapSystem.Continent conVal;
+
         public MonoBehaviour componentVal;
 
 
@@ -94,7 +96,8 @@ namespace AI
             Vector,
 
             // Unity Specific
-            Component
+            Component, 
+            Continent,
         }
 
         DataType myType;
@@ -109,6 +112,7 @@ namespace AI
             floatVal = 0.0f;
             vecVal = new Vector3();
             componentVal = null;
+            conVal = null;
         }
 
         public BlackboarData(Vector3 value)
@@ -120,7 +124,7 @@ namespace AI
             floatVal = 0.0f;
             vecVal = value;
             componentVal = null;
-
+            conVal = null;
         }
 
 
@@ -133,7 +137,20 @@ namespace AI
             floatVal = 0.0f;
             vecVal = Vector3.zero;
             componentVal = value;
+            conVal = null;
+        }
 
+        public BlackboarData(MapSystem.Continent continent)
+        {
+            intVal = 0;
+            myType = DataType.Continent;
+
+            stringVal = "";
+            floatVal = 0.0f;
+            vecVal = Vector3.zero;
+            componentVal = null;
+            //
+            conVal = continent;
         }
 
         #endregion
@@ -150,6 +167,11 @@ namespace AI
         public void SetValue(MonoBehaviour comp)
         {
             componentVal = comp;
+        }
+
+        public void SetValue(MapSystem.Continent value)
+        {
+            conVal = value;
         }
 
         public int GetInt()
@@ -171,6 +193,12 @@ namespace AI
             if (myType == DataType.Component) { return componentVal; }
 
             throw new System.Exception("Blackboard Data accessed was not a MonoBehavior");
+        }
+
+        public MapSystem.Continent GetContinent()
+        {
+            if(myType == DataType.Continent) { return conVal; }
+            throw new System.Exception("Blackboard Data accessed was not a Continent");
         }
     }
 }

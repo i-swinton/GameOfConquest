@@ -13,6 +13,13 @@ namespace AI
         No,
         Yes,
 
+        Zero,
+        Nonzero,
+
+        Empty,
+        NotFull,
+        Full,
+
         // Continental
         Continent,
         OwnContinent,
@@ -35,10 +42,12 @@ namespace AI
 
 
         // Territory
-        IncreaseTerritory
+        IncreaseTerritory,
 
         // Game Mode
 
+        // Blackboard
+        Home,
 
     }
 
@@ -56,7 +65,8 @@ namespace AI
         Owns,
 
         // Target
-        Target,
+        TargetPlayer,
+        TargetContinent,
 
         // Attack Data
         CanAttack,
@@ -79,6 +89,14 @@ namespace AI
         // The state of the world
         WorldStateObject[] states;//= new States[(int)StateKeys.Count]; 
 
+        public static int Size
+        {
+            get
+            {
+                return (int)StateKeys.Count;
+            }
+        }
+
         public WorldState(int v = 0)
         {
             // Create the array
@@ -87,6 +105,8 @@ namespace AI
             // Fill each of the slots
             states[(int)StateKeys.GameState] = States.Any;
             states[(int)StateKeys.GameMode] = States.Any;
+
+            states[(int)StateKeys.DraftTroops] = States.Any; 
         }
 
         /// <summary>
@@ -198,4 +218,20 @@ namespace AI
         public int element2;
 
     }
+
+
+    public class WorldStateContinent : WorldStateObject
+    {
+        // The continent being targeted
+        public List< MapSystem.Continent> continents;
+
+        public WorldStateContinent()
+        {
+            continents = new List<MapSystem.Continent>();
+        }
+
+
+    }
+    
+    
 }

@@ -25,6 +25,15 @@ public class AIPlayer
         }
     }
 
+    public AI.Blackboard Blackboard
+    {
+        get
+        {
+            return bb;
+        }
+    }
+
+
     public AIPlayer(Player player)
     {
         // Create the blackboard
