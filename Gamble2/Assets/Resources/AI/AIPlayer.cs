@@ -77,6 +77,9 @@ public class AIPlayer
         // Fill the action space
         plan.AddToActionSpace(new AI.Options.ClaimContinentNode());
         plan.AddToActionSpace(new AI.Options.ReinforceContinentNode());
+        plan.AddToActionSpace(new AI.Options.DraftContinent());
+        plan.AddToActionSpace(new AI.Options.GoToEndState());
+        plan.AddToActionSpace(new AI.Options.GoToFortifyState());
 
         plan.FormPlan();
 
@@ -134,6 +137,8 @@ public class AIPlayer
         worldState[AI.StateKeys.GameState] = AI.AIAssist.Convert(GameMaster.GetInstance().GetState());
         // Draft troops
         worldState[AI.StateKeys.DraftTroops] = PlayerRef.draftTroop > 0 ? AI.States.Nonzero : AI.States.Zero;
+
+        
 
         // For testing reasons, set target
         if(bb["TargetCon"].GetContinent() != null)

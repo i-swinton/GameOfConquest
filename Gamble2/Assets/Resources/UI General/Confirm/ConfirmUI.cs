@@ -13,6 +13,15 @@ public class ConfirmUI : UIElement
         None =-1
     }
 
+    public enum BattleConfirmValue
+    {
+        Blitz =-4 ,
+
+        Triple,
+        Double,
+        Single = -1
+    }
+
     // ------------------------------------------------- Variables --------------------------------------------------------
     GameMaster requester;
 

@@ -14,7 +14,7 @@ namespace AI
         }
 
 
-        public class AIAction
+        public abstract class AIAction
         {
 
             protected WorldState precondition = new WorldState(0);
@@ -59,7 +59,7 @@ namespace AI
                 }
             }
 
-
+            #region Match Functions
             public virtual bool Match(int index, AIAction other)
             {
                 // Compare the two state values
@@ -132,43 +132,41 @@ namespace AI
                 return precondition.Get(index) == start.Get(index);
             }
 
-            public virtual ActionStatus PerformAction(AIPlayer player)
-            {
-                // If not overridden, then just claim the action is done
-                return ActionStatus.Complete;
-            }
+            #endregion
+
+            public abstract ActionStatus PerformAction(AIPlayer player);
 
         }
 
 
 
-        public class AttackTarget : AIAction
-        {
-            public AttackTarget()
-            {
-                // Adjust the world state
-                precondition[StateKeys.GameState] = States.Attack;
+        //public class AttackTarget : AIAction
+        //{
+        //    public AttackTarget()
+        //    {
+        //        // Adjust the world state
+        //        precondition[StateKeys.GameState] = States.Attack;
 
-                //
+        //        //
 
-            }
-        }
+        //    }
+        //}
 
-        public class AttackAdjacent : AIAction
-        {
-            public AttackAdjacent()
-            {
+        //public class AttackAdjacent : AIAction
+        //{
+        //    public AttackAdjacent()
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
-        public class AttackSameContinent : AIAction
-        {
-            public AttackSameContinent()
-            {
+        //public class AttackSameContinent : AIAction
+        //{
+        //    public AttackSameContinent()
+        //    {
 
-            }
-        }
+        //    }
+        //}
         //----------------------------------------- Claiming Actions ------------------------------------------------
         public class ClaimContinentNode : AIAction
         {
@@ -289,6 +287,166 @@ namespace AI
 
         }
 
+        // --------------------------------------------- Draft Actions --------------------------------------------------
+
+        public class DraftContinent : AIAction
+        {
+            public DraftContinent()
+            {
+                // We can draft if...
+                precondition[StateKeys.GameState] = States.Draft;
+                precondition[StateKeys.DraftTroops] = States.Nonzero;
+                //precondition[StateKeys]
+
+                // Becuase we draft continents...
+                effects[StateKeys.GameState] = States.Attack;
+                effects[StateKeys.DraftTroops] = States.Zero;
+            }
+
+            public override ActionStatus PerformAction(AIPlayer player)
+            {
+
+
+                // If we have no target, just state we completed this action
+                if (!player.Blackboard.Contains("TargetCon"))
+                {
+                    return ActionStatus.Complete;
+                }
+                // We are done once we are out of draft troops
+                if (player.PlayerRef.draftTroop <= 0)
+                {
+                    return ActionStatus.Complete;
+                }
+
+                // Get the continent
+                MapSystem.Continent con = player.Blackboard["TargetCon"].GetContinent();
+
+                // Grab an open tile
+                MapSystem.BoardTile target = con.GetRandomTile(player.PlayerRef);
+
+
+                // If there are non to find, return true
+                if (target == null)
+                {
+                    return ActionStatus.Complete;
+                }
+
+                var gm = GameMaster.GetInstance();
+
+                // Claim the given tile
+                gm.DraftTile(target);
+
+                return ActionStatus.Working;
+            }
+        }
+
+        // -------------------------------------------- Attack Actions --------------------------------------------------
+
+        public class AttackContinent : AIAction
+        {
+            MapSystem.BoardTile targetAttacker;
+            MapSystem.BoardTile defenderAttacker;
+
+            int step = 0;
+
+            public AttackContinent()
+            {
+
+            }
+
+            public override ActionStatus PerformAction(AIPlayer player)
+            { 
+                
+                // If we have no target, just state we completed this action
+                if (!player.Blackboard.Contains("TargetCon"))
+                {
+                    return ActionStatus.Complete;
+                }
+
+                // If target attacker is null, find the target attacker
+                if (targetAttacker == null)
+                {
+
+                    // Get the continent
+                    MapSystem.Continent con = player.Blackboard["TargetCon"].GetContinent();
+
+                    // Grab an open tile
+                    MapSystem.BoardTile target = con.GetRandomTile(player.PlayerRef);
+
+
+
+                    var tiles = player.PlayerRef.tiles;
+                    for (int i = 0; i < player.PlayerRef.tiles.Count; ++i)
+                    {
+                        // See if we can attack the continent with this tile
+                        if (!CombatSystem.CanAttack(tiles[i])) { continue; }
+
+                        // Search through the neighbors for tiles in the continent
+                        foreach (MapSystem.BoardTile neighbor in tiles[i].Neighbors)
+                        {
+                            // If I cannot attack my neighbors, continue
+                            if (neighbor.Owner == null || neighbor.Owner == player.PlayerRef)
+                            {
+                                continue;
+                            }
+
+                            // If I neighbor a tile and I can attack it
+                            if (con.Contains(neighbor))
+                            {
+                                targetAttacker = tiles[i];
+                                defenderAttacker = neighbor;
+                                break;
+                            }
+                        }
+
+                        // If we have an attacker skip
+                        if (targetAttacker != null) { break; }
+                    }
+
+                }
+                else
+                {
+                    switch (step)
+                    {
+                        case 0:
+                            {
+                                GameMaster.GetInstance().AttackTile(GenerateMap.GetTile(targetAttacker));
+                                step = 1;
+                                break;
+                            }
+                        case 1:
+                            {
+
+                                GameMaster.GetInstance().AttackTile(GenerateMap.GetTile(defenderAttacker));
+                                step = 2;
+                                break;
+                            }
+                        case 2:
+                            {
+                                // Confirm Blitz attack
+                                GameMaster.GetInstance().Confirm((int)ConfirmUI.BattleConfirmValue.Blitz);
+                                // Reset node for additional attacks
+                                targetAttacker = null;
+                                defenderAttacker = null;
+                                step = 0;
+
+
+                                return ActionStatus.Complete;
+                                
+                            }
+                    }
+                }
+
+
+
+                return ActionStatus.Working;
+            }
+        }
+
+        // -------------------------------------------- Fortify Actions -------------------------------------------------
+
+        // -------------------------------------------- End Turn Actions ------------------------------------------------
+
         // ----------------------------------------- State Change Actions -------------------------------------------
 
         public class GoToAttackState : AIAction
@@ -300,6 +458,16 @@ namespace AI
 
                 effects[StateKeys.GameState] = States.Attack;
             }
+
+            public override ActionStatus PerformAction(AIPlayer player)
+            {
+
+                // End the turn
+                GameMaster.GetInstance().ForceTurnEnd();
+
+                return ActionStatus.Complete;
+                //throw new System.NotImplementedException();
+            }
         }
 
         public class GoToFortifyState : AIAction
@@ -309,10 +477,21 @@ namespace AI
                 precondition[StateKeys.GameState] = States.Attack;
                 effects[StateKeys.GameState] = States.Fortify;
             }
+            
 
             public override string ToString()
             {
                 return "Actions: Fortify";
+            }
+
+            public override ActionStatus PerformAction(AIPlayer player)
+            {
+
+                // End the turn
+                GameMaster.GetInstance().ForceTurnEnd();
+
+                return ActionStatus.Complete;
+                //throw new System.NotImplementedException();
             }
         }
 
@@ -327,6 +506,17 @@ namespace AI
             public override string ToString()
             {
                 return "Action: End";
+            }
+
+
+            public override ActionStatus PerformAction(AIPlayer player)
+            {
+
+                // End the turn
+                GameMaster.GetInstance().ForceTurnEnd();
+
+                return ActionStatus.Complete;
+                //throw new System.NotImplementedException();
             }
         }
 

@@ -1038,7 +1038,8 @@ public class GameMaster : NetworkBehaviour
                         MapDrawSystem.SpawnArrow(GetChallenger().NodeRef.Position, mapTile.NodeRef.Position);
 
                         // Only pull up the UI if you are the turn player
-                        if (!IsNetworked ||(IsNetworked && ClientPlayerController.IsCurrentPlayer(this)))
+                        if ((!IsNetworked && GetPlayer().isHuman) 
+                            ||(IsNetworked && ClientPlayerController.IsCurrentPlayer(this)))
                         {
                             // Pull up the confirm menu
                             ConfirmUI.BeginConfirm($"Attack {mapTile.NodeRef.Name}?", ConfirmUI.ConfirmType.Battle, GetChallenger().NodeRef);
@@ -1374,6 +1375,8 @@ public class Player
     public List<TerritoryCard> cards;
     public List<MapSystem.Continent> continentsOwned;
 
+    public List<MapSystem.BoardTile> tiles = new List<MapSystem.BoardTile>();
+
     public Sprite playerIcon;
 
     public AIPlayer aiBrain;
@@ -1381,6 +1384,12 @@ public class Player
     public bool canGetCard;
     public int territoryCount;
     // Insert spot for player UI
+
+    public void ChangeTileOwner(MapSystem.BoardTile changedTile)
+    {
+        if (tiles.Contains(changedTile)) { tiles.Remove(changedTile); }
+        else { tiles.Add(changedTile); }
+    }
 
     public bool isHuman;
 }

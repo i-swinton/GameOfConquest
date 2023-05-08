@@ -88,6 +88,20 @@ namespace AI
                 worldGoal[StateKeys.DraftTroops] = States.Zero;
             }
         }
+
+        public class TakeOverContinent : AIGoal
+        {
+            int targetCon;
+            AIPlayer player;
+
+            public TakeOverContinent(int targetContinent, AIPlayer player)
+            {
+                targetCon = targetContinent;
+                this.player = player;
+            }
+
+
+        }
     }
 
 }

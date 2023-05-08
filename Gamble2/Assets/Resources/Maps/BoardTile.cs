@@ -201,11 +201,15 @@ namespace MapSystem
             if(owner != null)
             {
                 owner.territoryCount -= 1;
+                // On Tile change
+                owner.ChangeTileOwner(this);
             }
 
             // Change the owner to the new player
             owner = player;
 
+
+            player.ChangeTileOwner(this);
             player.territoryCount += 1;
             
         }
