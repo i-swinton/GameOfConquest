@@ -72,6 +72,8 @@ public class AIPlayer
         //plan.SetGoal(new AI.Goals.ConquerContinent(1, this));
         plan.AddGoal(new AI.Goals.ConquerContinent(1, this));
         plan.AddGoal(new AI.Goals.ReinforceContinent(1, this));
+        plan.AddGoal(new AI.Goals.TakeOverContinent(1, this));
+
         plan.SetPlayer(this);
 
         // Fill the action space

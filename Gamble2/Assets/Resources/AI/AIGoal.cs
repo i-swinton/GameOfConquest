@@ -98,6 +98,8 @@ namespace AI
             {
                 targetCon = targetContinent;
                 this.player = player;
+
+                worldGoal[StateKeys.GameMode] = States.End;
             }
 
 
