@@ -60,7 +60,7 @@ namespace AI
         // Game State
         GameState,
         // Game Mode
-        GameMode,
+        Mode,
 
         // Owns
         Owns,
@@ -107,7 +107,7 @@ namespace AI
 
             // Fill each of the slots
             states[(int)StateKeys.GameState] = States.Any;
-            states[(int)StateKeys.GameMode] = States.Any;
+            states[(int)StateKeys.Mode] = States.Any;
 
             states[(int)StateKeys.DraftTroops] = States.Any;
 

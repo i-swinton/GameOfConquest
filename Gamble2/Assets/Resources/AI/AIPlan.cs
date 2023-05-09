@@ -85,6 +85,7 @@ namespace AI
                     openList.Add(actionSpace[i]);
                     // Perform search
                     int ittr = 0;
+                    actionSpace[i].g = 0;
                     while (openList.Count > 0)
                     {
                         // Pop node off of the open list
@@ -93,9 +94,17 @@ namespace AI
                         // Add to the closed list
                         closedList.Add(node);
 
+                        //@@@ Note: Make testState reference actual existing worldState
+                        WorldState testState = new WorldState(0);
+
+                        Transform(node, ref testState);
+                        //node.Transform(ref testState);
+
+
                         #region Return Goal
                         // If this node ends at the goal 
-                        if (AIAction.Match(node, goal.GoalState))
+                        //if (AIAction.Match(node, goal.GoalState))
+                        if (AIAction.Match(testState, goal.GoalState))
                         {
                             ittr = 0;
                             // Recurse the path
@@ -104,7 +113,7 @@ namespace AI
                             {
 
                                 // Add to the list
-                                plan.Add(current);
+                                plan.Insert(0,current);
                                 // Recurse
                                 current = current.prior;
 
@@ -118,10 +127,7 @@ namespace AI
                             return true;
                         }
                         #endregion
-                        //@@@ Note: Make testState reference actual existing worldState
-                        WorldState testState = new WorldState(0);
-
-                        node.Transform(ref testState);
+   
 
                         for (int j = 0; j < actionSpace.Count; ++j)
                         {
@@ -136,7 +142,7 @@ namespace AI
                                 if(AIAction.Match(testState,actionSpace[j]))
                                 //if (AIAction.Match(node, actionSpace[j]))
                                 {
-                                    if (actionSpace[j].FCost < node.FCost)
+                                    if (actionSpace[j].FCost <= node.FCost)
                                     {
                                         // Update the g value
                                         actionSpace[j].g = node.g + 1;
@@ -266,7 +272,7 @@ namespace AI
             // Recurse to the beginning
            if(action.prior != null)
             {
-                Transform(action, ref demoState);
+                Transform(action.prior, ref demoState);
             }
 
             // Apply transformation

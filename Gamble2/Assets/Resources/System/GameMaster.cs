@@ -52,10 +52,15 @@ public class GameMaster : NetworkBehaviour
     // Singleton
     static GameMaster instance;
 
+    // AI State Management
+    bool isInBattle;
+
     // Networking Variables
     bool isNetworked;
 
     public bool IsNetworked { get { return isNetworked; } }
+
+
 
     List<ClientPlayerController> playerControllers;
 
@@ -63,7 +68,7 @@ public class GameMaster : NetworkBehaviour
     public System.Action<int> onTurnBegin;
 
     // ------------------------------------ Properties -----------------------------------------------------
-
+    public bool IsInBattle { get { return isInBattle; } }
     public static bool HasStarted
     {
         get
@@ -1033,6 +1038,7 @@ public class GameMaster : NetworkBehaviour
                 // Stop drawing the cancel arrow
                 MapDrawSystem.CancelArrow();
                 ConfirmUI.CancelConfirm();
+                isInBattle = false;
             }
             else
             {
@@ -1046,11 +1052,12 @@ public class GameMaster : NetworkBehaviour
 
                         // Draw the arrow displaying who is attacking on the map
                         MapDrawSystem.SpawnArrow(GetChallenger().NodeRef.Position, mapTile.NodeRef.Position);
-
+                        isInBattle = true;
                         // Only pull up the UI if you are the turn player
                         if ((!IsNetworked && GetPlayer().isHuman) 
                             ||(IsNetworked && ClientPlayerController.IsCurrentPlayer(this)))
                         {
+
                             // Pull up the confirm menu
                             ConfirmUI.BeginConfirm($"Attack {mapTile.NodeRef.Name}?", ConfirmUI.ConfirmType.Battle, GetChallenger().NodeRef);
                         }
@@ -1213,10 +1220,14 @@ public class GameMaster : NetworkBehaviour
             // If we are networked, don't open network ui
             if (!IsNetworked || (IsNetworked && ClientPlayerController.IsCurrentPlayer(this)))
             {
-                // Pull up the confirm for fortify
-                ConfirmUI.BeginConfirm("Fortify", ConfirmUI.ConfirmType.Fortify,
-                    GetChallenger().NodeRef, GetDefender().NodeRef,
-                    Mathf.Clamp(unitsToMove, 1, Challenger.Units - 1));
+                if (GetPlayer().isHuman)
+                {
+                    // Pull up the confirm for fortify
+                    ConfirmUI.BeginConfirm("Fortify", ConfirmUI.ConfirmType.Fortify,
+                        GetChallenger().NodeRef, GetDefender().NodeRef,
+                        Mathf.Clamp(unitsToMove, 1, Challenger.Units - 1));
+                }
+
                 //Defender.NodeRef.Fortify(3);
             }
         }
@@ -1227,6 +1238,8 @@ public class GameMaster : NetworkBehaviour
             ReleaseChallenger();
             ReleaseDefender();
             MapDrawSystem.CancelArrow();
+            // Battle is over
+            isInBattle = false;
         }
     }
 
@@ -1256,6 +1269,9 @@ public class GameMaster : NetworkBehaviour
         {
             UpdateContinentsOwned();
         }
+
+        // Mark battle as over
+        isInBattle = false;
     }
 
     #endregion

@@ -94,10 +94,28 @@ namespace AI
             {
                 for (int i = 0; i < WorldState.Size; ++i)
                 {
-                    if (end.effects[i] == States.Any) { continue; }
+                    //if (end.effects[i] == States.Any) { continue; }
+                    if(goal[i] == States.Any) { continue; }
 
                     // If they don't match, return
                     if (!(end.Match(i, goal)))
+                    {
+                        return false;
+                    }
+                }
+                // If we made it here, there are no exceptions
+                return true;
+            }
+
+            public static bool Match(WorldState current, WorldState goal)
+            {
+                for (int i = 0; i < WorldState.Size; ++i)
+                {
+                    //if (end.effects[i] == States.Any) { continue; }
+                    if (goal[i] == States.Any) { continue; }
+
+                    // If they don't match, return
+                    if (!(current.Get(i) == goal.Get(i)))
                     {
                         return false;
                     }
@@ -374,7 +392,7 @@ namespace AI
             {
                 precondition[StateKeys.GameState] = States.Attack;
 
-
+                effects[StateKeys.GameState] = States.Attack;
                 effects[StateKeys.AttackState] = States.HasAttacked;
             }
 
@@ -467,18 +485,44 @@ namespace AI
                             {
                                 // Confirm Blitz attack
                                 GameMaster.GetInstance().Confirm((int)ConfirmUI.BattleConfirmValue.Blitz);
-                                // Reset node for additional attacks
-                                targetAttacker = null;
-                                defenderAttacker = null;
-                                step = 0;
 
 
                                 // Apply has attacked
-                                player.UpdateWorldState(StateKeys.AttackState,AI.States.HasAttacked);
+                                player.UpdateWorldState(StateKeys.AttackState, AI.States.HasAttacked);
 
+                                // If we took the location and must
+                                if (!GameMaster.GetInstance().IsInBattle)
+                                {
+                                    step = 0;
+                                    // Reset node for additional attacks
+                                    targetAttacker = null;
+                                    defenderAttacker = null;
+                                    return ActionStatus.Complete;
+                                }
+                                else
+                                {
+                                    step = 3;
+                                    break;
+                                }
+                            }
+                        case 3:
+                            {
+                                
+                                GameMaster gm = GameMaster.GetInstance();
+                                MapSystem.Board board =  BoardManager.instance.GetBoard();
+
+                                if (gm.IsInBattle)
+                                {
+                                    // Calculate the maximum number of troops to send
+
+                                    int troopsToSend = targetAttacker.UnitCount - 1;
+
+                                    gm.Confirm(troopsToSend);
+                                }
+                                targetAttacker = null;
+                                defenderAttacker = null;
 
                                 return ActionStatus.Complete;
-                                
                             }
                     }
                 }

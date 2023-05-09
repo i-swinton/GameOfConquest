@@ -103,7 +103,7 @@ namespace AI
                 this.player = player;
 
                 //worldGoal[StateKeys.Owns];
-                worldGoal[StateKeys.GameMode] = States.End;
+                worldGoal[StateKeys.GameState] = States.End;
                 worldGoal[StateKeys.AttackState] = States.HasAttacked;
             }
 
@@ -117,7 +117,7 @@ namespace AI
             {
                 this.player = player;
 
-                worldGoal[StateKeys.GameMode] = States.End;
+                worldGoal[StateKeys.GameState] = States.End;
             }
         }
 
