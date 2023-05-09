@@ -55,6 +55,8 @@ namespace AI
                 // Set up the goal list
                 worldGoal[StateKeys.TargetContinent] = States.Full;
 
+                worldGoal[StateKeys.GameState] = States.Reinforce ;
+
             }
 
 
@@ -86,6 +88,7 @@ namespace AI
                 // We want no draft troops
                 
                 worldGoal[StateKeys.DraftTroops] = States.Zero;
+                worldGoal[StateKeys.GameState] = States.Draft;
             }
         }
 
@@ -99,11 +102,25 @@ namespace AI
                 targetCon = targetContinent;
                 this.player = player;
 
+                //worldGoal[StateKeys.Owns];
                 worldGoal[StateKeys.GameMode] = States.End;
+                worldGoal[StateKeys.AttackState] = States.HasAttacked;
             }
 
 
         }
+
+        public class EndTurn : AIGoal
+        {
+            AIPlayer player;
+            public EndTurn(AIPlayer player)
+            {
+                this.player = player;
+
+                worldGoal[StateKeys.GameMode] = States.End;
+            }
+        }
+
     }
 
 }

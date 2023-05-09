@@ -83,95 +83,110 @@ namespace AI
                 if (actionSpace[i].IsAnyAction|| (AIAction.Match(targetPlayer.WorldState, actionSpace[i])) )
                 {
                     openList.Add(actionSpace[i]);
-                    break;
-                }
-            }
-
-            int ittr = 0;
-            while (openList.Count > 0)
-            {
-                // Pop node off of the open list
-                AIAction node = CheapestElement(openList, out int index);
-                openList.RemoveAt(index);
-                // Add to the closed list
-                closedList.Add(node);
-
-                #region Return Goal
-                // If this node ends at the goal 
-                if (AIAction.Match(node, goal.GoalState))
-                {
-                    ittr = 0;
-                    // Recurse the path
-                    AIAction current = node;
-                    while (current != null)
+                    // Perform search
+                    int ittr = 0;
+                    while (openList.Count > 0)
                     {
+                        // Pop node off of the open list
+                        AIAction node = CheapestElement(openList, out int index);
+                        openList.RemoveAt(index);
+                        // Add to the closed list
+                        closedList.Add(node);
 
-                        // Add to the list
-                        plan.Add(current);
-                        // Recurse
-                        current = current.prior;
-
-                        ittr++;
-                        if (ittr > actionSpace.Count) { throw new System.Exception("Infinite loop found when recursing path"); }
-                    }
-
-                    // Return the plan and report that we have found it
-                    return true;
-                }
-                #endregion
-
-                for (int i = 0; i < actionSpace.Count; ++i)
-                {
-                    // Skip if on the closed list
-                    if (closedList.Contains(actionSpace[i])) { continue; }
-
-                    if (openList.Contains(actionSpace[i]))
-                    {
-                        // If the actions actually match
-                        if (AIAction.Match(node, actionSpace[i]))
+                        #region Return Goal
+                        // If this node ends at the goal 
+                        if (AIAction.Match(node, goal.GoalState))
                         {
-                            if (actionSpace[i].FCost < node.FCost)
+                            ittr = 0;
+                            // Recurse the path
+                            AIAction current = node;
+                            while (current != null)
                             {
-                                // Update the g value
-                                actionSpace[i].g = node.g + 1;
 
-                                // Set the parent
-                                actionSpace[i].prior = node;
-                                // Skip to the next neighbor
+                                // Add to the list
+                                plan.Add(current);
+                                // Recurse
+                                current = current.prior;
+
+                                ittr++;
+                                if (ittr > actionSpace.Count) { throw new System.Exception("Infinite loop found when recursing path"); }
+                            }
+
+
+                            Reset();
+                            // Return the plan and report that we have found it
+                            return true;
+                        }
+                        #endregion
+                        //@@@ Note: Make testState reference actual existing worldState
+                        WorldState testState = new WorldState(0);
+
+                        node.Transform(ref testState);
+
+                        for (int j = 0; j < actionSpace.Count; ++j)
+                        {
+                            // Skip if on the closed list
+                            if (closedList.Contains(actionSpace[j])) { continue; }
+
+
+
+                            if (openList.Contains(actionSpace[j]))
+                            {
+                                // If the actions actually match
+                                if(AIAction.Match(testState,actionSpace[j]))
+                                //if (AIAction.Match(node, actionSpace[j]))
+                                {
+                                    if (actionSpace[j].FCost < node.FCost)
+                                    {
+                                        // Update the g value
+                                        actionSpace[j].g = node.g + 1;
+
+                                        // Set the parent
+                                        actionSpace[j].prior = node;
+                                        // Skip to the next neighbor
+                                        continue;
+                                    }
+                                }
+
+                                // Other wise continue
                                 continue;
                             }
+
+                            // If not on openList or closedList
+
+                            // Check if they are neighbors
+                            if (AIAction.Match(node, actionSpace[j]))
+                            {
+                                // Add to the open list
+                                openList.Insert(0,actionSpace[j]);
+
+                                // Set the prior
+                                actionSpace[j].prior = node;
+
+                                // The action space g
+                                actionSpace[j].g = node.g + 1;
+                            }
+
+
                         }
+                        /// Pop node off top
+                        /// Is Node the goal
+                        /// If not, check the neighbors
+                        /// Update open list
 
-                        // Other wise continue
-                        continue;
+
+                        ittr++;
+                        if (ittr > 100000)
+                        {
+                            throw new System.Exception("Infinite loop detected");
+                        }
                     }
 
-                    // If not on openList or closedList
-
-                    // Check if they are neighbors
-                    if (AIAction.Match(node, actionSpace[i]))
-                    {
-                        // Add to the open list
-                        openList.Add(actionSpace[i]);
-
-                        // The action space g
-                        actionSpace[i].g = node.g + 1;
-                    }
-
-
-                }
-                /// Pop node off top
-                /// Is Node the goal
-                /// If not, check the neighbors
-                /// Update open list
-
-
-                ittr++;
-                if (ittr > 100000)
-                {
-                    throw new System.Exception("Infinite loop detected");
+                    Reset();
                 }
             }
+
+            
 
 
             return false;
@@ -234,6 +249,30 @@ namespace AI
             }
 
         }
+
+        // Reset the data
+        void Reset()
+        {
+            for(int i=0; i < actionSpace.Count; ++i)
+            {
+                actionSpace[i].prior = null;
+                actionSpace[i].g = 2000;
+            }
+        }
+
+
+        public void Transform(AIAction action,ref  WorldState demoState)
+        {
+            // Recurse to the beginning
+           if(action.prior != null)
+            {
+                Transform(action, ref demoState);
+            }
+
+            // Apply transformation
+            action.Transform(ref demoState);
+        }
+
     }
 }
             

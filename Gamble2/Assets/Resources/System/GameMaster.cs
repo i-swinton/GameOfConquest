@@ -286,6 +286,7 @@ public class GameMaster : NetworkBehaviour
 
         turnTacker = -1;
         IncrementTurnTracker();
+        onTurnBegin(turnTacker);
         //ChangeState(GameState.Claim);
 
     }
@@ -573,6 +574,11 @@ public class GameMaster : NetworkBehaviour
         return Challenger != null;
     }
 
+    public bool HasDefenderCheck()
+    {
+        return Defender != null;
+    }
+
     #endregion
 
     // ------------------------------------------------- State Changing Functions ----------------------------------------------
@@ -588,9 +594,11 @@ public class GameMaster : NetworkBehaviour
                 UpdateContinentsOwned();
                 break;
             case GameState.Reinforce:
+
                 IncrementTurnTracker();
-                if(ReinforcingDone())
+                if (ReinforcingDone())
                     ChangeState(GameState.Draft);
+                //onTurnBegin(turnTacker);
                 break;
             case GameState.Draft: ChangeState(GameState.Attack); break;
             case GameState.Attack: ChangeState(GameState.Fortify); break; 
@@ -602,8 +610,10 @@ public class GameMaster : NetworkBehaviour
                 }
                 else { EndTurn(); }
                 break;
-            case GameState.End: IncrementTurnTracker(); ChangeState(GameState.Draft); break;
+            case GameState.End: IncrementTurnTracker(); ChangeState(GameState.Draft); ; break;
         }
+
+        onTurnBegin(turnTacker);
     }
 
     public void ForceTurnEnd()
@@ -687,7 +697,7 @@ public class GameMaster : NetworkBehaviour
 
 
         // Let anyone know the turn has changed that needs to 
-        onTurnBegin?.Invoke(turnTacker);
+        //onTurnBegin?.Invoke(turnTacker);
     }
 
     void ChangeState(GameState desiredState)

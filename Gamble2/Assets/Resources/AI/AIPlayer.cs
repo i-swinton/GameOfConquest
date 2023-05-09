@@ -73,6 +73,7 @@ public class AIPlayer
         plan.AddGoal(new AI.Goals.ConquerContinent(1, this));
         plan.AddGoal(new AI.Goals.ReinforceContinent(1, this));
         plan.AddGoal(new AI.Goals.TakeOverContinent(1, this));
+        plan.AddGoal(new AI.Goals.EndTurn(this));
 
         plan.SetPlayer(this);
 
@@ -80,6 +81,7 @@ public class AIPlayer
         plan.AddToActionSpace(new AI.Options.ClaimContinentNode());
         plan.AddToActionSpace(new AI.Options.ReinforceContinentNode());
         plan.AddToActionSpace(new AI.Options.DraftContinent());
+        plan.AddToActionSpace(new AI.Options.AttackContinent());
         plan.AddToActionSpace(new AI.Options.GoToEndState());
         plan.AddToActionSpace(new AI.Options.GoToFortifyState());
 
@@ -140,6 +142,8 @@ public class AIPlayer
         // Draft troops
         worldState[AI.StateKeys.DraftTroops] = PlayerRef.draftTroop > 0 ? AI.States.Nonzero : AI.States.Zero;
 
+        //
+        //worldState[AI.StateKeys.AttackState] = PlayerRef. ;
         
 
         // For testing reasons, set target
@@ -149,6 +153,11 @@ public class AIPlayer
 
             worldState[AI.StateKeys.TargetContinent] =(( targetCon.LastOwningPlayer != null) ? AI.States.Full : AI.States.NotFull);
         }
+    }
+
+    public void UpdateWorldState(AI.StateKeys key, AI.States state)
+    {
+        worldState.SetValue(key, state);
     }
 
     public void Update(float dt)

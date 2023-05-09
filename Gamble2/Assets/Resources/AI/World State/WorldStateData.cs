@@ -36,6 +36,7 @@ namespace AI
         // Attack State
         CanAttackAny,
         CannotAttack,
+        HasAttacked,
 
         // TroopCount
         IncreaseTroops,
@@ -71,6 +72,7 @@ namespace AI
 
         // Attack Data
         CanAttack,
+        AttackState,
 
 
         // Troop Counting States
@@ -116,7 +118,7 @@ namespace AI
             states[(int)StateKeys.TargetTroopCount] = States.Any;
             states[(int)StateKeys.TroopCount] = States.Any;
             //states[(int)StateKeys.] = States.Any;
-
+            states[(int)StateKeys.AttackState] = States.Any;
         }
 
         /// <summary>
@@ -194,6 +196,15 @@ namespace AI
             states[(int)key] = value;
         }
 
+        public void SetValue(StateKeys key, States value)
+        {
+            states[(int)key].Apply(value);
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
 
 
     }
@@ -251,7 +262,16 @@ namespace AI
             if (y.stateData == States.Any) { return false; }
             return x.stateData != y.stateData;
         }
-        
+
+        public virtual void Apply(States state)
+        {
+            stateData = state;
+        }
+
+        public override string ToString()
+        {
+            return stateData.ToString();
+        }
     }
 
     public class WorldStateObjectPair : WorldStateObject

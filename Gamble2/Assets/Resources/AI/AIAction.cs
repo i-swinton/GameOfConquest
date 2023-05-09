@@ -31,6 +31,8 @@ namespace AI
 
             protected BehaviorTree tree;
 
+
+
             public int FCost
             {
                 get
@@ -108,7 +110,7 @@ namespace AI
             {
                 for (int i = 0; i < WorldState.Size; ++i)
                 {
-                    if (start[i] == States.Any) { continue; }
+                    if (action.precondition[i] == States.Any) { continue; }
 
                     // If they don't match, return
                     if (!(action.MatchPre(i, start)))
@@ -135,6 +137,18 @@ namespace AI
             #endregion
 
             public abstract ActionStatus PerformAction(AIPlayer player);
+
+            public void Transform(ref WorldState world)
+            {
+                for(int i=0; i < WorldState.Size; ++i)
+                {
+                    // If the effect is set to any, don't do anything to it
+                    if(effects[i] == States.Any) { continue; }
+
+                    // Otherwise change the value
+                    world[i] =effects[i];
+                }
+            }
 
         }
 
@@ -188,6 +202,8 @@ namespace AI
 
                 // The continent is filled as a result
                 effects[StateKeys.TargetContinent] = States.Full;
+
+                effects[StateKeys.GameState] = States.Reinforce;
 
             }
 
@@ -249,10 +265,15 @@ namespace AI
 
                 // The continent is filled as a result
                 effects[StateKeys.DraftTroops] = States.Zero;
+
+                effects[StateKeys.GameState] = States.Draft;
             }
 
             public override ActionStatus PerformAction(AIPlayer player)
             {
+                // This action is complete once we are no longer in the main state
+                if(GameMaster.GetInstance().GetState() != GameState.Reinforce) { return ActionStatus.Complete; }
+
                 // If we have no target, just state we completed this action
                 if (!player.Blackboard.Contains("TargetCon"))
                 {
@@ -351,7 +372,10 @@ namespace AI
 
             public AttackContinent()
             {
+                precondition[StateKeys.GameState] = States.Attack;
 
+
+                effects[StateKeys.AttackState] = States.HasAttacked;
             }
 
             public override ActionStatus PerformAction(AIPlayer player)
@@ -373,13 +397,13 @@ namespace AI
                     // Grab an open tile
                     MapSystem.BoardTile target = con.GetRandomTile(player.PlayerRef);
 
-
-
                     var tiles = player.PlayerRef.tiles;
                     for (int i = 0; i < player.PlayerRef.tiles.Count; ++i)
                     {
                         // See if we can attack the continent with this tile
                         if (!CombatSystem.CanAttack(tiles[i])) { continue; }
+
+                        MapSystem.BoardTile targetable = null;
 
                         // Search through the neighbors for tiles in the continent
                         foreach (MapSystem.BoardTile neighbor in tiles[i].Neighbors)
@@ -391,17 +415,29 @@ namespace AI
                             }
 
                             // If I neighbor a tile and I can attack it
-                            if (con.Contains(neighbor))
+                            if (con.Contains(neighbor) )
                             {
                                 targetAttacker = tiles[i];
                                 defenderAttacker = neighbor;
                                 break;
                             }
+                            else
+                            {
+                                targetable = neighbor;
+                            }
+                        }
+                        if(targetable != null)
+                        {
+                            targetAttacker = tiles[i];
+                            defenderAttacker = targetable;
                         }
 
                         // If we have an attacker skip
                         if (targetAttacker != null) { break; }
                     }
+
+                    // If the target is still not found, report this as true
+                    if(targetAttacker == null) { return ActionStatus.Complete; }
 
                 }
                 else
@@ -411,14 +447,20 @@ namespace AI
                         case 0:
                             {
                                 GameMaster.GetInstance().AttackTile(GenerateMap.GetTile(targetAttacker));
-                                step = 1;
+                                if (GameMaster.GetInstance().HasChallengerCheck())
+                                {
+                                    step = 1;
+                                }
                                 break;
                             }
                         case 1:
                             {
 
                                 GameMaster.GetInstance().AttackTile(GenerateMap.GetTile(defenderAttacker));
-                                step = 2;
+                                if (GameMaster.GetInstance().HasDefenderCheck())
+                                {
+                                    step = 2;
+                                }
                                 break;
                             }
                         case 2:
@@ -429,6 +471,10 @@ namespace AI
                                 targetAttacker = null;
                                 defenderAttacker = null;
                                 step = 0;
+
+
+                                // Apply has attacked
+                                player.UpdateWorldState(StateKeys.AttackState,AI.States.HasAttacked);
 
 
                                 return ActionStatus.Complete;
