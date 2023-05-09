@@ -73,7 +73,10 @@ public class AIPlayer
         plan.AddGoal(new AI.Goals.ConquerContinent(1, this));
         plan.AddGoal(new AI.Goals.ReinforceContinent(1, this));
         plan.AddGoal(new AI.Goals.TakeOverContinent(1, this));
+        //plan.AddGoal(new AI.Goals.ClaimRandom(1, this));
         plan.AddGoal(new AI.Goals.EndTurn(this));
+        plan.AddGoal(new AI.Goals.ClaimRandom(this));
+        plan.AddGoal(new AI.Goals.ReinforceRandom(this));
 
         plan.SetPlayer(this);
 
@@ -84,6 +87,9 @@ public class AIPlayer
         plan.AddToActionSpace(new AI.Options.AttackContinent());
         plan.AddToActionSpace(new AI.Options.GoToEndState());
         plan.AddToActionSpace(new AI.Options.GoToFortifyState());
+        plan.AddToActionSpace(new AI.Options.ClaimRandom());
+        plan.AddToActionSpace(new AI.Options.ReinforceRandom());
+        plan.AddToActionSpace(new AI.Options.DraftRandom());
 
         plan.FormPlan();
 
@@ -151,7 +157,7 @@ public class AIPlayer
         {
             var targetCon = bb["TargetCon"].GetContinent();
 
-            worldState[AI.StateKeys.TargetContinent] =(( targetCon.LastOwningPlayer != null) ? AI.States.Full : AI.States.NotFull);
+            worldState[AI.StateKeys.TargetContinent] =((targetCon.IsFull) ? AI.States.Full : AI.States.NotFull);
         }
     }
 

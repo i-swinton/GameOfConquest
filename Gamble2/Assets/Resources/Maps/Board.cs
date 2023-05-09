@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -283,7 +284,23 @@ namespace MapSystem
             return listOfConnectedTiles;
         }
 
+        public BoardTile GetRandomTile(Player player)
+        {
+            int index = RNG.Roll(0, Count-1,false);
+            
+            for(int i=0; i < Count; ++i)
+            {
+                // If this random tile matches the player passed in, return it
+                if(this[index].Owner == player) { return this[index]; }
 
+                // Step the index
+                ++index;
+                index %= Count;
+            }
+
+            // Return nothing if no random tile could be found
+            return null;
+        }
     }
     
     [System.Serializable]
@@ -343,6 +360,24 @@ namespace MapSystem
             get
             {
                 return bonuses;
+            }
+        }
+
+        public bool IsFull
+        {
+            get
+            {
+                for(int i=0; i < TileCount; ++i)
+                {
+                    // If any of these are empty, return false
+                    if(board[tiles[i]].Owner == null)
+                    {
+                        return false;
+                    }
+                }
+
+                // If we didn't hit any obstacles, then all spots should be full
+                return true;
             }
         }
 

@@ -838,7 +838,14 @@ public class GameMaster : NetworkBehaviour
 
     #endregion
 
-    //---------------------------------------- On Click Functions -----------------------------------------
+    //---------------------------------------- On Click Functions ----------------------------------------
+
+    public void OnTileClick(int tileIndex)
+    {
+        // Return the tile index
+        OnTileClick(tileIndex, GenerateMap.GetTile(gameBoard[tileIndex]).ID);
+    }
+
     public void OnTileClick(int tileIndex, int mapTileID)
     {
         switch (GetState())

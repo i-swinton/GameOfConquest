@@ -251,7 +251,7 @@ namespace AI
                 var gm = GameMaster.GetInstance();
 
                 // Claim the given tile
-                gm.ClaimTiles(target);
+                gm.OnTileClick(target.ID);
 
 
 
@@ -260,6 +260,39 @@ namespace AI
                 return ActionStatus.Working;
             }
 
+        }
+
+        public class ClaimRandom : AIAction
+        {
+            GameMaster gm;
+            MapSystem.Board board;
+            public ClaimRandom()
+            {
+                precondition[StateKeys.GameState] = States.Claim;
+                precondition[StateKeys.DraftTroops] = States.Nonzero;
+
+                effects[StateKeys.GameState] = States.Reinforce;
+                effects[StateKeys.DraftTroops] = States.Nonzero;
+
+                gm = GameMaster.GetInstance();
+                board = BoardManager.instance.GetBoard();
+            }
+
+            public override ActionStatus PerformAction(AIPlayer player)
+            {
+                if(gm.GetState() != GameState.Claim) { return ActionStatus.Complete; }
+
+
+                MapSystem.BoardTile tile = board.GetRandomTile(null);
+
+                // If we can't find anything, try to replan
+                if(tile == null) { return ActionStatus.Failed; }
+
+                // Otherwise, claim the tile
+                gm.OnTileClick(tile.ID);
+
+                return ActionStatus.Working;
+            }
         }
 
         //---------------------------------------------- Reinforce Actions -----------------------------------------------
@@ -326,6 +359,40 @@ namespace AI
 
         }
 
+        public class ReinforceRandom : AIAction
+        {
+            GameMaster gm;
+
+            public ReinforceRandom()
+            {
+                precondition[StateKeys.GameState] = States.Reinforce;
+                precondition[StateKeys.DraftTroops] = States.Nonzero;
+
+                effects[StateKeys.GameState] = States.Draft;
+                effects[StateKeys.DraftTroops] = States.Zero;
+
+                // Get the game master
+                gm = GameMaster.GetInstance();
+            }
+
+            public override ActionStatus PerformAction(AIPlayer player)
+            {
+                if(gm.GetState() != GameState.Reinforce) { return ActionStatus.Complete; }
+                //throw new System.NotImplementedException();
+                
+
+                // If the draft troops are empty, we are complete
+                if(player.PlayerRef.draftTroop <= 0) { return ActionStatus.Complete; }
+                // Tiles
+                MapSystem.BoardTile tile = player.PlayerRef.tiles[RNG.Roll(0, player.PlayerRef.tiles.Count - 1)];
+                gm.OnTileClick(tile.ID);
+
+
+                // Return working otherwise
+                return ActionStatus.Working;
+            }
+        }
+
         // --------------------------------------------- Draft Actions --------------------------------------------------
 
         public class DraftContinent : AIAction
@@ -375,6 +442,39 @@ namespace AI
                 // Claim the given tile
                 gm.DraftTile(target);
 
+                return ActionStatus.Working;
+            }
+        }
+
+        public class DraftRandom : AIAction
+        {
+            GameMaster gm;
+            MapSystem.Board board;
+
+            public DraftRandom()
+            {
+                precondition[StateKeys.GameState] = States.Draft;
+                precondition[StateKeys.TroopCount] = States.Nonzero;
+
+                effects[StateKeys.GameState] = States.Attack;
+                effects[StateKeys.TroopCount] = States.Zero;
+
+                gm = GameMaster.GetInstance();
+                board = BoardManager.instance.GetBoard();
+            }
+
+            public override ActionStatus PerformAction(AIPlayer player)
+            {
+                if(gm.GetState() == GameState.Draft) { return ActionStatus.Complete; }
+
+                // If all the troops are gone, we can continue
+                if(player.PlayerRef.draftTroop <= 0) { return ActionStatus.Complete; }
+                MapSystem.BoardTile tile = player.PlayerRef.tiles[RNG.Roll(0, player.PlayerRef.tiles.Count, false)];
+
+                // Draft the random troop
+                gm.OnTileClick(tile.ID);
+
+                // Keep on working
                 return ActionStatus.Working;
             }
         }

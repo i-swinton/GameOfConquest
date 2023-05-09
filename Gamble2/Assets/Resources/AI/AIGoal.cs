@@ -121,6 +121,29 @@ namespace AI
             }
         }
 
+        public class ClaimRandom :AIGoal
+        {
+            AIPlayer player;
+            public ClaimRandom(AIPlayer player)
+            {
+                this.player = player;
+
+                worldGoal[StateKeys.GameState] = States.Reinforce;
+            }
+        }
+
+        public class ReinforceRandom : AIGoal
+        {
+            AIPlayer player;
+            public ReinforceRandom(AIPlayer player)
+            {
+                this.player = player;
+                worldGoal[StateKeys.GameState] = States.Draft;
+            }
+        }
+
+        
+
     }
 
 }
