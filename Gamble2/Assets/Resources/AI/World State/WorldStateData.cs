@@ -8,11 +8,14 @@ namespace AI
     public enum States
     {
         // Global States
+        Invalid =-1,
         Any,
         None,
         No,
         Yes,
 
+
+        // Numerical
         Zero,
         Nonzero,
 
@@ -112,13 +115,45 @@ namespace AI
             states[(int)StateKeys.DraftTroops] = States.Any;
 
             states[(int)StateKeys.CanAttack] = States.Any;
-            states[(int)StateKeys.Owns] = States.Any;
+
+            states[(int)StateKeys.Owns] = new WorldStateObjectList();
+            states[(int)StateKeys.Owns].Apply(States.None);
+            
             states[(int)StateKeys.OwnsPartially] = States.Any;
             states[(int)StateKeys.TargetContinent] = States.Any;
             states[(int)StateKeys.TargetTroopCount] = States.Any;
             states[(int)StateKeys.TroopCount] = States.Any;
             //states[(int)StateKeys.] = States.Any;
             states[(int)StateKeys.AttackState] = States.Any;
+        }
+
+        /// <summary>
+        /// Copy constructor of world state
+        /// </summary>
+        /// <param name="other"></param>
+        public WorldState(WorldState other)
+        {
+            // Create the array
+            states = new WorldStateObject[(int)StateKeys.Count];
+
+            // Fill each of the slots
+            states[(int)StateKeys.GameState] = other[StateKeys.GameState];
+            states[(int)StateKeys.Mode] = other[StateKeys.Mode];
+
+            states[(int)StateKeys.DraftTroops] = other[StateKeys.DraftTroops];
+
+            states[(int)StateKeys.CanAttack] = other[StateKeys.CanAttack];
+
+            // Match the own keys
+            states[(int)StateKeys.Owns] = new WorldStateObjectList((WorldStateObjectList)other.states[(int)StateKeys.Owns]);
+            //states[(int)StateKeys.Owns].Apply(States.None);
+
+            states[(int)StateKeys.OwnsPartially] = other[StateKeys.OwnsPartially];
+            states[(int)StateKeys.TargetContinent] = other[StateKeys.TargetContinent];
+            states[(int)StateKeys.TargetTroopCount] = other[StateKeys.TargetTroopCount];
+            states[(int)StateKeys.TroopCount] = other[StateKeys.TroopCount];
+            //states[(int)StateKeys.] = States.Any;
+            states[(int)StateKeys.AttackState] = other[StateKeys.AttackState];
         }
 
         /// <summary>
@@ -138,7 +173,7 @@ namespace AI
                 {
                     states[(int)key] = new WorldStateObject();
                 }
-                states[(int)key].stateData = value;
+                states[(int)key].Apply( value);
             }
         }
 
@@ -201,6 +236,16 @@ namespace AI
             states[(int)key].Apply(value);
         }
 
+        public void AddValue(StateKeys key, object value)
+        {
+            ((WorldStateObjectList)states[(int)key]).Add(value);
+        }
+
+        public void RemoveValue(StateKeys key, object value)
+        {
+            ((WorldStateObjectList)states[(int)key]).Remove(value);
+        }
+
         public override string ToString()
         {
             return base.ToString();
@@ -246,8 +291,12 @@ namespace AI
         {
             if (x is null) { return y is null; }
             else if (y is null) { return x is null; }
+
+            if (x.stateData == States.Invalid || y.stateData == States.Invalid) { return false; }
+
+
             // Since it is state data
-            if(y.stateData == States.Any) { return true; }
+            if (y.stateData == States.Any) { return true; }
 
             // Then just match the x/y
             return x.stateData == y.stateData;
@@ -257,6 +306,9 @@ namespace AI
         {
             if (x is null) { return !(y is null); }
             else if (y is null) { return !(x is null); }
+
+            if (x.stateData == States.Invalid || y.stateData == States.Invalid) { return false; }
+
 
             // IF the second is any, than the two match
             if (y.stateData == States.Any) { return false; }
@@ -296,6 +348,146 @@ namespace AI
 
     }
     
+    public class WorldStateObjectList : WorldStateObject
+    {
+        public List<object> list = new List<object>();
+
+        public WorldStateObjectList()
+        {
+            // Start the list as none
+            stateData = States.Any;
+        }
+
+        public WorldStateObjectList(WorldStateObjectList other)
+        {
+            // Match the stateData
+            stateData = other.stateData;
+            // Copy all of the elements from one list to the other
+            for(int i=0; i < other.list.Count; ++i)
+            {
+                // Add all the elements into the list
+                Add(other.list[i]);
+            }
+        }
+
+
+        public override void Apply(States state)
+        {
+            // Only allow to states
+            if(state != States.None && state != States.Nonzero && state != States.Any && state != States.Invalid) { return; }
+            base.Apply(state);
+        }
+
+        public void Add(object obj)
+        {
+            list.Add(obj);
+            // Auto update the state
+            if(list.Count > 0 && stateData != States.Nonzero)
+            {
+                Apply(States.Nonzero);
+            }
+        }
+        public void Remove(object obj)
+        {
+            list.Remove(obj);
+            // Auto update the state
+            if (list.Count <= 0)
+            {
+                Apply(States.None);
+            }
+        }
+
+        public bool Contains(object obj)
+        {
+            return list.Contains(obj);
+        }
+
+        public static bool operator ==(WorldStateObjectList x, WorldStateObject y)
+        {
+            if (x is null) { return y is null; }
+            else if (y is null) { return x is null; }
+
+            if (x.stateData == States.Invalid || y.stateData == States.Invalid) { return false; }
+
+
+            // Since it is state data
+            if (y.stateData == States.Any) { return true; }
+
+            // Then just match the x/y
+            return x.stateData == y.stateData;
+        }
+
+        public static bool operator !=(WorldStateObjectList x, WorldStateObject y)
+        {
+            if (x is null) { return !(y is null); }
+            else if (y is null) { return !(x is null); }
+
+            if(x.stateData == States.Invalid || y.stateData == States.Invalid) { return false; }
+
+            // IF the second is any, than the two match
+            if (y.stateData == States.Any) { return false; }
+            return x.stateData != y.stateData;
+        }
+
+        public static bool operator ==(WorldStateObjectList x, WorldStateObjectList y)
+        {
+            if (x is null) { return y is null; }
+            else if (y is null) { return x is null; }
+
+            if (x.stateData == States.Invalid || y.stateData == States.Invalid) { return false; }
+
+
+            // Since it is state data
+            if (y.stateData == States.Any) { return true; }
+
+            
+
+            // If the x and y state data don't match, then these two do not match
+            if(x.stateData != y.stateData) { return false; }
+
+            // Check if y is a subset of x
+            for(int i=0; i < y.list.Count; ++i)
+            {
+                // If the element is not in x, they do not match
+                if(!x.Contains(y.list[i]))
+                {
+                    return false;
+                }
+            }
+
+            // Then just match the x/y
+            return x.stateData == y.stateData;
+        }
+
+        public static bool operator !=(WorldStateObjectList x, WorldStateObjectList y)
+        {
+            if (x is null) { return !(y is null); }
+            else if (y is null) { return !(x is null); }
+
+            if (x.stateData == States.Invalid || y.stateData == States.Invalid) { return false; }
+
+
+            if (y.stateData == States.Any) { return false; }
+
+            // If the x and y state data don't match, then these two do not match
+            if (x.stateData != y.stateData) { return true; }
+
+            // Check if y is a subset of x
+            for (int i = 0; i < y.list.Count; ++i)
+            {
+                // If the element is not in x, they do not match
+                if (!x.Contains(y.list[i]))
+                {
+                    return true;
+                }
+            }
+
+
+            return x.stateData != y.stateData;
+        }
+
+    }
+
     public class WorldStateGraphList : WorldStateObject
     {
         public List<MapSystem.BoardTile> tiles = new List<MapSystem.BoardTile>();

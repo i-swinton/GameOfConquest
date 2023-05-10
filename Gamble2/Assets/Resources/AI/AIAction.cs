@@ -382,11 +382,29 @@ namespace AI
 
         public class DraftContinent : AIAction
         {
-            public DraftContinent()
+            AIPlayer targetPlayer;
+
+            public DraftContinent(AIPlayer p)
             {
+                targetPlayer = p;
+
                 // We can draft if...
                 precondition[StateKeys.GameState] = States.Draft;
                 precondition[StateKeys.DraftTroops] = States.Nonzero;
+
+
+                // If we have no target, just state we completed this action
+                if (!targetPlayer.Blackboard.Contains("TargetCon"))
+                {
+                    precondition[StateKeys.Owns] = States.Invalid;
+
+                    //return ActionStatus.Complete;
+                }
+                else
+                {
+                    // Add the continent to the need to hold
+                    precondition.AddValue(StateKeys.Owns, targetPlayer.Blackboard["TargetCon"].GetContinent());
+                }
                 //precondition[StateKeys]
 
                 // Becuase we draft continents...
@@ -450,7 +468,7 @@ namespace AI
 
             public override ActionStatus PerformAction(AIPlayer player)
             {
-                if(gm.GetState() == GameState.Draft) { return ActionStatus.Complete; }
+                if(gm.GetState() != GameState.Draft) { return ActionStatus.Complete; }
 
                 // If all the troops are gone, we can continue
                 if(player.PlayerRef.draftTroop <= 0) { return ActionStatus.Complete; }

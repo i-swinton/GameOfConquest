@@ -184,6 +184,18 @@ public class AIPlayer
         worldState.SetValue(key, state);
     }
 
+    public void UpdateWorldState(AI.StateKeys key, object objToAdd, bool addObject)
+    {
+        if (addObject)
+        {
+            worldState.AddValue(key, objToAdd);
+        }
+        else
+        {
+            worldState.RemoveValue(key, objToAdd);
+        }
+    }
+
     public void Update(float dt)
     {
         // Update the current tree

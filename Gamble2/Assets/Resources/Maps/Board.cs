@@ -177,6 +177,7 @@ namespace MapSystem
                         {
                             neighbor.g = current.g + 1;
                             neighbor.searchIndex = searchIndex;
+                            neighbor.prior = current;
                         }
                     }
                    else if (closedList.Contains(neighbor))
@@ -188,6 +189,7 @@ namespace MapSystem
                         openList.Add(neighbor);
                         neighbor.g = current.g + 1;
                         neighbor.searchIndex = searchIndex;
+                        neighbor.prior = current;
                     }
                 }
             }
@@ -509,6 +511,8 @@ namespace MapSystem
                 if(owner != board[tiles[i]].Owner) { return false; }
             }
 
+            
+
             // If it passes all the above tests, it is owned by one player
             return true;
         }
@@ -522,14 +526,28 @@ namespace MapSystem
             // Check if the continent is owned
             if(!IsOwned())
             {
+                // If we had a owning player
+                if(lastOwningPlayer != null)
+                {
+                    lastOwningPlayer.OnContinentDisown(this);
+                }
+
                 lastOwningPlayer = null;
 
                 // If not owned, return nobody
                 return null;
             }
+            // Null check
+            if (board[tiles[0]].Owner ==null)
+            {
+                return null;
+            }
 
             lastOwningPlayer = board[tiles[0]].Owner;
-            // 
+            // Update the last owning player
+
+            lastOwningPlayer.OnContinentOwn(this);
+
             return board[tiles[0]].Owner;
         }
 

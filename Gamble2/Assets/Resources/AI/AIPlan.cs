@@ -97,7 +97,7 @@ namespace AI
                         closedList.Add(node);
 
                         //@@@ Note: Make testState reference actual existing worldState
-                        WorldState testState = new WorldState(0);
+                        WorldState testState = new WorldState(targetPlayer.WorldState);
 
                         Transform(node, ref testState);
                         //node.Transform(ref testState);

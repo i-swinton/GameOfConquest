@@ -118,7 +118,7 @@ namespace AI
                     }
                 case Options.ActionTypes.DraftContinent:
                     {
-                        return new Options.DraftContinent();
+                        return new Options.DraftContinent(player);
                     }
                 case Options.ActionTypes.DraftRandom:
                     {

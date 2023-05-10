@@ -1424,5 +1424,36 @@ public class Player
         else { tiles.Add(changedTile); }
     }
 
+    public void OnContinentOwn(MapSystem.Continent con)
+    {
+        // If I already owned you, don't do anything
+        if (continentsOwned.Contains(con)) { return; }
+
+        // Add to owned continents
+        continentsOwned.Add(con);
+
+        // If not a player, update the ai
+        if(!isHuman)
+        {
+            aiBrain.UpdateWorldState(AI.StateKeys.Owns, con,true);
+        }
+
+    }
+
+    public void OnContinentDisown(MapSystem.Continent con)
+    {
+        // If don't already own you, don't do anything
+        if (!continentsOwned.Contains(con)) { return; }
+
+        // Add to owned continents
+        continentsOwned.Remove(con);
+
+        // If not a player, update the ai
+        if (!isHuman)
+        {
+            aiBrain.UpdateWorldState(AI.StateKeys.Owns, con, false);
+        }
+    }
+
     public bool isHuman;
 }
