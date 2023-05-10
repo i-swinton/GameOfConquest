@@ -53,6 +53,22 @@ public class AIPlayer
         plan = new AI.AIPlan();
 
         worldState = new AI.WorldState(0);
+
+        persona = (AIPersonality)Resources.Load("AI/Personalities/Greedy");
+    }
+
+    public void BeginPlanningSystem()
+    {
+        // Make
+        for(int i=0; i < persona.goals.Count; ++i)
+        {
+            // Get the goals
+            plan.AddGoal(AI.AIAssist.MakeGoal(persona.goals[i], this));
+        }
+        for(int i=0; i < persona.actions.Count; ++i)
+        {
+            plan.AddToActionSpace(AI.AIAssist.MakeAction(persona.actions[i], this));
+        }
     }
 
     public void Initialize(Player player, GameMaster master, AIPersonality persona)
@@ -69,27 +85,29 @@ public class AIPlayer
         }
 
         // Set the goal
-        //plan.SetGoal(new AI.Goals.ConquerContinent(1, this));
-        plan.AddGoal(new AI.Goals.ConquerContinent(1, this));
-        plan.AddGoal(new AI.Goals.ReinforceContinent(1, this));
-        plan.AddGoal(new AI.Goals.TakeOverContinent(1, this));
-        //plan.AddGoal(new AI.Goals.ClaimRandom(1, this));
-        plan.AddGoal(new AI.Goals.EndTurn(this));
-        plan.AddGoal(new AI.Goals.ClaimRandom(this));
-        plan.AddGoal(new AI.Goals.ReinforceRandom(this));
-
         plan.SetPlayer(this);
+        BeginPlanningSystem();
+        ////plan.SetGoal(new AI.Goals.ConquerContinent(1, this));
+        //plan.AddGoal(new AI.Goals.ConquerContinent(1, this));
+        //plan.AddGoal(new AI.Goals.ReinforceContinent(1, this));
+        //plan.AddGoal(new AI.Goals.TakeOverContinent(1, this));
+        ////plan.AddGoal(new AI.Goals.ClaimRandom(1, this));
+        //plan.AddGoal(new AI.Goals.EndTurn(this));
+        //plan.AddGoal(new AI.Goals.ClaimRandom(this));
+        //plan.AddGoal(new AI.Goals.ReinforceRandom(this));
 
-        // Fill the action space
-        plan.AddToActionSpace(new AI.Options.ClaimContinentNode());
-        plan.AddToActionSpace(new AI.Options.ReinforceContinentNode());
-        plan.AddToActionSpace(new AI.Options.DraftContinent());
-        plan.AddToActionSpace(new AI.Options.AttackContinent());
-        plan.AddToActionSpace(new AI.Options.GoToEndState());
-        plan.AddToActionSpace(new AI.Options.GoToFortifyState());
-        plan.AddToActionSpace(new AI.Options.ClaimRandom());
-        plan.AddToActionSpace(new AI.Options.ReinforceRandom());
-        plan.AddToActionSpace(new AI.Options.DraftRandom());
+        //plan.SetPlayer(this);
+
+        //// Fill the action space
+        //plan.AddToActionSpace(new AI.Options.ClaimContinentNode());
+        //plan.AddToActionSpace(new AI.Options.ReinforceContinentNode());
+        //plan.AddToActionSpace(new AI.Options.DraftContinent());
+        //plan.AddToActionSpace(new AI.Options.AttackContinent());
+        //plan.AddToActionSpace(new AI.Options.GoToEndState());
+        //plan.AddToActionSpace(new AI.Options.GoToFortifyState());
+        //plan.AddToActionSpace(new AI.Options.ClaimRandom());
+        //plan.AddToActionSpace(new AI.Options.ReinforceRandom());
+        //plan.AddToActionSpace(new AI.Options.DraftRandom());
 
         plan.FormPlan();
 

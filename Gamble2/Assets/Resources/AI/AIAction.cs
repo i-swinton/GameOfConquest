@@ -13,6 +13,21 @@ namespace AI
             Failed
         }
 
+        public enum ActionTypes
+        {
+            ClaimContinent,
+            ClaimRandom,
+            ReinforceContinent,
+            ReinforceRandom,
+            DraftContinent,
+            DraftRandom,
+            AttackContinent,
+
+            // GoTo Actions
+            GoToFortify,
+            GoToEnd
+        }
+
 
         public abstract class AIAction
         {
@@ -169,36 +184,6 @@ namespace AI
             }
 
         }
-
-
-
-        //public class AttackTarget : AIAction
-        //{
-        //    public AttackTarget()
-        //    {
-        //        // Adjust the world state
-        //        precondition[StateKeys.GameState] = States.Attack;
-
-        //        //
-
-        //    }
-        //}
-
-        //public class AttackAdjacent : AIAction
-        //{
-        //    public AttackAdjacent()
-        //    {
-
-        //    }
-        //}
-
-        //public class AttackSameContinent : AIAction
-        //{
-        //    public AttackSameContinent()
-        //    {
-
-        //    }
-        //}
         //----------------------------------------- Claiming Actions ------------------------------------------------
         public class ClaimContinentNode : AIAction
         {

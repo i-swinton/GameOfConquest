@@ -6,7 +6,12 @@ namespace AI
 {
     public enum GoalTypes
     {
-
+        ConquerContinent,
+        ReinforceContinent,
+        TakeOverContinent,
+        ClaimRandom,
+        ReinforceRandom,
+        EndTurn
     }
 
 

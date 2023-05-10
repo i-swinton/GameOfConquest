@@ -42,6 +42,7 @@ namespace MapSystem
         {
             // Create a new list of continents
             continents = new List<Continent>();
+            int conIDs = 0;
             // Create a number of nodes based on the continents
             foreach (MapContinent con in newCons)
             {
@@ -56,8 +57,8 @@ namespace MapSystem
                 }
 
                 // Add the tiles to the continent
-                Continent continent = new Continent(conTiles, con.Name, con.bonus);
-
+                Continent continent = new Continent(conTiles, con.Name, con.bonus, conIDs);
+                ++conIDs;
                 // Add the continent to the list
                 AddContinent(continent);
 
@@ -319,7 +320,13 @@ namespace MapSystem
 
         Player lastOwningPlayer;
 
+        int id;
         //------------------------------------ Properties --------------------------------------
+
+        public int ID
+        {
+            get { return id; }
+        }
 
         public int TileCount
         {
@@ -394,12 +401,13 @@ namespace MapSystem
             this.name = name;
         }
 
-        public Continent(List<int> tiles, string name, List<BonusBase> bonuses)
+        public Continent(List<int> tiles, string name, List<BonusBase> bonuses, int _id)
         {
             this.tiles = tiles;
             this.name = name;
 
             this.bonuses = bonuses;
+            this.id = _id;
         }
 
         /// <summary>
