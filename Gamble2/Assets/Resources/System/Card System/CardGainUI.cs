@@ -58,6 +58,13 @@ public class CardGainUI : UIElement
             }
         }
 
+        // If AI
+        if (!target.isHuman)
+        {
+            instance.target = target;
+            instance.AssignCards();
+            return;
+        }
 
         UIDisplayCard newCard = Instantiate(instance.cardPrefab, instance.targetStarPos.position, Quaternion.identity,instance.hideElement.transform);
         instance.cardList.Add(newCard);
@@ -100,7 +107,7 @@ public class CardGainUI : UIElement
     }
 
 
-
+    
     public void AssignCards()
     {
         for (int i = 0; i < cardList.Count; ++i)

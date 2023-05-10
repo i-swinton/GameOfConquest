@@ -416,10 +416,10 @@ namespace AI
                 MapSystem.BoardTile target = con.GetRandomTile(player.PlayerRef);
 
 
-                // If there are non to find, return true
+                // If there are non to find, replan
                 if (target == null)
                 {
-                    return ActionStatus.Complete;
+                    return ActionStatus.Failed;
                 }
 
                 var gm = GameMaster.GetInstance();
@@ -471,6 +471,11 @@ namespace AI
             MapSystem.BoardTile targetAttacker;
             MapSystem.BoardTile defenderAttacker;
 
+            MapSystem.Board board;
+
+            int attackCount = 1;
+            bool hasEntered = false;
+
             int step = 0;
 
             public AttackContinent()
@@ -479,6 +484,9 @@ namespace AI
 
                 effects[StateKeys.GameState] = States.Attack;
                 effects[StateKeys.AttackState] = States.HasAttacked;
+
+                // Initialize the board
+                board = BoardManager.instance.GetBoard();
             }
 
             public override ActionStatus PerformAction(AIPlayer player)
@@ -490,6 +498,16 @@ namespace AI
                     return ActionStatus.Complete;
                 }
 
+                if (!hasEntered)
+                {
+                    hasEntered = true;
+                    if (player.Blackboard.Contains("MaxNumOfAttacks"))
+                    {
+                        attackCount = player.Blackboard["MaxNumOfAttacks"].GetInt();
+                    }
+                    else { attackCount = 1; }
+                }
+
                 // If target attacker is null, find the target attacker
                 if (targetAttacker == null)
                 {
@@ -499,48 +517,100 @@ namespace AI
 
                     // Grab an open tile
                     MapSystem.BoardTile target = con.GetRandomTile(player.PlayerRef);
+                    int shortestLength = board.Count+1;
 
-                    var tiles = player.PlayerRef.tiles;
-                    for (int i = 0; i < player.PlayerRef.tiles.Count; ++i)
+                    // If the target continent does not have a tile
+                    if (target == null)
                     {
-                        // See if we can attack the continent with this tile
-                        if (!CombatSystem.CanAttack(tiles[i])) { continue; }
+                        List<MapSystem.BoardTile> ts; //= new List<MapSystem.BoardTile>();
+                        List<MapSystem.BoardTile> outTiles = new List<MapSystem.BoardTile>(); //= new List<MapSystem.BoardTile>();
 
-                        MapSystem.BoardTile targetable = null;
-
-                        // Search through the neighbors for tiles in the continent
-                        foreach (MapSystem.BoardTile neighbor in tiles[i].Neighbors)
+                        // Find the closest tile
+                        foreach (var t in player.PlayerRef.tiles)
                         {
-                            // If I cannot attack my neighbors, continue
-                            if (neighbor.Owner == null || neighbor.Owner == player.PlayerRef)
+                            // If you can't attack from this tile, check the next
+                            if (!CombatSystem.CanAttack(t))
                             {
                                 continue;
                             }
+                            ts = board.FindPathTo(t, con);
 
-                            // If I neighbor a tile and I can attack it
-                            if (con.Contains(neighbor) )
+                            // The out tiles path is the shorest
+                            if (ts.Count < shortestLength)
+                            {
+                                outTiles = ts;
+
+                                // Set the shortest length
+                                shortestLength = outTiles.Count;
+                            }
+                        }
+
+                        // Once we have the shortest path, move in that direction
+                        if(outTiles.Count > 0)
+                        {
+                            targetAttacker = outTiles[0];
+                            defenderAttacker = outTiles[1];
+                        }
+                    }
+                    else
+                    {
+                        // Find a spot to attack from
+                        var tiles = player.PlayerRef.tiles;
+                        for (int i = 0; i < player.PlayerRef.tiles.Count; ++i)
+                        {
+                            // See if we can attack the continent with this tile
+                            if (!CombatSystem.CanAttack(tiles[i])) { continue; }
+
+                            MapSystem.BoardTile targetable = null;
+
+                            // Search through the neighbors for tiles in the continent
+                            foreach (MapSystem.BoardTile neighbor in tiles[i].Neighbors)
+                            {
+                                // If I cannot attack my neighbors, continue
+                                if (neighbor.Owner == null || neighbor.Owner == player.PlayerRef)
+                                {
+                                    continue;
+                                }
+
+                                // If I neighbor a tile and I can attack it
+                                if (con.Contains(neighbor))
+                                {
+                                    targetAttacker = tiles[i];
+                                    defenderAttacker = neighbor;
+                                    break;
+                                }
+                                else
+                                {
+                                    targetable = neighbor;
+                                }
+                            }
+
+                            // Set attackers which are out of range
+                            if (targetable != null)
                             {
                                 targetAttacker = tiles[i];
-                                defenderAttacker = neighbor;
-                                break;
+                                defenderAttacker = targetable;
                             }
-                            else
-                            {
-                                targetable = neighbor;
-                            }
-                        }
-                        if(targetable != null)
-                        {
-                            targetAttacker = tiles[i];
-                            defenderAttacker = targetable;
-                        }
 
-                        // If we have an attacker skip
-                        if (targetAttacker != null) { break; }
+                            // If we have an attacker skip
+                            if (targetAttacker != null) { break; }
+                        }
                     }
 
                     // If the target is still not found, report this as true
-                    if(targetAttacker == null) { return ActionStatus.Complete; }
+                    if (targetAttacker == null)
+                    {
+                        if (attackCount <= 0)
+                        {
+                            hasEntered = false;
+                            return ActionStatus.Complete;
+                        }
+                        else
+                        {
+                            // Attack Count--
+                            --attackCount;
+                        }
+                    }
 
                 }
                 else
@@ -582,7 +652,19 @@ namespace AI
                                     // Reset node for additional attacks
                                     targetAttacker = null;
                                     defenderAttacker = null;
-                                    return ActionStatus.Complete;
+
+                                    if (attackCount <= 0)
+                                    {
+                                        hasEntered = false;
+                                        return ActionStatus.Complete;
+                                    }
+                                    else
+                                    {
+                                        // Attack Count--
+                                        --attackCount;
+                                    }
+                                    break;
+                                    //return ActionStatus.Complete;
                                 }
                                 else
                                 {
@@ -592,9 +674,9 @@ namespace AI
                             }
                         case 3:
                             {
-                                
+
                                 GameMaster gm = GameMaster.GetInstance();
-                                MapSystem.Board board =  BoardManager.instance.GetBoard();
+                                //MapSystem.Board board = BoardManager.instance.GetBoard();
 
                                 if (gm.IsInBattle)
                                 {
@@ -606,17 +688,29 @@ namespace AI
                                 }
                                 targetAttacker = null;
                                 defenderAttacker = null;
+                                step = 0;
 
-                                return ActionStatus.Complete;
+                                if (attackCount <= 0)
+                                {
+                                    hasEntered = false;
+                                    return ActionStatus.Complete;
+                                }
+                                else
+                                {
+                                    // Attack Count--
+                                    --attackCount;
+                                }
+                                // return ActionStatus.Complete;
+                                break;
                             }
                     }
                 }
 
-
-
                 return ActionStatus.Working;
             }
         }
+
+       
 
         // -------------------------------------------- Fortify Actions -------------------------------------------------
 

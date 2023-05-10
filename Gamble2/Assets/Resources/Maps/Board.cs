@@ -17,7 +17,7 @@ namespace MapSystem
         [Tooltip("The list of continents on the board")]
         [SerializeField] List<Continent> continents;
 
-
+        int searchIndex=0;
         // ----------------------------------------- Properties ---------------------------------------------------
 
         
@@ -130,7 +130,78 @@ namespace MapSystem
 
 
 
-        //---------------------------------------- Overridden Functions --------------------------------------------
+        public List<BoardTile> FindPathTo(BoardTile startTile, Continent continent)
+        {
+            // Use a dijsktra flood search to find the first tile which is of the continent
+            List<BoardTile> openList = new List<BoardTile>();
+            List<BoardTile> closedList = new List<BoardTile>();
+
+            List<BoardTile> path = new List<BoardTile>();
+
+            startTile.prior = null;
+            openList.Add(startTile);
+
+            while (openList.Count > 0)
+            {
+                // Pop the first node off the list
+                var current = openList[0];
+                openList.RemoveAt(0);
+
+                // Add to the closed list
+                closedList.Add(current);
+
+
+                // If the current node is in the continent, return
+                if(continent.Contains(current))
+                {
+                    while (current != null)
+                    {
+                        path.Insert(0,current);
+
+                        current = (BoardTile)current.prior;
+                    }
+
+                    if (searchIndex == int.MaxValue) { searchIndex = 0; }
+                    else { ++searchIndex; }
+
+                    // Return the list
+                    return path;
+                }
+
+                // Fill the open list with the neighbors
+                foreach (BoardTile neighbor in current.Neighbors)
+                {
+                   if(openList.Contains(neighbor))
+                    {
+                        if(neighbor.g > current.g && neighbor.searchIndex == searchIndex)
+                        {
+                            neighbor.g = current.g + 1;
+                            neighbor.searchIndex = searchIndex;
+                        }
+                    }
+                   else if (closedList.Contains(neighbor))
+                    {
+                        // Skip if on the closed list
+                    }
+                   else // If not on anything else, add to open list
+                    {
+                        openList.Add(neighbor);
+                        neighbor.g = current.g + 1;
+                        neighbor.searchIndex = searchIndex;
+                    }
+                }
+            }
+
+            if (searchIndex == int.MaxValue) { searchIndex = 0; }
+            else { ++searchIndex; }
+
+            // Return the empty path
+            return path;
+        }
+
+        //---------------------------------------- Overridden Functions --------
+        //
+        //------------------------------------
         /// <summary>
         /// Adds a boardTile to the board.
         /// </summary>

@@ -111,6 +111,8 @@ namespace MapSystem
             // Return the new node
             return node;
         }
+        
+        
 
 
         // --------------------- Private Functions ----------------------------------
@@ -159,6 +161,11 @@ namespace MapSystem
 
         // The unique identifier of a node
         int myId;
+
+        public Node prior;
+
+        public int g;
+        public int searchIndex = -1;
 
         //----------------------- Public Properties ---------------------------------
 

@@ -52,7 +52,7 @@ namespace AI
 
                 board = BoardManager.instance.GetBoard();
 
-
+                Debug.Log("Target Con: " + board.FindContinent(targetCon).Name);
 
                 // Set the target continent
                 player.Blackboard.UpdateValue("TargetCon", board.FindContinent(targetCon));

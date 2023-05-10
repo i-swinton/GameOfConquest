@@ -49,6 +49,8 @@ namespace AI
                 // If we can find a plan, use that plan
                 if(PlanToGoal(out currentPlan, i))
                 {
+                    // Print the current plan
+                    Debug.Log(ToString());
                     return;
                 }
             }
@@ -277,6 +279,16 @@ namespace AI
 
             // Apply transformation
             action.Transform(ref demoState);
+        }
+
+        public override string ToString()
+        {
+            string outString = "Plan: ";
+            for(int i=0; i < currentPlan.Count; ++i)
+            {
+                outString += currentPlan[i].ToString() + "->";
+            }
+            return outString;
         }
 
     }
