@@ -64,7 +64,10 @@ namespace AI
 
             }
 
-
+            public override string ToString()
+            {
+                return "Conquer Continent";
+            }
 
         }
 
@@ -95,6 +98,11 @@ namespace AI
                 worldGoal[StateKeys.DraftTroops] = States.Zero;
                 worldGoal[StateKeys.GameState] = States.Draft;
             }
+
+            public override string ToString()
+            {
+                return "Reinforce Continent";
+            }
         }
 
         public class TakeOverContinent : AIGoal
@@ -112,7 +120,10 @@ namespace AI
                 worldGoal[StateKeys.AttackState] = States.HasAttacked;
             }
 
-
+            public override string ToString()
+            {
+                return "Take Over Continent";
+            }
         }
 
         public class EndTurn : AIGoal
@@ -123,6 +134,11 @@ namespace AI
                 this.player = player;
 
                 worldGoal[StateKeys.GameState] = States.End;
+            }
+
+            public override string ToString()
+            {
+                return "End Turn";
             }
         }
 
@@ -135,6 +151,11 @@ namespace AI
 
                 worldGoal[StateKeys.GameState] = States.Reinforce;
             }
+
+            public override string ToString()
+            {
+                return "Claim Random";
+            }
         }
 
         public class ReinforceRandom : AIGoal
@@ -144,6 +165,11 @@ namespace AI
             {
                 this.player = player;
                 worldGoal[StateKeys.GameState] = States.Draft;
+            }
+
+            public override string ToString()
+            {
+                return "Reinforce Continent";
             }
         }
 

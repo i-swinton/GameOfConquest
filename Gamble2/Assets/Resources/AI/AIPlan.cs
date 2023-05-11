@@ -283,7 +283,7 @@ namespace AI
 
         public override string ToString()
         {
-            string outString = "Plan: ";
+            string outString = $"Plan[{goal}]: ";
             for(int i=0; i < currentPlan.Count; ++i)
             {
                 outString += currentPlan[i].ToString() + "->";

@@ -140,6 +140,10 @@ namespace AI
                     {
                         return new Options.ReinforceRandom();
                     }
+                case Options.ActionTypes.FortifyLastAttackReckless:
+                    {
+                        return new Options.FortifyLastAttackReckless();
+                    }
                 default:
                     {
                         throw new System.Exception($"{actionType} could not be found in Make Action");

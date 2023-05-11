@@ -67,6 +67,8 @@ public class GameMaster : NetworkBehaviour
     //----------------------------------------- Actions -------------------------------------------------
     public System.Action<int> onTurnBegin;
 
+    public System.Action<int, int> onAfterAttack;
+
     // ------------------------------------ Properties -----------------------------------------------------
     public bool IsInBattle { get { return isInBattle; } }
     public static bool HasStarted
@@ -1206,9 +1208,13 @@ public class GameMaster : NetworkBehaviour
         EffectSystem.SpawnText(Challenger.NodeRef.Position, Challenger.Player.playerColor).Text = $"-{AtkUnitsLost}";
         EffectSystem.SpawnText(Defender.NodeRef.Position, Defender.Player.playerColor).Text = $"-{DefUnitsLost}";
 
+      
 
         if (Defender.Units <= 0)
         {
+            // Update the player
+            onAfterAttack?.Invoke(turnTacker, Defender.NodeRef.ID);
+
             // If we have captured a territory, allow us to gain a card
             GetPlayer().canGetCard = true;
 
@@ -1237,9 +1243,12 @@ public class GameMaster : NetworkBehaviour
 
                 //Defender.NodeRef.Fortify(3);
             }
+
         }
         else
         {
+            // Update the player
+            onAfterAttack?.Invoke(turnTacker, Challenger.NodeRef.ID);
 
             // Perform the proper cleanup
             ReleaseChallenger();
@@ -1388,7 +1397,9 @@ public class Player
         continentsOwned = new List<MapSystem.Continent>();
         cards = new List<TerritoryCard>();
 
-        isHuman = true;   
+        isHuman = true;
+
+        GameMaster.GetInstance().onAfterAttack += OnAttack;
     }
 
     public string Name
@@ -1499,6 +1510,22 @@ public class Player
         if (!isHuman)
         {
             aiBrain.UpdateWorldState(AI.StateKeys.Owns, con, false);
+        }
+    }
+
+    public void OnAttack(int index, int attackNodeIndex)
+    {
+        // If the player index doesn't match, return
+        if(index != playerID) { return; }
+
+        if(!isHuman)
+        {
+            // Mention the last attack
+            //var board = BoardManager.instance.GetBoard();
+
+            aiBrain.Blackboard.UpdateValue("LastAttackTileID", attackNodeIndex);
+
+            
         }
     }
 

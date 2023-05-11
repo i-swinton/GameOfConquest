@@ -15,13 +15,20 @@ namespace AI
 
         public enum ActionTypes
         {
+            // Claim Actions
             ClaimContinent,
             ClaimRandom,
+            // Reinforce Actions
             ReinforceContinent,
             ReinforceRandom,
+            // Draft Actions
             DraftContinent,
             DraftRandom,
+            // Attack Actions
             AttackContinent,
+
+            // Foritfy Actions
+            FortifyLastAttackReckless,
 
             // GoTo Actions
             GoToFortify,
@@ -735,6 +742,122 @@ namespace AI
 
         // -------------------------------------------- Fortify Actions -------------------------------------------------
 
+        public class FortifyLastAttackReckless : AIAction
+        {
+            MapSystem.BoardTile targetTile;
+            MapSystem.BoardTile defenderTile;
+            MapSystem.Board board;
+            int step;
+            GameMaster gm;
+            public FortifyLastAttackReckless()
+            {
+                precondition[StateKeys.GameState] = States.Fortify;
+                effects[StateKeys.GameState] = States.End;
+
+                // We need to have attacked to take this action
+                precondition[StateKeys.AttackState] = States.HasAttacked;
+                //precondition[StateKeys.GameState] = States.Fortify;
+
+                // Ends the fortify state
+                //effects[StateKeys.GameState] = States.End;
+
+                // Grab the board
+                board = BoardManager.instance.GetBoard();
+                gm = GameMaster.GetInstance();
+            }
+
+            public override ActionStatus PerformAction(AIPlayer player)
+            {
+                // Step 1, Get the target tile
+                if (targetTile == null)
+                {
+                    if (player.Blackboard.Contains("LastAttackTileID"))
+                    {
+                        targetTile = board[player.Blackboard["LastAttackTileID"].GetInt()];
+                    }
+                    else
+                    {
+                        // Report failure if we have not attacked
+                        return ActionStatus.Failed;
+                    }
+                }
+                else if (defenderTile == null)
+                {
+                    // Step 2, Pick anothter tile
+                    List<MapSystem.BoardTile> connectedTiles = board.GetConnectedTiles(targetTile.ID);
+
+                    // Find the highest cost 
+                    MapSystem.BoardTile highestTile=null;
+                    int highest = 1;
+                    for(int i=0; i < connectedTiles.Count; ++i)
+                    {
+                        // Check if it is the new highest
+                        if(connectedTiles[i].UnitCount > highest)
+                        {
+                            // Update the highest tile
+                            highestTile = connectedTiles[i];
+                            highest = highestTile.UnitCount;
+                        }
+                    }
+                    // If we could not find a higher tile, just end the foritfy
+                    if(highestTile == null)
+                    {
+                        targetTile = null;
+
+                        // End the turn
+                        GameMaster.GetInstance().ForceTurnEnd();
+
+                        return ActionStatus.Complete;
+                    }
+                    // Else, lets prepare the fortify
+                    defenderTile = highestTile;
+                }
+                else
+                {
+                    // Step 3, Profit
+                    switch(step)
+                    {
+                        // Step 3.1: Target Challenger
+                        case 0:
+                            {
+                                gm.OnTileClick(targetTile.ID);
+                                break;
+                            }
+                        //Step 3.2: Target Defender
+                        case 1:
+                            {
+                                gm.OnTileClick(defenderTile.ID);
+                                break;
+                            }
+                        // Step 3.3 Do it
+                        case 2:
+                            {
+                                step = 0;
+
+                                // Confirm
+                                gm.Confirm(defenderTile.UnitCount - 1);
+
+                                // Target Tile
+                                targetTile = null;
+                                defenderTile = null;
+
+                                break;
+                            }
+                    }
+                }
+
+                // Make sure to shut down everything in step 3
+
+
+                return ActionStatus.Working;
+            }
+
+            public override string ToString()
+            {
+                return "Fortify Last Attack Reckless"; 
+            }
+        }
+
         // -------------------------------------------- End Turn Actions ------------------------------------------------
 
         // ----------------------------------------- State Change Actions -------------------------------------------
@@ -771,7 +894,7 @@ namespace AI
 
             public override string ToString()
             {
-                return "Actions: Fortify";
+                return "Go To Fortify";
             }
 
             public override ActionStatus PerformAction(AIPlayer player)
