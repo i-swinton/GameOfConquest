@@ -91,6 +91,20 @@ namespace MapSystem
             c.SetBoard(this);
         }
 
+        public Continent FindContinent(BoardTile tile)
+        {
+            for(int i=0; i < continents.Count; ++i)
+            {
+                if(continents[i].Contains(tile))
+                {
+                    return continents[i];
+                }
+            }
+
+            // If none found, return null
+            return null;
+        }
+
         public Continent FindContinent(string continentName)
         {
             // Search the list for the matching continent

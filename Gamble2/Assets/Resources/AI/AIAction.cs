@@ -396,14 +396,14 @@ namespace AI
                 // If we have no target, just state we completed this action
                 if (!targetPlayer.Blackboard.Contains("TargetCon"))
                 {
-                    precondition[StateKeys.Owns] = States.Invalid;
+                    precondition[StateKeys.ExistsIn] = States.Invalid;
 
                     //return ActionStatus.Complete;
                 }
                 else
                 {
                     // Add the continent to the need to hold
-                    precondition.AddValue(StateKeys.Owns, targetPlayer.Blackboard["TargetCon"].GetContinent());
+                    precondition.AddValue(StateKeys.ExistsIn, targetPlayer.Blackboard["TargetCon"].GetContinent());
                 }
                 //precondition[StateKeys]
 
@@ -459,6 +459,8 @@ namespace AI
                 precondition[StateKeys.GameState] = States.Draft;
                 precondition[StateKeys.TroopCount] = States.Nonzero;
 
+                precondition[StateKeys.Owns] = States.Any;
+
                 effects[StateKeys.GameState] = States.Attack;
                 effects[StateKeys.TroopCount] = States.Zero;
 
@@ -472,7 +474,7 @@ namespace AI
 
                 // If all the troops are gone, we can continue
                 if(player.PlayerRef.draftTroop <= 0) { return ActionStatus.Complete; }
-                MapSystem.BoardTile tile = player.PlayerRef.tiles[RNG.Roll(0, player.PlayerRef.tiles.Count, false)];
+                MapSystem.BoardTile tile = player.PlayerRef.tiles[RNG.Roll(0, player.PlayerRef.tiles.Count-1, false)];
 
                 // Draft the random troop
                 gm.OnTileClick(tile.ID);
@@ -524,6 +526,7 @@ namespace AI
                         attackCount = player.Blackboard["MaxNumOfAttacks"].GetInt();
                     }
                     else { attackCount = 1; }
+                    Debug.Log("Targeting: " + player.Blackboard["TargetCon"].GetContinent().Name);
                 }
 
                 // If target attacker is null, find the target attacker

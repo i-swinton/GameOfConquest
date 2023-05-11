@@ -1420,8 +1420,55 @@ public class Player
 
     public void ChangeTileOwner(MapSystem.BoardTile changedTile)
     {
-        if (tiles.Contains(changedTile)) { tiles.Remove(changedTile); }
-        else { tiles.Add(changedTile); }
+        if (tiles.Contains(changedTile)) 
+        { 
+            tiles.Remove(changedTile); 
+
+            // Update the AI to know what continents it is on
+            if(!isHuman)
+            {
+                MapSystem.Board board = BoardManager.instance.GetBoard();
+                MapSystem.Continent con = board.FindContinent(changedTile);
+
+                // Check if we have any other tiles in the owner
+                for(int i=0; i < tiles.Count; ++i)
+                {
+                    // Check if the tile is in the continent
+                    if(con.Contains(tiles[i]))
+                    {
+                        // Then we don't need to do anything
+                        return;   
+                    }
+                }
+
+                // If not, note that we don't in world state
+                aiBrain.UpdateWorldState(AI.StateKeys.ExistsIn, con, false);
+            }
+        }
+        else 
+        { 
+            tiles.Add(changedTile); 
+            // Update the AI to know what continent it is on
+            if(!isHuman)
+            {
+                MapSystem.Board board = BoardManager.instance.GetBoard();
+                MapSystem.Continent con = board.FindContinent(changedTile);
+
+                // Check if we have any other tiles in the con
+                for(int i=0; i <tiles.Count; ++i)
+                {
+                    // Check if the tile is in the continent
+                    if(con.Contains(tiles[i]))
+                    {
+                        return;
+                    }
+                }
+
+                // If not, add to the world state
+                aiBrain.UpdateWorldState(AI.StateKeys.ExistsIn, con, true);
+
+            }
+        }
     }
 
     public void OnContinentOwn(MapSystem.Continent con)

@@ -67,7 +67,7 @@ namespace AI
 
         // Owns
         Owns,
-        OwnsPartially,
+        ExistsIn,
 
         // Target
         TargetPlayer,
@@ -118,8 +118,11 @@ namespace AI
 
             states[(int)StateKeys.Owns] = new WorldStateObjectList();
             states[(int)StateKeys.Owns].Apply(States.None);
-            
-            states[(int)StateKeys.OwnsPartially] = States.Any;
+
+            states[(int)StateKeys.ExistsIn] = new WorldStateObjectList();
+            states[(int)StateKeys.ExistsIn].Apply(States.Any);
+
+
             states[(int)StateKeys.TargetContinent] = States.Any;
             states[(int)StateKeys.TargetTroopCount] = States.Any;
             states[(int)StateKeys.TroopCount] = States.Any;
@@ -148,7 +151,7 @@ namespace AI
             states[(int)StateKeys.Owns] = new WorldStateObjectList((WorldStateObjectList)other.states[(int)StateKeys.Owns]);
             //states[(int)StateKeys.Owns].Apply(States.None);
 
-            states[(int)StateKeys.OwnsPartially] = other[StateKeys.OwnsPartially];
+            states[(int)StateKeys.ExistsIn] = new WorldStateObjectList((WorldStateObjectList)other.states[(int)StateKeys.ExistsIn]);
             states[(int)StateKeys.TargetContinent] = other[StateKeys.TargetContinent];
             states[(int)StateKeys.TargetTroopCount] = other[StateKeys.TargetTroopCount];
             states[(int)StateKeys.TroopCount] = other[StateKeys.TroopCount];
@@ -287,19 +290,26 @@ namespace AI
             return obj;
         }
 
-        public static bool operator==(WorldStateObject x, WorldStateObject y)
+        public virtual bool CompareTo(WorldStateObject y)
         {
-            if (x is null) { return y is null; }
-            else if (y is null) { return x is null; }
+            if (this is null) { return y is null; }
+            else if (y is null) { return this is null; }
 
-            if (x.stateData == States.Invalid || y.stateData == States.Invalid) { return false; }
+            if (this.stateData == States.Invalid || y.stateData == States.Invalid) { return false; }
 
 
             // Since it is state data
             if (y.stateData == States.Any) { return true; }
 
             // Then just match the x/y
-            return x.stateData == y.stateData;
+            return stateData == y.stateData;
+        }
+
+        public static bool operator==(WorldStateObject x, WorldStateObject y)
+        {
+            if (x is null) { return y is null; }
+            else if (y is null) { return x is null; }
+            return x.CompareTo(y);
         }
 
         public static bool operator!=(WorldStateObject x, WorldStateObject y)
@@ -429,6 +439,33 @@ namespace AI
             return x.stateData != y.stateData;
         }
 
+        public override bool CompareTo(WorldStateObject y)
+        {
+            bool b = base.CompareTo(y);
+
+            if (!b) { return false; }
+
+            WorldStateObjectList z = (WorldStateObjectList)y;
+
+            if(z!=null)
+            {
+
+            }
+            // Check if y is a subset of x
+            for (int i = 0; i < z.list.Count; ++i)
+            {
+                // If the element is not in x, they do not match
+                if (!this.Contains(z.list[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+
+
+        }
+
         public static bool operator ==(WorldStateObjectList x, WorldStateObjectList y)
         {
             if (x is null) { return y is null; }
@@ -445,15 +482,7 @@ namespace AI
             // If the x and y state data don't match, then these two do not match
             if(x.stateData != y.stateData) { return false; }
 
-            // Check if y is a subset of x
-            for(int i=0; i < y.list.Count; ++i)
-            {
-                // If the element is not in x, they do not match
-                if(!x.Contains(y.list[i]))
-                {
-                    return false;
-                }
-            }
+           
 
             // Then just match the x/y
             return x.stateData == y.stateData;
