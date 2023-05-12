@@ -110,6 +110,132 @@ public static class CardSystem
         return false;
     }
 
+    public static List<TerritoryCard> GetCardIn(ref List<TerritoryCard> cards)
+    {
+        // Count each of the cards
+        int infCount = 0; int calvCount = 0; int artCount = 0;
+
+        List<int> infintry = new List<int>();
+        List<int> calv = new List<int>();
+        List<int> artil = new List<int>();
+
+        List<TerritoryCard> outList = new List<TerritoryCard>();
+
+        for (int i = 0; i < cards.Count; ++i)
+        {
+            switch (cards[i].CardType)
+            {
+                // Increment infantry, calvary, or artillery accordingly
+                case CardType.Infantry:
+                    {
+                        ++infCount;
+                        infintry.Add(i);
+                        break;
+                    }
+                case CardType.Calvary:
+                    {
+                        ++calvCount;
+                        calv.Add(i);
+                        break;
+                    }
+
+                case CardType.Artillery:
+                    {
+                        ++artCount;
+                        artil.Add(i);
+                        break;
+                    }
+                // If we have one wild in a hand of three, we are guarenteed to be able to card in.
+                case CardType.Wild:
+                    {
+                        infintry.Add(i);
+                        calv.Add(i);
+                        artil.Add(i);
+                        ++infCount;
+                        ++calvCount;
+                        ++artCount;
+                        break;
+                    }
+            }
+
+            // Check if any of the card-in rules are true
+
+            // Three of a kind
+            if (infCount >= 3)
+            {
+                for (int j = 0; j < 3; ++j)
+                {
+                    outList.Add(cards[infintry[j]]);
+                }
+                cards.RemoveAt(infintry[2]);
+                cards.RemoveAt(infintry[1]);
+                cards.RemoveAt(infintry[0]);
+            }
+            else if (calvCount >= 3)
+            {
+                for (int j = 0; j < 3; ++j)
+                {
+                    outList.Add(cards[calv[j]]);
+                }
+                cards.RemoveAt(calv[2]);
+                cards.RemoveAt(calv[1]);
+                cards.RemoveAt(calv[0]);
+            }
+            else if (artCount >= 3)
+            {
+                for (int j = 0; j < 3; ++j)
+                {
+                    outList.Add(cards[artil[j]]);
+                }
+                cards.RemoveAt(artil[2]);
+                cards.RemoveAt(artil[1]);
+                cards.RemoveAt(artil[0]);
+            }
+            // One of each
+            else if (infCount > 0 && calvCount > 0 && artCount > 0) 
+            {
+                outList.Add(cards[infintry[0]]);
+                outList.Add(cards[calv[0]]);
+                outList.Add(cards[artil[0]]);
+
+                if(infintry[0] > calv[0])
+                {
+                    if(infintry[0] > artil[0])
+                    {
+                        cards.RemoveAt(infintry[0]);
+                        cards.RemoveAt(Mathf.Max( artil[0], calv[0]) );
+                        cards.RemoveAt(Mathf.Min(artil[0],calv[0]));
+                    }
+                    else // Inifintry is the second
+                    {
+                        cards.RemoveAt(artil[0]);
+                        cards.RemoveAt(infintry[0]);
+                        cards.RemoveAt(calv[0]);
+                    }
+                }
+                else
+                {
+                    if(infintry[0] < artil[0]) // Infintry is small
+                    {
+                        cards.RemoveAt(Mathf.Max(artil[0], calv[0]));
+                        cards.RemoveAt(Mathf.Min(artil[0], calv[0]));
+                        cards.RemoveAt(infintry[0]);
+                    }
+                    else // Infitry is middle
+                    {
+                        cards.RemoveAt(calv[0]);
+                        cards.RemoveAt(infintry[0]);
+                        cards.RemoveAt(artil[0]);
+                    }
+                }
+            }
+
+            // Remove from out list
+           
+        }
+
+        return outList;
+    }
 
     /// <summary>
     /// Performs the card in action.

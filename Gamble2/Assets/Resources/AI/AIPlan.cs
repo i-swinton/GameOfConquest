@@ -50,7 +50,7 @@ namespace AI
                 if(PlanToGoal(out currentPlan, i))
                 {
                     // Print the current plan
-                    Debug.Log(ToString());
+                    Debug.Log("Player: "+targetPlayer.PlayerRef.playerID+" "+ToString());
                     return;
                 }
             }

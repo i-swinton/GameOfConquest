@@ -270,6 +270,11 @@ namespace MapSystem
             return null;
         }
 
+        public override string ToString()
+        {
+            return $"{Name}";
+        }
+
         // ---------------------------------------------- DEBUG FUNCTIONS --------------------------------------------
         public void DrawConnections()
         {

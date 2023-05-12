@@ -165,7 +165,8 @@ public class AIPlayer
         worldState[AI.StateKeys.GameState] = AI.AIAssist.Convert(GameMaster.GetInstance().GetState());
         // Draft troops
         worldState[AI.StateKeys.DraftTroops] = PlayerRef.draftTroop > 0 ? AI.States.Nonzero : AI.States.Zero;
-
+        worldState[AI.StateKeys.TroopCount] = PlayerRef.troopCount > 0 ? AI.States.Nonzero : AI.States.Zero;
+        //worldState.SetValue(AI.StateKeys.TroopCount, PlayerRef.troopCount);
         //
         //worldState[AI.StateKeys.AttackState] = PlayerRef. ;
         
@@ -182,6 +183,11 @@ public class AIPlayer
     public void UpdateWorldState(AI.StateKeys key, AI.States state)
     {
         worldState.SetValue(key, state);
+    }
+
+    public void UpdateWorldState(AI.StateKeys key, int value)
+    {
+        worldState.SetValue(key, value);
     }
 
     public void UpdateWorldState(AI.StateKeys key, object objToAdd, bool addObject)
@@ -216,6 +222,25 @@ public class AIPlayer
 
         // Sense
         UpdateWorldState();
+
+    }
+
+    public void CardInCheck()
+    {
+        // Always card in 
+        if (CardSystem.CanCardIn(PlayerRef.cards))
+        {
+            List<TerritoryCard> cards = CardSystem.GetCardIn(ref PlayerRef.cards);
+            // Insert player for card in here
+            int troopCount = CardSystem.CardIn(PlayerRef.cards, GameMaster.GetInstance().GetPlayer(), BoardManager.instance.GetBoard());
+
+            PlayerRef.draftTroop += troopCount;
+
+
+            NotifySystem.Message($"{PlayerRef} has recieved {troopCount} units.");
+        }
+
+
 
     }
 }

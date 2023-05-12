@@ -171,7 +171,7 @@ namespace AI
             }
             public bool MatchPre(int index, WorldState start)
             {
-                return precondition.Get(index) == start.Get(index);
+                return start.Get(index) == precondition.Get(index);
             }
 
             #endregion
@@ -434,12 +434,15 @@ namespace AI
                     return ActionStatus.Complete;
                 }
 
+                player.CardInCheck();
+
                 // Get the continent
                 MapSystem.Continent con = player.Blackboard["TargetCon"].GetContinent();
 
                 // Grab an open tile
                 MapSystem.BoardTile target = con.GetRandomTile(player.PlayerRef);
 
+               
 
                 // If there are non to find, replan
                 if (target == null)
@@ -464,12 +467,12 @@ namespace AI
             public DraftRandom()
             {
                 precondition[StateKeys.GameState] = States.Draft;
-                precondition[StateKeys.TroopCount] = States.Nonzero;
+                precondition[StateKeys.DraftTroops] = States.Nonzero;
 
                 precondition[StateKeys.Owns] = States.Any;
 
                 effects[StateKeys.GameState] = States.Attack;
-                effects[StateKeys.TroopCount] = States.Zero;
+                effects[StateKeys.DraftTroops] = States.Zero;
 
                 gm = GameMaster.GetInstance();
                 board = BoardManager.instance.GetBoard();
@@ -481,6 +484,10 @@ namespace AI
 
                 // If all the troops are gone, we can continue
                 if(player.PlayerRef.draftTroop <= 0) { return ActionStatus.Complete; }
+
+                // See if we can card in
+                player.CardInCheck();
+
                 MapSystem.BoardTile tile = player.PlayerRef.tiles[RNG.Roll(0, player.PlayerRef.tiles.Count-1, false)];
 
                 // Draft the random troop
@@ -828,14 +835,14 @@ namespace AI
                         // Step 3.1: Target Challenger
                         case 0:
                             {
-                                gm.OnTileClick(targetTile.ID);
+                                gm.OnTileClick(defenderTile.ID);
                                 step = 1;
                                 break;
                             }
                         //Step 3.2: Target Defender
                         case 1:
                             {
-                                gm.OnTileClick(defenderTile.ID);
+                                gm.OnTileClick(targetTile.ID);
                                 step = 2;
                                 break;
                             }
@@ -944,6 +951,9 @@ namespace AI
             }
         }
 
+        // ----------------------------------- Other Action --------------------------------------------
+
+       
 
     }
 }

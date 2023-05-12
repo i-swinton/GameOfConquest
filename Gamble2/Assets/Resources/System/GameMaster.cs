@@ -238,11 +238,11 @@ public class GameMaster : NetworkBehaviour
         PlayerAmount = numberOfPlayers;
 
         //state = GameState.Claim;
+        PlayerAmount += computerPlayers.PlayerCount;
 
         if (PlayerAmount <= 1)
             PlayerAmount = 2;
 
-        PlayerAmount += computerPlayers.PlayerCount;
 
         for (int i = 0; i < numberOfPlayers; i++)
         {
@@ -1052,9 +1052,9 @@ public class GameMaster : NetworkBehaviour
             else
             {
                 // Battle two challengers
-                if (GetChallenger().Player.playerID != mapTile.Player.playerID)
+                if (Challenger.Player.playerID != mapTile.Player.playerID)
                 {
-                    if (GetChallenger().NodeRef.Neighbors.Contains(mapTile.NodeRef))
+                    if (Challenger.NodeRef.Neighbors.Contains(mapTile.NodeRef))
                     {
                         // Mark this tile as the challenger
                         SetDefender(mapTile);
@@ -1133,8 +1133,11 @@ public class GameMaster : NetworkBehaviour
                     // If you are the current player, open up the attack menu
                     if (!IsNetworked || (IsNetworked && ClientPlayerController.IsCurrentPlayer(this)))
                     {
-                        // Pull up the confirm menu
-                        ConfirmUI.BeginConfirm("Fortify", ConfirmUI.ConfirmType.Fortify, GetChallenger().NodeRef, mapTile.NodeRef);
+                        if (GetPlayer().isHuman)
+                        {
+                            // Pull up the confirm menu
+                            ConfirmUI.BeginConfirm("Fortify", ConfirmUI.ConfirmType.Fortify, GetChallenger().NodeRef, mapTile.NodeRef);
+                        }
                     }
                 }
             }
@@ -1468,6 +1471,8 @@ public class Player
                 // Check if we have any other tiles in the con
                 for(int i=0; i <tiles.Count; ++i)
                 {
+                    // Ignore the new tile
+                    if(tiles[i] == changedTile) { continue; }
                     // Check if the tile is in the continent
                     if(con.Contains(tiles[i]))
                     {

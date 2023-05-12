@@ -445,7 +445,7 @@ namespace AI
 
             if (!b) { return false; }
 
-            WorldStateObjectList z = (WorldStateObjectList)y;
+            WorldStateObjectList z = new WorldStateObjectList((WorldStateObjectList)y);
 
             if(z!=null)
             {
