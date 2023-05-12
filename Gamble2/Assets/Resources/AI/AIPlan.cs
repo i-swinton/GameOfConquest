@@ -163,10 +163,10 @@ namespace AI
                             // If not on openList or closedList
 
                             // Check if they are neighbors
-                            if (AIAction.Match(node, actionSpace[j]))
+                            if (AIAction.Match(testState, actionSpace[j]))
                             {
                                 // Add to the open list
-                                openList.Insert(0,actionSpace[j]);
+                                openList.Add(actionSpace[j]);
 
                                 // Set the prior
                                 actionSpace[j].prior = node;
@@ -211,7 +211,7 @@ namespace AI
 
             for (int i = 1; i < openList.Count; ++i)
             {
-                if (openList[i].FCost <= cheapest.FCost)
+                if (openList[i].FCost < cheapest.FCost)
                 {
                     index = i;
                     cheapest = openList[i];

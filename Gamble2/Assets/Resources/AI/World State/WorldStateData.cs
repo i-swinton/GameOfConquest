@@ -117,7 +117,7 @@ namespace AI
             states[(int)StateKeys.CanAttack] = States.Any;
 
             states[(int)StateKeys.Owns] = new WorldStateObjectList();
-            states[(int)StateKeys.Owns].Apply(States.None);
+            states[(int)StateKeys.Owns].Apply(States.Any);
 
             states[(int)StateKeys.ExistsIn] = new WorldStateObjectList();
             states[(int)StateKeys.ExistsIn].Apply(States.Any);

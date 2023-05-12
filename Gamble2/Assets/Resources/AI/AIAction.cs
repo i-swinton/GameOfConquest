@@ -620,6 +620,13 @@ namespace AI
                                 defenderAttacker = targetable;
                             }
 
+                            if(targetAttacker.Owner == defenderAttacker.Owner)
+                            {
+                                Debug.Log("Owner Conflict Here");
+                                targetAttacker = null;
+                                defenderAttacker = null;
+                            }
+
                             // If we have an attacker skip
                             if (targetAttacker != null) { break; }
                         }
@@ -666,6 +673,7 @@ namespace AI
                             }
                         case 2:
                             {
+                                Debug.Log($"{targetAttacker.Name} is attacking {defenderAttacker.Name} ");
                                 // Confirm Blitz attack
                                 GameMaster.GetInstance().Confirm((int)ConfirmUI.BattleConfirmValue.Blitz);
 
@@ -800,7 +808,7 @@ namespace AI
                         }
                     }
                     // If we could not find a higher tile, just end the foritfy
-                    if(highestTile == null)
+                    if(highestTile == null || highestTile == targetTile)
                     {
                         targetTile = null;
 
@@ -821,12 +829,14 @@ namespace AI
                         case 0:
                             {
                                 gm.OnTileClick(targetTile.ID);
+                                step = 1;
                                 break;
                             }
                         //Step 3.2: Target Defender
                         case 1:
                             {
                                 gm.OnTileClick(defenderTile.ID);
+                                step = 2;
                                 break;
                             }
                         // Step 3.3 Do it
@@ -841,7 +851,8 @@ namespace AI
                                 targetTile = null;
                                 defenderTile = null;
 
-                                break;
+                                // Return complete
+                                return ActionStatus.Complete;
                             }
                     }
                 }

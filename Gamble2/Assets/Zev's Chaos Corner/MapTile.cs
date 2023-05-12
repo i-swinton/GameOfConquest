@@ -110,7 +110,13 @@ public class MapTile : MonoBehaviour
         }
         else
         {
-            gm.OnTileClick(NodeRef.ID, ID);
+            // Only allow interactions if a human player is playing
+            {
+                if (gm.GetPlayer().isHuman)
+                {
+                    gm.OnTileClick(NodeRef.ID, ID);
+                }
+            }
         }
         //switch (gm.GetState())
         //{
