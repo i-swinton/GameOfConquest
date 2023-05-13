@@ -702,8 +702,8 @@ MonoBehaviour:
   text: {fileID: 1857778260}
   gameMode: {fileID: 11400000, guid: f189433e6dbbc324da4dfe2926b82405, type: 2}
   settings:
-    AutoFillTiles: 1
-    AutoReinforce: 1
+    AutoFillTiles: 0
+    AutoReinforce: 0
 --- !u!4 &265174797
 Transform:
   m_ObjectHideFlags: 0

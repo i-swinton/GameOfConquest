@@ -7,12 +7,20 @@ using Unity.Netcode.Transports.UTP;
 
 public class NetworkLobbyScript : NetworkBehaviour
 {
+    enum LobbyState
+    {
+        Find,
+        Host,
+        Local
+    }
+
     [Header("Referneces")]
     [SerializeField] TMPro.TextMeshProUGUI addressText;
     [SerializeField] TMPro.TextMeshProUGUI portText;
 
     [SerializeField] GameObject searchForGamePanel;
     [SerializeField] GameObject hostForGamePanel;
+    [SerializeField] GameObject localGamePanel;
 
     [Header("Host Panel References")]
     [SerializeField] TMPro.TextMeshProUGUI[] playerTexts;
@@ -21,6 +29,9 @@ public class NetworkLobbyScript : NetworkBehaviour
 
     [SerializeField] InputField inputField;
 
+    LobbyState state;
+
+
     private void Start()
     {
         //inputField.te
@@ -28,9 +39,16 @@ public class NetworkLobbyScript : NetworkBehaviour
 
     private void Update()
     {
-        if (NetworkPlayerDataCarrier.Controllers.Count - 1 != index)
+        if (state == LobbyState.Host)
         {
-            UpdatePlayerText();
+            if (NetworkPlayerDataCarrier.Controllers.Count - 1 != index)
+            {
+                UpdatePlayerText();
+            }
+        }
+        else if(state == LobbyState.Local)
+        {
+            UpdatePlayerText_Local();
         }
     }
 
@@ -44,6 +62,13 @@ public class NetworkLobbyScript : NetworkBehaviour
 
         index = NetworkPlayerDataCarrier.Controllers.Count-1;
     }
+
+    void UpdatePlayerText_Local()
+    {
+
+    }
+
+
     bool ContainsPlayer()
     {
         for(int i =0; i < index; ++i)
@@ -69,6 +94,9 @@ public class NetworkLobbyScript : NetworkBehaviour
 
             searchForGamePanel.SetActive(false);
             hostForGamePanel.SetActive(true);
+
+            state = LobbyState.Host;
+
         }catch(System.Exception err)
         {
             DebugNetworklLog.Log(err.Message);
@@ -80,7 +108,18 @@ public class NetworkLobbyScript : NetworkBehaviour
         searchForGamePanel.SetActive(false);
         hostForGamePanel.SetActive(true);
 
+        state = LobbyState.Host;
+
         StartHost();
+    }
+
+    public void Local()
+    {
+        searchForGamePanel.SetActive(false);
+        hostForGamePanel.SetActive(false);
+        localGamePanel.SetActive(true);
+
+        state = LobbyState.Local;
     }
 
     public void StartHost()
