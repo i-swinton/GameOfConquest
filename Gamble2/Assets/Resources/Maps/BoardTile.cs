@@ -198,8 +198,13 @@ namespace MapSystem
             // Ignore if the players match
             if(owner == player) { return; }
             
+         
+
             if(owner != null)
             {
+
+                Debug.Log($"Changed ownership from {owner} to {player}");
+
                 owner.territoryCount -= 1;
                 // On Tile change
                 owner.ChangeTileOwner(this);

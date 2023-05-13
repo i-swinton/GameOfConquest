@@ -578,13 +578,24 @@ namespace AI
                                 // Set the shortest length
                                 shortestLength = outTiles.Count;
                             }
+                           
                         }
 
                         // Once we have the shortest path, move in that direction
                         if(outTiles.Count > 0)
                         {
-                            targetAttacker = outTiles[0];
-                            defenderAttacker = outTiles[1];
+                            string s = "";
+                            foreach(var t in outTiles)
+                            {
+                                s += $"{t}->";
+                            }
+                            Debug.Log(s);
+                            if (outTiles[0].Owner.playerID != outTiles[1].Owner.playerID)
+                            {
+
+                                targetAttacker = outTiles[0];
+                                defenderAttacker = outTiles[1];
+                            }
                         }
                     }
                     else
@@ -788,7 +799,26 @@ namespace AI
                 {
                     if (player.Blackboard.Contains("LastAttackTileID"))
                     {
-                        targetTile = board[player.Blackboard["LastAttackTileID"].GetInt()];
+                        // If we didn't attack for any reason, stop and reset
+                        if (player.Blackboard["LastAttackTileID"].GetInt() == -1)
+                        {
+                            gm.ForceTurnEnd();
+                            step = 0;
+                            targetTile = null;
+                            defenderTile = null;
+                            return ActionStatus.Complete;
+                        }
+                        else
+                        {
+
+
+                            targetTile = board[player.Blackboard["LastAttackTileID"].GetInt()];
+                            if (targetTile.Owner.playerID != player.PlayerRef.playerID)
+                            {
+                                Debug.Log("Mismatch detected");
+                                Debug.Break();
+                            }
+                        }
                     }
                     else
                     {

@@ -632,6 +632,7 @@ public class GameMaster : NetworkBehaviour
         }
         else // End Turn normally if networked
         {
+            Debug.Log("Ending turn of " + GetPlayer());
             EndTurn();
         }
     }
@@ -1215,6 +1216,7 @@ public class GameMaster : NetworkBehaviour
 
         if (Defender.Units <= 0)
         {
+            
             // Update the player
             onAfterAttack?.Invoke(turnTacker, Defender.NodeRef.ID);
 
@@ -1532,6 +1534,11 @@ public class Player
 
             
         }
+    }
+
+    public override string ToString()
+    {
+        return "Player " + playerID;
     }
 
     public bool isHuman;

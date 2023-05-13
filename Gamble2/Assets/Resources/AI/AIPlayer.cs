@@ -217,6 +217,9 @@ public class AIPlayer
         // If the player id doesn't match, return
         if (player != PlayerRef.playerID) { return; }
 
+        // Change last attacked to null
+        Blackboard.UpdateValue("LastAttackTileID", -1);
+
         // Update has attacked to not have attacked
         UpdateWorldState(AI.StateKeys.AttackState, AI.States.None); 
 
