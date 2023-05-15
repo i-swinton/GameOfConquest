@@ -861,6 +861,7 @@ namespace AI
                 }
                 else
                 {
+                    Debug.Log($"Target Tile: {targetTile}, Defender Tile: {defenderTile}");
                     // Step 3, Profit
                     switch(step)
                     {
