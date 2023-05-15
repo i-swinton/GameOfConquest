@@ -88,7 +88,7 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
         Debug.Log("Settings are: " + (instance.data.settings != null?"Exists":"Null"));
 
         //NOTE: Add a computer player count insert here as well
-        master.StartGame(instance.data.cpcs.Count,new AI.AIPlayerData(0),instance.data.settings, instance.data.mode);
+        master.StartGame(instance.data.cpcs.Count,new AI.AIPlayerData(BotCount),instance.data.settings, instance.data.mode);
 
     }
 
