@@ -32,9 +32,24 @@ public class NetworkLobbyScript : NetworkBehaviour
 
     LobbyState state;
 
+    static NetworkLobbyScript instance;
+
+    public static NetworkLobbyScript Instance
+    {
+        get
+        {
+            return instance;
+        }
+    }
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void Start()
     {
+        //instance = this;
         //inputField.te
     }
 
@@ -56,6 +71,7 @@ public class NetworkLobbyScript : NetworkBehaviour
             }
         }
     }
+
 
 
     void UpdatePlayerText()
@@ -91,10 +107,18 @@ public class NetworkLobbyScript : NetworkBehaviour
         this.index = index;
     }
 
+    [ClientRpc]
+    public void AddBot_ClientRPC()
+    {
+        //instance.AddBot_Net();
+        NetworkPlayerDataCarrier.AddBot();
+
+    }
 
     public void AddBot_Net()
     {
-        NetworkPlayerDataCarrier.AddBot();
+        //NetworkPlayerDataCarrier.AddBot();
+        GMNet.Instance.AddBot_ServerRPC();
     }
 
     public void AddBot()

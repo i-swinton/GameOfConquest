@@ -66,4 +66,10 @@ public class GMNet : NetworkBehaviour
     {
         GameMaster.GetInstance().ConfirmFortify_ClientRPC(value);
     }
+
+    [ServerRpc]
+    public void AddBot_ServerRPC()
+    {
+        NetworkLobbyScript.Instance.AddBot_ClientRPC();
+    }
 }
