@@ -26,15 +26,37 @@ public class CardGainUI : UIElement
 
     public static void GainCards(List<TerritoryCard> cards, Player target, MapSystem.Board board)
     {
+        //if (GameMaster.GetInstance().IsNetworked)
+        //{
+        //    // If we aren't the player getting the card, don't show the cards
+        //    if (target.playerID != ClientPlayerController.LocalPlayer && !GameMaster.GetInstance().IsCurrentAI())
+        //    {
+        //        return;
+        //    }
+        //}
         if (GameMaster.GetInstance().IsNetworked)
         {
-            // If we aren't the player getting the card, don't show the cards
-            if (target.playerID != ClientPlayerController.LocalPlayer && !GameMaster.GetInstance().IsCurrentAI())
-            {
-                return;
-            }
-        }
 
+            if (target.isHuman)
+            {
+
+                // If we aren't the player getting the card, don't show the card
+                if (target.playerID != ClientPlayerController.LocalPlayer)
+                {
+                    Debug.Log("Return on gain cards");
+                    return;
+                }
+            }
+            else
+            {
+                // Don't continue if you are not the host
+                if (!GMNet.Instance.IsHost)
+                {
+                    return;
+                }
+            }
+
+        }
         foreach (var card in cards)
         {
             UIDisplayCard newCard = Instantiate(instance.cardPrefab, instance.targetStarPos.position, Quaternion.identity);
@@ -52,11 +74,25 @@ public class CardGainUI : UIElement
         if(GameMaster.GetInstance().IsNetworked)
         {
 
-            // If we aren't the player getting the card, don't show the card
-            if(target.playerID != ClientPlayerController.LocalPlayer )
+            if (target.isHuman)
             {
-                return;
+
+                // If we aren't the player getting the card, don't show the card
+                if (target.playerID != ClientPlayerController.LocalPlayer)
+                {
+                    Debug.Log("Return on gain cards");
+                    return;
+                }
             }
+            else
+            {
+                // Don't continue if you are not the host
+                if (!GMNet.Instance.IsHost)
+                {
+                    return;
+                }
+            }
+            
         }
 
         // If AI
