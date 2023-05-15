@@ -83,6 +83,12 @@ public class NetworkLobbyScript : NetworkBehaviour
         this.index = index;
     }
 
+
+    public void AddBot_Net()
+    {
+        NetworkPlayerDataCarrier.AddBot();
+    }
+
     public void AddBot()
     {
         DataCarrier.AddBot();

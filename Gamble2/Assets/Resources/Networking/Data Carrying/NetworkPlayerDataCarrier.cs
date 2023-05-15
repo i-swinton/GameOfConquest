@@ -92,6 +92,11 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
 
     }
 
+    public static void AddBot()
+    {
+        instance.botCount++;
+    }
+
 }
 
 // Tells the Netcode how to serialize and deserialize Url in the future.
