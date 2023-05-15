@@ -240,6 +240,7 @@ namespace AI
 
             // If the current action is completable, continue the plan
 
+            Debug.Log($"Current Plan: {currentPlan[currentIndex]}");
             ActionStatus result = currentPlan[currentIndex].PerformAction(player);
             if (result == ActionStatus.Complete)
             {
