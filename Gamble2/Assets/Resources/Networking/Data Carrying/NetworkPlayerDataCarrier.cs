@@ -58,6 +58,8 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
         instance.data.mode = mode;
 
         instance.onLoadInGame?.Invoke();
+
+
     }
 
 
@@ -114,4 +116,9 @@ namespace NetworkSystem
 
 
 
+}
+
+public static class GameType
+{
+    public static bool isNetworked;
 }

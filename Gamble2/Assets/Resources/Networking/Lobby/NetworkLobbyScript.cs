@@ -24,6 +24,7 @@ public class NetworkLobbyScript : NetworkBehaviour
 
     [Header("Host Panel References")]
     [SerializeField] TMPro.TextMeshProUGUI[] playerTexts;
+    [SerializeField] TMPro.TextMeshProUGUI[] pT;
     int index;
     [SerializeField] string gameplayScene;
 
@@ -46,9 +47,12 @@ public class NetworkLobbyScript : NetworkBehaviour
                 UpdatePlayerText();
             }
         }
-        else if(state == LobbyState.Local)
+        else if (state == LobbyState.Local)
         {
-            UpdatePlayerText_Local();
+            if ((DataCarrier.PlayerCount + DataCarrier.BotCount) != index)
+            {
+                UpdatePlayerText_Local();
+            }
         }
     }
 
@@ -65,43 +69,33 @@ public class NetworkLobbyScript : NetworkBehaviour
 
     void UpdatePlayerText_Local()
     {
-
-    }
-
-
-    bool ContainsPlayer()
-    {
-        for(int i =0; i < index; ++i)
+        int index = 0; 
+        for(;index < DataCarrier.PlayerCount; ++index)
         {
-            
+            pT[index].text = $"Player {index}";
         }
 
-        return false;
-    }
-
-    public void Connect()
-    {
-        Debug.Log("Current end point:" + NetworkManager.GetComponent<UnityTransport>().ConnectionData.ServerEndPoint);
-        NetworkManager.GetComponent<UnityTransport>().ConnectionData.Address = addressText.text.Substring(0,addressText.text.Length-1);
-        Debug.Log(portText.text.Substring(0, portText.text.Length - 1));
-        NetworkManager.GetComponent<UnityTransport>().ConnectionData.Port = ushort.Parse(portText.text.Substring(0,portText.text.Length-1));
-
-        // Connect to the server
-        //NetworkManager.Singleton.StartClient();
-        try
+        for(;index  < DataCarrier.BotCount+DataCarrier.PlayerCount; ++index)
         {
-            StartClient();
-
-            searchForGamePanel.SetActive(false);
-            hostForGamePanel.SetActive(true);
-
-            state = LobbyState.Host;
-
-        }catch(System.Exception err)
-        {
-            DebugNetworklLog.Log(err.Message);
+            pT[index].text = $"Bot {index}";
         }
+
+        this.index = index;
     }
+
+    public void AddBot()
+    {
+        DataCarrier.AddBot();
+        Debug.Log("Adding bot");
+    }
+
+    public void AddPlayer()
+    {
+
+        // Add a player to the carrier
+        DataCarrier.AddPlayer();
+    }
+
 
     public void Host()
     {
@@ -109,6 +103,7 @@ public class NetworkLobbyScript : NetworkBehaviour
         hostForGamePanel.SetActive(true);
 
         state = LobbyState.Host;
+        GameType.isNetworked = true;
 
         StartHost();
     }
@@ -120,6 +115,67 @@ public class NetworkLobbyScript : NetworkBehaviour
         localGamePanel.SetActive(true);
 
         state = LobbyState.Local;
+        GameType.isNetworked = false;
+
+        // Add player
+        DataCarrier.AddPlayer();
+
+
+
+    }
+
+    public void LoadGame_Local()
+    {
+        // Get the index and settings
+        int modeIndex = MatchSettingsPanels.GetGameModeIndex();
+        var settings = new NetworkSystem.GameSettingStruct(MatchSettingsPanels.GetGameSettingsList());
+
+        DataCarrier.Instance.onLoadInGame += BeginGameScene_Local;
+        DataCarrier.LoadGameData(GameModeList.GetGameMode(modeIndex), new GameSettings(settings));
+    }
+
+    public void BeginGameScene_Local()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(gameplayScene);
+    }
+
+
+    #region Network Functions
+
+    bool ContainsPlayer()
+    {
+        for (int i = 0; i < index; ++i)
+        {
+
+        }
+
+        return false;
+    }
+
+    public void Connect()
+    {
+        Debug.Log("Current end point:" + NetworkManager.GetComponent<UnityTransport>().ConnectionData.ServerEndPoint);
+        NetworkManager.GetComponent<UnityTransport>().ConnectionData.Address = addressText.text.Substring(0, addressText.text.Length - 1);
+        Debug.Log(portText.text.Substring(0, portText.text.Length - 1));
+        NetworkManager.GetComponent<UnityTransport>().ConnectionData.Port = ushort.Parse(portText.text.Substring(0, portText.text.Length - 1));
+
+        // Connect to the server
+        //NetworkManager.Singleton.StartClient();
+        try
+        {
+            StartClient();
+
+            searchForGamePanel.SetActive(false);
+            hostForGamePanel.SetActive(true);
+
+            state = LobbyState.Host;
+            GameType.isNetworked = true;
+
+        }
+        catch (System.Exception err)
+        {
+            DebugNetworklLog.Log(err.Message);
+        }
     }
 
     public void StartHost()
@@ -172,5 +228,5 @@ public class NetworkLobbyScript : NetworkBehaviour
         }
     }
 
-   
+    #endregion
 }

@@ -293,8 +293,9 @@ public class GameMaster : NetworkBehaviour
 
         turnTacker = -1;
         IncrementTurnTracker();
-        onTurnBegin(turnTacker);
-        //ChangeState(GameState.Claim);
+
+        // Only invoke action if someone is listening
+        onTurnBegin?.Invoke(turnTacker);
 
     }
 
@@ -304,8 +305,15 @@ public class GameMaster : NetworkBehaviour
         
         if(!hasGameStarted)
         {
-            NetworkPlayerDataCarrier.InitializeGame(this);
-
+            // Choose to initialize local or online game
+            if (GameType.isNetworked)
+            {
+                NetworkPlayerDataCarrier.InitializeGame(this);
+            }
+            else
+            {
+                DataCarrier.InitializeGame(this);
+            }
             return;
         }
 
