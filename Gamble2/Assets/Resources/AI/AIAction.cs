@@ -344,7 +344,7 @@ namespace AI
                 var gm = GameMaster.GetInstance();
 
                 // Claim the given tile
-                gm.ReinforceTile(target);
+                gm.OnTileClick(target.ID);
 
                 return ActionStatus.Working;
             }
