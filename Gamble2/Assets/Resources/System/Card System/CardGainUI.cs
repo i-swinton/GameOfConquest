@@ -29,7 +29,7 @@ public class CardGainUI : UIElement
         if (GameMaster.GetInstance().IsNetworked)
         {
             // If we aren't the player getting the card, don't show the cards
-            if (target.playerID != ClientPlayerController.LocalPlayer)
+            if (target.playerID != ClientPlayerController.LocalPlayer && !GameMaster.GetInstance().IsCurrentAI())
             {
                 return;
             }
@@ -51,8 +51,9 @@ public class CardGainUI : UIElement
     {
         if(GameMaster.GetInstance().IsNetworked)
         {
+
             // If we aren't the player getting the card, don't show the card
-            if(target.playerID != ClientPlayerController.LocalPlayer)
+            if(target.playerID != ClientPlayerController.LocalPlayer )
             {
                 return;
             }
