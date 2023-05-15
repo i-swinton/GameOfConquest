@@ -158,7 +158,7 @@ public class BoardManager : MonoBehaviour
         {
 
             BoardTile tile = board[i];
-            Gizmos.DrawWireSphere(tile.Position, nodeCenterRadius);
+          //  Gizmos.DrawWireSphere(tile.Position, nodeCenterRadius);
         }
 
         if (Input.GetKey(KeyCode.C))

@@ -12,6 +12,141 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc0ecca68e98444b9da6da7a7652410, type: 3}
   m_Name: Board 2
   m_EditorClassIdentifier: 
-  Contenents: []
+  Contenents:
+  - Name: Edleguard
+    bonus:
+    - {fileID: 11400000, guid: e4310051c4f83e84b9ad76651f41b309, type: 2}
+    Tiles:
+    - Name: Maully
+      Image: {fileID: 21300000, guid: c785b95f74fb6004c9d483cd4180b1bc, type: 3}
+    - Name: Spencer
+      Image: {fileID: 21300000, guid: 1a5c6a4fa28458645bf21d518ae97afd, type: 3}
+    - Name: Lance
+      Image: {fileID: 21300000, guid: 7dfc36fc836df0f4c8057ec122d59c84, type: 3}
+    - Name: Bow
+      Image: {fileID: 21300000, guid: 7e56392157d8c3a47ad2927d43b6740c, type: 3}
+  - Name: Circle
+    bonus:
+    - {fileID: 11400000, guid: 603b3f2c65587a74e9593881d31b131b, type: 2}
+    Tiles:
+    - Name: Eastward
+      Image: {fileID: 21300000, guid: f202b4d08390ce5449deb4ac8319fbe3, type: 3}
+    - Name: Westward
+      Image: {fileID: 21300000, guid: 67e123911fa9f694f8768bc23db51768, type: 3}
+    - Name: Circle
+      Image: {fileID: 21300000, guid: b66a89ae88322ec4885898bddcada9cf, type: 3}
+  - Name: Blob Major
+    bonus: []
+    Tiles:
+    - Name: Alcor
+      Image: {fileID: 21300000, guid: dc59a53f40bda9e4ea0008c2e991c2fe, type: 3}
+    - Name: Mizar A
+      Image: {fileID: 21300000, guid: 86c629b8be9d29a4f933c522d6d0ca08, type: 3}
+    - Name: Mizar B
+      Image: {fileID: 21300000, guid: d327d69dffd756141825ca7bcc35d015, type: 3}
+    - Name: Lalande
+      Image: {fileID: 21300000, guid: 4897c3e993d539342af3b08c1170b930, type: 3}
+    - Name: Winnecke
+      Image: {fileID: 21300000, guid: 1106afc12ec407444921e421ef39403a, type: 3}
+  - Name: Blob Minor
+    bonus: []
+    Tiles:
+    - Name: Polaris
+      Image: {fileID: 21300000, guid: 567840768565de449aa3eed4202f0f76, type: 3}
+    - Name: Calvera
+      Image: {fileID: 21300000, guid: 479662b357b97c24ead3834ee6315442, type: 3}
+  - Name: Center
+    bonus: []
+    Tiles:
+    - Name: Median
+      Image: {fileID: 21300000, guid: f1c8a49d1cc90cc4daae3a3b01ff21b3, type: 3}
+    - Name: Mean
+      Image: {fileID: 21300000, guid: c793f7348f6ce5b4e91951ab888f500f, type: 3}
+    - Name: Mode
+      Image: {fileID: 21300000, guid: 7ced456342254494ca686834d4fb2bfb, type: 3}
+    - Name: Standard Deviation
+      Image: {fileID: 21300000, guid: 494b70794d208154391b7444e12725f7, type: 3}
+    - Name: IQR
+      Image: {fileID: 21300000, guid: c68d74213036cd0458c905489b301436, type: 3}
+    - Name: Range
+      Image: {fileID: 21300000, guid: 793b433eb80bda944926610eba12f88e, type: 3}
+  - Name: Triangle Land
+    bonus: []
+    Tiles:
+    - Name: Wrong
+      Image: {fileID: 21300000, guid: 9cfbfe87ce4d9fa49b2c67ec02690a19, type: 3}
+    - Name: Scalene
+      Image: {fileID: 21300000, guid: e68b06ce7ed48a3419e07c76d9d218c4, type: 3}
+    - Name: Isosales
+      Image: {fileID: 21300000, guid: 3f06ae1b05f05224baf0714053feecc2, type: 3}
+    - Name: Right
+      Image: {fileID: 21300000, guid: 7cbbca2504a42df4dbdd06afa0492b13, type: 3}
+    - Name: Left
+      Image: {fileID: 21300000, guid: b1388f02f5881bd498095657d30dbab5, type: 3}
+  - Name: Island
+    bonus: []
+    Tiles:
+    - Name: Hawaii
+      Image: {fileID: 21300000, guid: 16f240eceaa45234aa6471eb7bf9661d, type: 3}
+    - Name: Japan
+      Image: {fileID: 21300000, guid: 445c79dcc63e2d54b8f41e24c3ef6e31, type: 3}
+    - Name: Cuba
+      Image: {fileID: 21300000, guid: a910169331fd6df489608b1073735fb1, type: 3}
+    - Name: Britian
+      Image: {fileID: 21300000, guid: ee486fa76aba55149b8900b6ad9e480d, type: 3}
+    - Name: Madagascar
+      Image: {fileID: 21300000, guid: 3eb2dc0accf903d4bb46d9bc9550e62e, type: 3}
+    - Name: Greenland
+      Image: {fileID: 21300000, guid: 8ba31f2ad66854d4cad6c738bf499400, type: 3}
   connectionPairs: []
-  namedPairs: []
+  namedPairs:
+  - node1: Median
+    node2: Winnecke
+  - node1: Mode
+    node2: Isosales
+  - node1: Mode
+    node2: Polaris
+  - node1: Median
+    node2: Greenland
+  - node1: Maully
+    node2: Mizar A
+  - node1: Bow
+    node2: Hawaii
+  - node1: Spencer
+    node2: Wrong
+  - node1: Right
+    node2: Lance
+  - node1: Left
+    node2: Polaris
+  - node1: Hawaii
+    node2: Japan
+  - node1: Hawaii
+    node2: Greenland
+  - node1: Japan
+    node2: Madagascar
+  - node1: Cuba
+    node2: Madagascar
+  - node1: Scalene
+    node2: Left
+  - node1: Scalene
+    node2: Right
+  - node1: Scalene
+    node2: Wrong
+  - node1: Scalene
+    node2: Isosales
+  - node1: Mizar B
+    node2: Lalande
+  - node1: Bow
+    node2: Lance
+  - node1: Maully
+    node2: Spencer
+  - node1: Westward
+    node2: Eastward
+  - node1: Cuba
+    node2: Britian
+  - node1: Greenland
+    node2: Winnecke
+  - node1: Greenland
+    node2: Madagascar
+  - node1: Polaris
+    node2: Calvera
