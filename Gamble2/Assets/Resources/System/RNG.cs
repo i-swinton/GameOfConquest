@@ -15,6 +15,11 @@ public static class RNG
     //            2531011L) >> 16) & 0x7fff);
     //}
 
+    public static int Seed
+    {
+        get { return seed; }
+    }
+
     public static void SeedRandom(int newSeed)
     {
         seed = newSeed;

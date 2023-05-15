@@ -108,7 +108,9 @@ public class GameMaster : NetworkBehaviour
 
         DebugNetworklLog.Log("Start Game Server");
 
-        int randomSeed = (int)Time.time;
+        // Generate a random seed
+        //int randomSeed = (int)Time.time
+        int randomSeed = Guid.NewGuid().GetHashCode();
 
 
 
@@ -163,7 +165,18 @@ public class GameMaster : NetworkBehaviour
         CompleteFortify(value);
     }
     #endregion
+    #region Host Functions
 
+    /// <summary>
+    /// Reports wheter or not the current player is an AI functioning on this machine
+    /// </summary>
+    /// <returns>If the current machine is the host and current player is an AI, returns true. Otherwise, returns false. </returns>
+    public bool IsCurrentAI()
+    {
+        return IsHost && !GetPlayer().isHuman;
+    }
+
+    #endregion
     // ------------------------------------ Starting Functions ------------------------------------------------------------
 
     private void Awake()
@@ -202,6 +215,7 @@ public class GameMaster : NetworkBehaviour
         instance.settings = settings;
     }
 
+    #region Start Game Functions
     /// <summary>
     /// Starts a game with the current settings and the given number of players
     /// </summary>
@@ -298,6 +312,7 @@ public class GameMaster : NetworkBehaviour
         onTurnBegin?.Invoke(turnTacker);
 
     }
+    #endregion
 
     // Update is called once per frame
     void Update()
@@ -372,10 +387,13 @@ public class GameMaster : NetworkBehaviour
         }
 
         // Handle updating AI
-        if(GetPlayer().isHuman == false)
+        if (GetPlayer().isHuman == false)
         {
             float dt = Time.deltaTime;
-            GetPlayer().aiBrain.Update( dt);
+            if (!IsNetworked || (IsNetworked && IsCurrentAI()))
+            {
+                GetPlayer().aiBrain.Update(dt);
+            }
         }
 
     }
@@ -678,9 +696,14 @@ public class GameMaster : NetworkBehaviour
         return true;
     }
 
-
     void IncrementTurnTracker()
     {
+        if (IsHost)
+        {
+            // Sync the RNG
+            GMNet.Instance.SyncRNG_ServerRPC(RNG.Seed);
+        }
+
         // Increment turn tracker to the next non-dead player
         do
         {
@@ -688,7 +711,9 @@ public class GameMaster : NetworkBehaviour
             if (turnTacker >= PlayerAmount)
                 turnTacker = 0;
         } while (!players[turnTacker].isAlive);
-        
+
+
+
         // Update the display
         if(gameBoard != null)
         {
@@ -851,10 +876,19 @@ public class GameMaster : NetworkBehaviour
 
     //---------------------------------------- On Click Functions ----------------------------------------
 
+
+
     public void OnTileClick(int tileIndex)
     {
-        // Return the tile index
-        OnTileClick(tileIndex, GenerateMap.GetTile(gameBoard[tileIndex]).ID);
+        if (IsNetworked)
+        {
+            OnTileClickClientRPC(tileIndex, GenerateMap.GetTile(gameBoard[tileIndex]).ID);  
+        }
+        else
+        {
+            // Return the tile index
+            OnTileClick(tileIndex, GenerateMap.GetTile(gameBoard[tileIndex]).ID);
+        }
     }
 
     public void OnTileClick(int tileIndex, int mapTileID)
@@ -1073,7 +1107,7 @@ public class GameMaster : NetworkBehaviour
                         isInBattle = true;
                         // Only pull up the UI if you are the turn player
                         if ((!IsNetworked && GetPlayer().isHuman) 
-                            ||(IsNetworked && ClientPlayerController.IsCurrentPlayer(this)))
+                            ||(IsNetworked && (ClientPlayerController.IsCurrentPlayer(this) || IsCurrentAI())))
                         {
 
                             // Pull up the confirm menu
@@ -1140,7 +1174,7 @@ public class GameMaster : NetworkBehaviour
                     MapDrawSystem.SpawnArrow(GetChallenger().NodeRef.Position, mapTile.NodeRef.Position);
 
                     // If you are the current player, open up the attack menu
-                    if (!IsNetworked || (IsNetworked && ClientPlayerController.IsCurrentPlayer(this)))
+                    if (!IsNetworked || (IsNetworked && (ClientPlayerController.IsCurrentPlayer(this) || IsCurrentAI())))
                     {
                         if (GetPlayer().isHuman)
                         {
@@ -1244,7 +1278,7 @@ public class GameMaster : NetworkBehaviour
             int unitsToMove = Mathf.Clamp((-index), 1, 3);
 
             // If we are networked, don't open network ui
-            if (!IsNetworked || (IsNetworked && ClientPlayerController.IsCurrentPlayer(this)))
+            if (!IsNetworked || (IsNetworked && (ClientPlayerController.IsCurrentPlayer(this) || IsCurrentAI())))
             {
                 if (GetPlayer().isHuman)
                 {

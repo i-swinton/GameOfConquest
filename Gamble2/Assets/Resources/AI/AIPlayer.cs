@@ -206,7 +206,7 @@ public class AIPlayer
     {
         // Update the current tree
         //currentTree.Update(dt);
-
+        
         // If the plan
         plan.Update(dt, this);
     }

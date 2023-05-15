@@ -44,6 +44,18 @@ public class GMNet : NetworkBehaviour
     }
 
     [ServerRpc]
+    public void SyncRNG_ServerRPC(int seed)
+    {
+        SyncRNG_ClientRPC(seed);
+    }
+
+    [ClientRpc]
+    public void SyncRNG_ClientRPC(int seed)
+    {
+        RNG.SeedRandom(seed);
+    }
+
+    [ServerRpc]
     public void ConfirmBattle_ServerRPC(int value)
     {
         GameMaster.GetInstance().ConfirmBattle_ClientRPC(value);

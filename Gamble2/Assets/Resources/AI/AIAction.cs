@@ -672,7 +672,8 @@ namespace AI
                     {
                         case 0:
                             {
-                                GameMaster.GetInstance().AttackTile(GenerateMap.GetTile(targetAttacker));
+                                //GameMaster.GetInstance().AttackTile(GenerateMap.GetTile(targetAttacker));
+                                GameMaster.GetInstance().OnTileClick(targetAttacker.ID);
                                 if (GameMaster.GetInstance().HasChallengerCheck())
                                 {
                                     step = 1;
@@ -682,7 +683,8 @@ namespace AI
                         case 1:
                             {
 
-                                GameMaster.GetInstance().AttackTile(GenerateMap.GetTile(defenderAttacker));
+                                //GameMaster.GetInstance().AttackTile(GenerateMap.GetTile(defenderAttacker));
+                                GameMaster.GetInstance().OnTileClick(defenderAttacker.ID);
                                 if (GameMaster.GetInstance().HasDefenderCheck())
                                 {
                                     step = 2;

@@ -9,9 +9,20 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
     static NetworkPlayerDataCarrier instance;
     [SerializeField]NetworkSystem.GameData data;
 
+    int botCount;
+
     public System.Action onLoadInGame;
 
     public static System.Action OnLoadInGame;
+
+    public static int BotCount
+    {
+        get
+        {
+            return instance.botCount;
+        }
+    }
+
 
     private void Awake()
     {
