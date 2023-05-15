@@ -42,7 +42,8 @@ public class NetworkLobbyScript : NetworkBehaviour
     {
         if (state == LobbyState.Host)
         {
-            if (NetworkPlayerDataCarrier.Controllers.Count - 1 != index)
+            Debug.Log(index + " VS " + (NetworkPlayerDataCarrier.Controllers.Count));
+            if ((NetworkPlayerDataCarrier.Controllers.Count + NetworkPlayerDataCarrier.BotCount) != index)
             {
                 UpdatePlayerText();
             }
@@ -59,12 +60,19 @@ public class NetworkLobbyScript : NetworkBehaviour
 
     void UpdatePlayerText()
     {
-        for(int i =0; i < NetworkPlayerDataCarrier.Controllers.Count; ++i)
+        int i = 0;
+        for(; i < NetworkPlayerDataCarrier.Controllers.Count; ++i)
         {
             playerTexts[i].text = $"{(IsHost?"Host ":"Client ")} "+NetworkPlayerDataCarrier.Controllers[i].InternalID;
         }
 
-        index = NetworkPlayerDataCarrier.Controllers.Count-1;
+
+        for (; i < NetworkPlayerDataCarrier.BotCount + NetworkPlayerDataCarrier.Controllers.Count; ++i)
+        {
+            playerTexts[i].text = $"Bot {i}";
+        }
+
+        index = NetworkPlayerDataCarrier.Controllers.Count-1+NetworkPlayerDataCarrier.BotCount;
     }
 
     void UpdatePlayerText_Local()
@@ -126,7 +134,7 @@ public class NetworkLobbyScript : NetworkBehaviour
         // Add player
         DataCarrier.AddPlayer();
 
-
+        
 
     }
 
