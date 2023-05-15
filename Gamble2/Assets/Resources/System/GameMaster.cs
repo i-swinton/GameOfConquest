@@ -1107,7 +1107,7 @@ public class GameMaster : NetworkBehaviour
                         isInBattle = true;
                         // Only pull up the UI if you are the turn player
                         if ((!IsNetworked && GetPlayer().isHuman) 
-                            ||(IsNetworked && (ClientPlayerController.IsCurrentPlayer(this) || IsCurrentAI())))
+                            ||(IsNetworked && (ClientPlayerController.IsCurrentPlayer(this) )))
                         {
 
                             // Pull up the confirm menu
@@ -1174,7 +1174,7 @@ public class GameMaster : NetworkBehaviour
                     MapDrawSystem.SpawnArrow(GetChallenger().NodeRef.Position, mapTile.NodeRef.Position);
 
                     // If you are the current player, open up the attack menu
-                    if (!IsNetworked || (IsNetworked && (ClientPlayerController.IsCurrentPlayer(this) || IsCurrentAI())))
+                    if (!IsNetworked || (IsNetworked && (ClientPlayerController.IsCurrentPlayer(this))))
                     {
                         if (GetPlayer().isHuman)
                         {
