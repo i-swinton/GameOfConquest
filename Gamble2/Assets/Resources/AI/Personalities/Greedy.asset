@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0767506f751be148b6525ef75f98fea, type: 3}
   m_Name: Greedy
   m_EditorClassIdentifier: 
+  personaName: Greedy
   goals: 000000000100000002000000050000000300000004000000
   actions: 000000000100000002000000030000000400000005000000060000000700000008000000
   preferredAttackNumber: 1

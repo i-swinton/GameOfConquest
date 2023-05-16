@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0767506f751be148b6525ef75f98fea, type: 3}
   m_Name: Aggressive
   m_EditorClassIdentifier: 
+  personaName: Aggressive
   goals: 06000000040000000300000005000000
   actions: 01000000030000000b000000050000000a0000000700000008000000
   preferredAttackNumber: 3

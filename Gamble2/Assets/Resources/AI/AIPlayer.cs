@@ -81,6 +81,7 @@ public class AIPlayer
         // If we are given an actual persona, then we can use it 
         if(persona != null)
         {
+            Debug.Log($"{player} has persona {persona}");
             this.persona = persona;
             persona.InitBot(this);
         }
