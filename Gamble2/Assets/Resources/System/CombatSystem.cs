@@ -23,9 +23,15 @@ public static class CombatSystem {
 
     public static bool CanAttack(MapSystem.BoardTile tile)
     {
-        if (tile.UnitCount <= 1)  return false; 
+        if (tile.UnitCount <= 1)  return false;
 
-       // Check the neighbors for someone attackable
+        return HasAttackableTarget(tile);
+
+    }
+
+    public static bool HasAttackableTarget(MapSystem.BoardTile tile)
+    {
+        // Check the neighbors for someone attackable
         foreach (MapSystem.BoardTile node in tile.Neighbors)
         {
             // If the owner does not match, we can attack

@@ -156,6 +156,10 @@ namespace AI
                     {
                         return new Options.DraftOutwards();
                     }
+                case Options.ActionTypes.FortifyOutwards:
+                    {
+                        return new Options.FortifyOutwards();
+                    }
                 default:
                     {
                         throw new System.Exception($"{actionType} could not be found in Make Action");

@@ -23,7 +23,7 @@ namespace AI
                 hasEntered = false;
             }
 
-            public void Reset()
+            public override void Reset()
             {
                 attackCount = 0;
                 attacker = null;
@@ -278,6 +278,133 @@ namespace AI
                     // Give the selected index
                     gm.OnTileClick(tiles[index].ID);
                 }
+
+                return ActionStatus.Working;
+            }
+        }
+
+        public class FortifyOutwards : FortifyAction
+        {
+            public FortifyOutwards()
+            {
+                precondition[StateKeys.GameState] = States.Fortify;
+
+                effects[StateKeys.GameState] = States.End;
+                    
+            }
+
+            public override ActionStatus PerformAction(AIPlayer player)
+            {
+                // Step 1, Get the target tile
+                if (targetTile == null)
+                {
+                    
+                    // Find a tile that can attack and can be fortified
+                    foreach(var tile in player.PlayerRef.tiles)
+                    {
+                        // Don't do anything else below if no attackable target
+                        if(!CombatSystem.HasAttackableTarget(tile))
+                        {
+                            continue;
+                        }
+
+                        // See if there is a connection to someone with more than one troop
+                        var connected = board.GetConnectedTiles(tile.ID);
+                        for(int i=0; i < connected.Count;++i)
+                        {
+                            if(connected[i].UnitCount >1 )
+                            {
+                                targetTile = tile;
+                                break;
+                            }
+                        }
+
+                        // If we have a target tile, break from here
+                        if(targetTile != null)
+                        {
+                            break;
+                        }
+                    }
+
+
+                    // If at the end, target tile is still null, just continue to the next turn
+                    if(targetTile == null)
+                    {
+                        gm.ForceTurnEnd();
+                        return ActionStatus.Complete;
+                    }
+                }
+                else if (defenderTile == null)
+                {
+                    // Step 2, Pick anothter tile
+                    List<MapSystem.BoardTile> connectedTiles = board.GetConnectedTiles(targetTile.ID);
+
+                    // Find the highest cost 
+                    MapSystem.BoardTile highestTile = null;
+                    int highest = 1;
+                    for (int i = 0; i < connectedTiles.Count; ++i)
+                    {
+                        // Check if it is the new highest
+                        if (connectedTiles[i].UnitCount > highest)
+                        {
+                            // Update the highest tile
+                            highestTile = connectedTiles[i];
+                            highest = highestTile.UnitCount;
+                        }
+                    }
+                    // If we could not find a higher tile, just end the foritfy
+                    if (highestTile == null || highestTile == targetTile)
+                    {
+                        targetTile = null;
+
+                        // End the turn
+                        GameMaster.GetInstance().ForceTurnEnd();
+
+                        return ActionStatus.Complete;
+                    }
+                    // Else, lets prepare the fortify
+                    defenderTile = highestTile;
+                }
+                else
+                {
+                    Debug.Log($"Target Tile: {targetTile}, Defender Tile: {defenderTile}");
+                    // Step 3, Profit
+                    switch (step)
+                    {
+                        // Step 3.1: Target Challenger
+                        case 0:
+                            {
+                                gm.OnTileClick(defenderTile.ID);
+                                step = 1;
+                                break;
+                            }
+                        //Step 3.2: Target Defender
+                        case 1:
+                            {
+                                gm.OnTileClick(targetTile.ID);
+                                step = 2;
+                                break;
+                            }
+                        // Step 3.3 Do it
+                        case 2:
+                            {
+                                step = 0;
+
+                                // Confirm
+                                gm.Confirm(defenderTile.UnitCount - 1);
+
+                                // Target Tile
+                                targetTile = null;
+                                defenderTile = null;
+
+                                // Return complete
+                                return ActionStatus.Complete;
+                            }
+                    }
+                }
+
+                // Make sure to shut down everything in step 3
+
 
                 return ActionStatus.Working;
             }

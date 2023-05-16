@@ -38,7 +38,8 @@ namespace AI
 
 
             AttackOutward,
-            DraftOutwards
+            DraftOutwards,
+            FortifyOutwards
 
         }
 
