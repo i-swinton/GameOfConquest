@@ -28,7 +28,7 @@ public class MapTile : MonoBehaviour
 
 
     public MapSystem.BoardTile NodeRef;
-    PolygonCollider2D Colid;
+    public PolygonCollider2D Colid;
     public Vector3 Center = new Vector3(1,1,1);
 
     public Transform UIDisplays;

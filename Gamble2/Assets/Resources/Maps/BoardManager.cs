@@ -15,6 +15,8 @@ public class NodeConnectionPairNamed
 {
     public string node1;
     public string node2;
+
+    public bool RenderConnection = true;
 }
 
 [System.Serializable]

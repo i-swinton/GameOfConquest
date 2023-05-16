@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4106708135352897951
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4106708135352897891}
+  - component: {fileID: 4106708135352897949}
+  - component: {fileID: 4106708135352897948}
+  m_Layer: 0
+  m_Name: Map
+  m_TagString: Untagged
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4106708135352897891
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4106708135352897951}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4106708135352897949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4106708135352897951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8699cffd143e1f64bbaaf581992ce386, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Map: {fileID: 11400000, guid: e329d47d664667947be748e359b2128c, type: 2}
+  ContinentPrefab: {fileID: 4228148056073159526, guid: 5f6d46c890760c940a3c05cc49589e87, type: 3}
+  TilePrefab: {fileID: 1043854607677495953, guid: 132dd8a0d5b3def478f1c1e1cf8653a3, type: 3}
+  ForcedConnection: {fileID: 7066334591838271599, guid: 3f284e2651417f74eb5fc4997574b06a, type: 3}
+  ConnectionFilter:
+    useTriggers: 0
+    useLayerMask: 0
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 0
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
+  mapTiles: []
+--- !u!114 &4106708135352897948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4106708135352897951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 981d0807722401a44bc7868a3cdce585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberOfNodes: 19
+  connections:
+  - node1: 1
+    node2: 2
+  - node1: 3
+    node2: 3
+  - node1: 3
+    node2: 0
+  nodePositions:
+  - {x: -1.5, y: 2, z: 0}
+  - {x: 1, y: 0.5, z: 0}
+  - {x: 2, y: -2, z: 0}
+  - {x: -1, y: -2, z: 0}
+  nodeCenterRadius: 1.06
+  continents:
+  - tiles: 
+    bonuses: []
+    name: 
+  - tiles: 
+    bonuses: []
+    name: 
+  tileBonuses: []

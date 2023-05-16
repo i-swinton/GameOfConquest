@@ -9,6 +9,7 @@ public class GenerateMap : MonoBehaviour
 
     public GameObject ContinentPrefab;
     public GameObject TilePrefab;
+    public GameObject ForcedConnection;
 
     public ContactFilter2D ConnectionFilter;
 
@@ -93,11 +94,12 @@ public class GenerateMap : MonoBehaviour
             
         }
 
+        // Set the map tiles for future reference
+        mapTiles = spawnedTiles;
+
         GenerateConnections(board, spawnedTiles);
         ForceConnections(board, Map.namedPairs);
 
-        // Set the map tiles for future reference
-        mapTiles = spawnedTiles;
     }
 
     public void ForceConnections(MapSystem.Board board, List<NodeConnectionPairNamed> pairs)
@@ -109,6 +111,18 @@ public class GenerateMap : MonoBehaviour
             {
                 // Find and connect the two nodes
                 board.Connect(board[pair.node1].ID, board[pair.node2].ID);
+
+                if (pair.RenderConnection)
+                {
+                    LineRenderer LR = Instantiate(ForcedConnection, transform).GetComponent<LineRenderer>();
+
+                    MapTile t1 = GetTile(board.Find(pair.node1));
+                    MapTile t2 = GetTile(board.Find(pair.node2));
+
+                  
+                    LR.SetPosition(0, t1.Colid.ClosestPoint(t2.Colid.bounds.center));
+                    LR.SetPosition(1, t2.Colid.ClosestPoint(t1.Colid.bounds.center));
+                }
             }
         }
     }
