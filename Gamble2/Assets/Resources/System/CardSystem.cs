@@ -273,6 +273,26 @@ public static class CardSystem
                 // Create new units on that tile to become the new type of units
                 board[card.TargetTileID].AddUnits(new Unit(2, card.UnitType));
             }
+            else // Battle the location with the units
+            {
+                if (card.CardType != CardType.Wild)
+                {
+                    MapSystem.BoardTile tempTile = new MapSystem.BoardTile(-1, Vector3.zero, null, "TempTile", 0);
+
+                    tempTile.AddUnits(new Unit(2, card.UnitType));
+                    var targetTile = board[card.TargetTileID];
+                    CombatSystem.BattleTiles(tempTile, board[card.TargetTileID], Combat.CombatRollType.Blitz, out int aLoss, out int defLoss,0);
+
+                    EffectSystem.SpawnText(targetTile.Position, player.playerColor).Text = $"-{aLoss}";
+                    EffectSystem.SpawnText(targetTile.Position, targetTile.Owner.playerColor).Text = $"-{defLoss}";
+                    // Check if drops killed defender
+                    if (board[card.TargetTileID].UnitCount <= 0)
+                    {
+                        targetTile.ChangeOwner(player);
+                        targetTile.AddUnits(new Unit( 2 - aLoss));
+                    }
+                }
+            }
 
         }
 

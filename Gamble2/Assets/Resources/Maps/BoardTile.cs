@@ -189,7 +189,11 @@ namespace MapSystem
         /// <param name="amount"></param>
         public void KillUnits(int amount)
         {
-            owner.OnTroopCountChange(-amount);
+            // Only if we have owner
+            if (owner != null)
+            {
+                owner.OnTroopCountChange(-amount);
+            }
             units -= amount;
         }
 
