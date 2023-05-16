@@ -10,6 +10,12 @@ public enum SelectState
     Selected,
     OtherSelected
 }
+public enum ConnectionRender
+{
+    None,
+    Adjecent,
+    Seperated
+}
 
 //Show blizards and capitals
 public class MapTileRender : MonoBehaviour
@@ -17,6 +23,11 @@ public class MapTileRender : MonoBehaviour
     MapTile Tile;
     SpriteRenderer Renderer;
     [SerializeField] Material Mat;
+
+    [SerializeField] GameObject SeperateConnection;
+    [SerializeField] GameObject AdjecentConnection;
+
+
     public SelectState _State;
 
     Vector3 Center;
@@ -157,5 +168,47 @@ public class MapTileRender : MonoBehaviour
         //}
 
     }
+
+    #region Generate Connections
+    public void GenConnection(MapTile connection, ConnectionRender mode)
+    {
+        switch (mode)
+        {
+            case ConnectionRender.None:
+                break;
+            case ConnectionRender.Adjecent:
+                GenAdjecentConnection(connection);
+                break;
+            case ConnectionRender.Seperated:
+                GenSeperateConnection(connection);
+                break;
+            default:
+                GenSeperateConnection(connection);
+                break;
+        }
+
+
+
+    }
+
+    void GenAdjecentConnection(MapTile connection)
+    {
+
+        LineRenderer LR = Instantiate(AdjecentConnection, transform).GetComponent<LineRenderer>(); ;
+
+        LR.SetPosition(0, Tile.Center);
+        LR.SetPosition(1, connection.Center);
+
+    }
+    void GenSeperateConnection(MapTile connection)
+    {
+        LineRenderer LR = Instantiate(SeperateConnection, transform).GetComponent<LineRenderer>(); ;
+
+        LR.SetPosition(0, Tile.Colid.ClosestPoint(connection.Colid.bounds.center));
+        LR.SetPosition(1, connection.Colid.ClosestPoint(Tile.Colid.bounds.center));
+
+    }
+
+    #endregion
 }
 

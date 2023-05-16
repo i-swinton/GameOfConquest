@@ -101,6 +101,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Mat: {fileID: 2100000, guid: f40f90cbb43598d49916461a86543256, type: 2}
+  SeperateConnection: {fileID: 7066334591838271599, guid: ae255b6fd47540148933cd9f08cef5f9, type: 3}
+  AdjecentConnection: {fileID: 7066334591838271599, guid: 3f284e2651417f74eb5fc4997574b06a, type: 3}
   _State: 0
   DisplayFeatures:
   - Bonus: {fileID: 11400000, guid: 835e152bd54313f42af62b7022d07ae2, type: 2}
@@ -117,10 +119,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9acdf7b69dc9022499a217f7d1669e1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Colid: {fileID: 0}
   Center: {x: 1, y: 1, z: 1}
   UIDisplays: {fileID: 4986420040975085915}
   NameDisplay: {fileID: 3330055250225447949}
   UnitsDisplay: {fileID: 2750820983266330868}
+  Render: {fileID: 1043854607677495956}
 --- !u!114 &1043854607677495955
 MonoBehaviour:
   m_ObjectHideFlags: 0

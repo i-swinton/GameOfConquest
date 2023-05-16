@@ -35,6 +35,8 @@ public class MapTile : MonoBehaviour
     public TextMeshPro NameDisplay;
     public TextMeshPro UnitsDisplay;
 
+    public MapTileRender Render;
+
     private SpriteRenderer _spriteRenderer;
     private GameMaster gm;
 

@@ -9,7 +9,6 @@ public class GenerateMap : MonoBehaviour
 
     public GameObject ContinentPrefab;
     public GameObject TilePrefab;
-    public GameObject ForcedConnection;
 
     public ContactFilter2D ConnectionFilter;
 
@@ -112,17 +111,7 @@ public class GenerateMap : MonoBehaviour
                 // Find and connect the two nodes
                 board.Connect(board[pair.node1].ID, board[pair.node2].ID);
 
-                if (pair.RenderConnection)
-                {
-                    LineRenderer LR = Instantiate(ForcedConnection, transform).GetComponent<LineRenderer>();
-
-                    MapTile t1 = GetTile(board.Find(pair.node1));
-                    MapTile t2 = GetTile(board.Find(pair.node2));
-
-                  
-                    LR.SetPosition(0, t1.Colid.ClosestPoint(t2.Colid.bounds.center));
-                    LR.SetPosition(1, t2.Colid.ClosestPoint(t1.Colid.bounds.center));
-                }
+                GetTile(board.Find(pair.node1)).Render.GenConnection (GetTile(board.Find(pair.node2)), pair.RenderConnection);
             }
         }
     }
@@ -132,12 +121,15 @@ public class GenerateMap : MonoBehaviour
         for(int i=0; i < tiles.Count; ++i)
         {
             // Grab all of the map tiles connected to this one
-            var connectedNodes = FindConnections(tiles[i]);
+            List<MapTile> connectedNodes = FindConnections(tiles[i]);
+
 
             // Loop through the nodes to connect them
-            foreach(var node in connectedNodes)
+            foreach(MapTile node in connectedNodes)
             {
                 board.Connect(tiles[i].NodeRef.ID, node.NodeRef.ID);
+
+                tiles[i].Render.GenConnection(node, ConnectionRender.Adjecent);
             }
         }
     }

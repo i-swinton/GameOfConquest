@@ -102,51 +102,76 @@ MonoBehaviour:
   namedPairs:
   - node1: Median
     node2: Winnecke
+    RenderConnection: 1
   - node1: Mode
     node2: Isosales
+    RenderConnection: 1
   - node1: Mode
     node2: Polaris
+    RenderConnection: 1
   - node1: Median
     node2: Greenland
+    RenderConnection: 1
   - node1: Maully
     node2: Mizar A
+    RenderConnection: 1
   - node1: Bow
     node2: Hawaii
+    RenderConnection: 1
   - node1: Spencer
     node2: Wrong
+    RenderConnection: 1
   - node1: Right
     node2: Lance
+    RenderConnection: 1
   - node1: Left
     node2: Polaris
+    RenderConnection: 1
   - node1: Hawaii
     node2: Japan
+    RenderConnection: 1
   - node1: Hawaii
     node2: Greenland
+    RenderConnection: 1
   - node1: Japan
     node2: Madagascar
+    RenderConnection: 1
   - node1: Cuba
     node2: Madagascar
+    RenderConnection: 1
   - node1: Scalene
     node2: Left
+    RenderConnection: 1
   - node1: Scalene
     node2: Right
+    RenderConnection: 1
   - node1: Scalene
     node2: Wrong
+    RenderConnection: 1
   - node1: Scalene
     node2: Isosales
+    RenderConnection: 1
   - node1: Mizar B
     node2: Lalande
+    RenderConnection: 0
   - node1: Bow
     node2: Lance
+    RenderConnection: 0
   - node1: Maully
     node2: Spencer
+    RenderConnection: 0
   - node1: Westward
     node2: Eastward
+    RenderConnection: 0
   - node1: Cuba
     node2: Britian
+    RenderConnection: 0
   - node1: Greenland
     node2: Winnecke
+    RenderConnection: 1
   - node1: Greenland
     node2: Madagascar
+    RenderConnection: 1
   - node1: Polaris
     node2: Calvera
+    RenderConnection: 0
