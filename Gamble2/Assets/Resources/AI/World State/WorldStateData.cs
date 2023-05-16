@@ -48,6 +48,9 @@ namespace AI
         // Territory
         IncreaseTerritory,
 
+        // Goal
+        
+
         // Game Mode
 
         // Blackboard
@@ -77,6 +80,7 @@ namespace AI
         CanAttack,
         AttackState,
 
+        CardGain,
 
         // Troop Counting States
         TroopCount,
@@ -115,6 +119,8 @@ namespace AI
             states[(int)StateKeys.DraftTroops] = States.Any;
 
             states[(int)StateKeys.CanAttack] = States.Any;
+
+            states[(int)StateKeys.CardGain] = States.Any;
 
             states[(int)StateKeys.Owns] = new WorldStateObjectList();
             states[(int)StateKeys.Owns].Apply(States.Any);

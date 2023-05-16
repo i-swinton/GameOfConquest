@@ -11,7 +11,9 @@ namespace AI
         TakeOverContinent,
         ClaimRandom,
         ReinforceRandom,
-        EndTurn
+        EndTurn,
+
+        ExpandOutward
     }
 
 

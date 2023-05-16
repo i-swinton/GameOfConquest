@@ -32,7 +32,12 @@ namespace AI
 
             // GoTo Actions
             GoToFortify,
-            GoToEnd
+            GoToEnd,
+
+
+            AttackOutward,
+            DraftOutwards
+
         }
 
 
@@ -81,6 +86,14 @@ namespace AI
                     // If we didn't find any exceptions, then the worldstate is an any world state
                     return true;
                 }
+            }
+            protected GameMaster gm;
+            protected MapSystem.Board board;
+            protected bool hasEntered;
+            public AIAction()
+            {
+                gm = GameMaster.GetInstance();
+                board = BoardManager.instance.GetBoard();
             }
 
             #region Match Functions
@@ -177,6 +190,15 @@ namespace AI
             #endregion
 
             public abstract ActionStatus PerformAction(AIPlayer player);
+
+
+            public virtual bool OnEnter()
+            {
+                if(hasEntered == true) { return false; }
+                hasEntered = true;
+
+                return true;
+            }
 
             public void Transform(ref WorldState world)
             {
@@ -987,6 +1009,12 @@ namespace AI
         // ----------------------------------- Other Action --------------------------------------------
 
        
+        // ------------------------------------ Template Actions --------------------------------------
+        public abstract class AttackAction : AIAction
+        {
+            protected MapSystem.BoardTile attacker;
+            protected MapSystem.BoardTile defender;
+        }
 
     }
 }

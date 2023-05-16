@@ -93,6 +93,10 @@ namespace AI
                     {
                         return new Goals.EndTurn(player);
                     }
+                case GoalTypes.ExpandOutward:
+                    {
+                        return new Goals.ExpandOutward();
+                    }
                 default:
                     {
                         throw new System.Exception($"Goal Type {goalType.ToString()} is not listed in make goal.");
@@ -143,6 +147,14 @@ namespace AI
                 case Options.ActionTypes.FortifyLastAttackReckless:
                     {
                         return new Options.FortifyLastAttackReckless();
+                    }
+                case Options.ActionTypes.AttackOutward:
+                    {
+                        return new Options.AttackOutward();
+                    }
+                case Options.ActionTypes.DraftOutwards:
+                    {
+                        return new Options.DraftOutwards();
                     }
                 default:
                     {

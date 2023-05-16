@@ -8,4 +8,14 @@ public class AIPersonality : ScriptableObject
     public List<AI.GoalTypes> goals;
     public List<AI.Options.ActionTypes> actions;
 
+    [Header("Attack Preferences")]
+    public int preferredAttackNumber;
+
+
+    public void InitBot(AIPlayer player)
+    {
+        // Set the players maximum number of attacks, with a minimum of 1
+        player.Blackboard.UpdateValue("MaxNumOfAttacks", System.Math.Max( preferredAttackNumber,1));
+    }
+
 }

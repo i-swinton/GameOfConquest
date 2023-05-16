@@ -82,35 +82,19 @@ public class AIPlayer
         if(persona != null)
         {
             this.persona = persona;
+            persona.InitBot(this);
         }
+
+
 
         // Set the goal
         plan.SetPlayer(this);
         BeginPlanningSystem();
-        ////plan.SetGoal(new AI.Goals.ConquerContinent(1, this));
-        //plan.AddGoal(new AI.Goals.ConquerContinent(1, this));
-        //plan.AddGoal(new AI.Goals.ReinforceContinent(1, this));
-        //plan.AddGoal(new AI.Goals.TakeOverContinent(1, this));
-        ////plan.AddGoal(new AI.Goals.ClaimRandom(1, this));
-        //plan.AddGoal(new AI.Goals.EndTurn(this));
-        //plan.AddGoal(new AI.Goals.ClaimRandom(this));
-        //plan.AddGoal(new AI.Goals.ReinforceRandom(this));
 
-        //plan.SetPlayer(this);
-
-        //// Fill the action space
-        //plan.AddToActionSpace(new AI.Options.ClaimContinentNode());
-        //plan.AddToActionSpace(new AI.Options.ReinforceContinentNode());
-        //plan.AddToActionSpace(new AI.Options.DraftContinent());
-        //plan.AddToActionSpace(new AI.Options.AttackContinent());
-        //plan.AddToActionSpace(new AI.Options.GoToEndState());
-        //plan.AddToActionSpace(new AI.Options.GoToFortifyState());
-        //plan.AddToActionSpace(new AI.Options.ClaimRandom());
-        //plan.AddToActionSpace(new AI.Options.ReinforceRandom());
-        //plan.AddToActionSpace(new AI.Options.DraftRandom());
 
         plan.FormPlan();
 
+#if false
         // Create the behavior tree
         currentTree = new AI.BehaviorTree(this);
 
@@ -156,6 +140,7 @@ public class AIPlayer
 
         // Initialize the root
         currentTree.SetRoot(root);
+#endif
         UpdateWorldState();
     }
 

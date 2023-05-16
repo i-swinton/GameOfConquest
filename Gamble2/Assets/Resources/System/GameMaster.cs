@@ -231,7 +231,10 @@ public class GameMaster : NetworkBehaviour
 
     public void StartGame(int numberOfPlayers,AI.AIPlayerData computerPlayers,GameSettings gameSettings, GameMode mode)
     {
-        if(gameBoard == null)
+        // Seed the RNG
+        RNG.SeedRandom(Guid.NewGuid().GetHashCode());
+
+        if (gameBoard == null)
         {
             gameBoard = BoardManager.instance.GetBoard();
         }
