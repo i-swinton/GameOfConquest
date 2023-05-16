@@ -12,9 +12,8 @@ public class CameraControler : MonoBehaviour
     public float ZoomSpeed;
 
     [SerializeField] Camera TileUICam;
-    [SerializeField] float MaskDistanceThreshold;
-    [SerializeField] LayerMask CloseMask;
     [SerializeField] LayerMask DistanceMask;
+    [SerializeField] List<ZoomThreshold> ZoomThresholds = new List<ZoomThreshold>();
 
 
     [Header("Pan Settings")]
@@ -75,11 +74,38 @@ public class CameraControler : MonoBehaviour
             transform.position = new Vector3(transform.position.x, transform.position.y, MinHeight);
 
 
+
         //Turns on and off tile names based off distance.
-        if (transform.position.z >= MaskDistanceThreshold)
-            TileUICam.cullingMask = CloseMask;
-        else
-            TileUICam.cullingMask = DistanceMask;
+        TileUICam.cullingMask = DistanceMask;
+        foreach (ZoomThreshold zoom in ZoomThresholds)
+        {
+            if (transform.position.z >= zoom.Threshold)
+                TileUICam.cullingMask = zoom.Mask;
+        }
+
+
+    }
+    [System.Serializable]
+    public class ZoomThreshold
+    {
+        public LayerMask Mask;
+        public float Threshold;
+
+        public override bool Equals(object obj)
+        {
+            var threshold = obj as ZoomThreshold;
+            return threshold != null &&
+                   Threshold == threshold.Threshold;
+        }
+
+        public static bool operator ==(ZoomThreshold t1, ZoomThreshold t2)
+        {
+            return t1.Threshold == t2.Threshold;
+        }
+        public static bool operator !=(ZoomThreshold t1, ZoomThreshold t2)
+        {
+            return t1.Threshold == t2.Threshold;
+        }
 
     }
 }

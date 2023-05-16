@@ -200,13 +200,18 @@ MonoBehaviour:
   MinHeight: -15
   ZoomSpeed: 1
   TileUICam: {fileID: 4571614637394219967}
-  MaskDistanceThreshold: -10
-  CloseMask:
-    serializedVersion: 2
-    m_Bits: 2147483647
   DistanceMask:
     serializedVersion: 2
     m_Bits: 55
+  ZoomThresholds:
+  - Mask:
+      serializedVersion: 2
+      m_Bits: 119
+    Threshold: -10
+  - Mask:
+      serializedVersion: 2
+      m_Bits: 2147483647
+    Threshold: -6
   PanSpeed: 2
   PanBoundsX: {x: -20, y: 20}
   PanBoundsY: {x: -20, y: 20}
