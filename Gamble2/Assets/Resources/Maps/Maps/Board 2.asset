@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc0ecca68e98444b9da6da7a7652410, type: 3}
   m_Name: Board 2
   m_EditorClassIdentifier: 
+  Image: {fileID: 2800000, guid: 5677f17ca7b87d3409729e8da3a868c1, type: 3}
   Contenents:
   - Name: Edleguard
     bonus:

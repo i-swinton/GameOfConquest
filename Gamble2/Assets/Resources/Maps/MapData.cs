@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEditor;
 [CreateAssetMenu(fileName = "MapData", menuName = "Map")]
 
 public class MapData : ScriptableObject
 {
+    public Texture2D Image;
+
     public List<MapContinent> Contenents;
 
 
@@ -28,4 +30,26 @@ public struct TileData
     public string Name;
     public Sprite Image;
     //  Sprite this[int i = 0] { get { return Image; } }
+}
+
+[CustomEditor(typeof(MapData))]
+public class MapDataEditor : Editor
+{
+
+    public override Texture2D RenderStaticPreview(string assetPath, Object[] subAssets, int width, int height)
+    {
+        MapData mapData = target as MapData;
+        if (mapData == null || mapData.Image == null)
+            return null;
+
+        Texture2D cache = new Texture2D(width, height);
+
+        Texture2D preview = AssetPreview.GetAssetPreview(mapData.Image);
+
+        EditorUtility.CopySerialized(preview, cache);
+
+        return cache;
+
+       // return base.RenderStaticPreview(assetPath, subAssets, width, height);
+    }
 }
