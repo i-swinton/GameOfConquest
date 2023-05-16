@@ -228,7 +228,7 @@ public class AIPlayer
         {
             List<TerritoryCard> cards = CardSystem.GetCardIn(ref PlayerRef.cards);
             // Insert player for card in here
-            int troopCount = CardSystem.CardIn(PlayerRef.cards, GameMaster.GetInstance().GetPlayer(), BoardManager.instance.GetBoard());
+            int troopCount = CardSystem.CardIn(cards, GameMaster.GetInstance().GetPlayer(), BoardManager.instance.GetBoard());
 
             PlayerRef.draftTroop += troopCount;
 

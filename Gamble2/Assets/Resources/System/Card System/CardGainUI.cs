@@ -57,6 +57,15 @@ public class CardGainUI : UIElement
             }
 
         }
+
+        // If AI
+        if (!target.isHuman)
+        {
+            instance.target = target;
+            instance.AssignCards(cards);
+            return;
+        }
+
         foreach (var card in cards)
         {
             UIDisplayCard newCard = Instantiate(instance.cardPrefab, instance.targetStarPos.position, Quaternion.identity);
@@ -99,7 +108,7 @@ public class CardGainUI : UIElement
         if (!target.isHuman)
         {
             instance.target = target;
-            instance.AssignCards();
+            instance.AssignCards(card);
             return;
         }
 
@@ -145,11 +154,35 @@ public class CardGainUI : UIElement
 
 
     
-    public void AssignCards()
+    public void AssignCards(TerritoryCard card)
     {
-        for (int i = 0; i < cardList.Count; ++i)
+        //for (int i = 0; i < cardList.Count; ++i)
+        //{
+        //    target.cards.Add(cardList[i].Card);
+        //}
+        target.cards.Add(card);
+
+        // Reset their ability to get a card
+        target.canGetCard = false;
+
+
+        IsVisible = false;
+        // End the turn only if it is the end of the game.
+        if (GameMaster.GetInstance().GetState() == GameState.End)
         {
-            target.cards.Add(cardList[i].Card);
+            GameMaster.GetInstance().ForceTurnEnd();
+        }
+    }
+    public void AssignCards(List<TerritoryCard> cards)
+    {
+        //for (int i = 0; i < cardList.Count; ++i)
+        //{
+        //    target.cards.Add(cardList[i].Card);
+        //}
+
+        foreach (var card in cards)
+        {
+            target.cards.Add(card);
         }
 
         // Reset their ability to get a card

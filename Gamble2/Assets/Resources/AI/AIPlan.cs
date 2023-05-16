@@ -244,6 +244,9 @@ namespace AI
             ActionStatus result = currentPlan[currentIndex].PerformAction(player);
             if (result == ActionStatus.Complete)
             {
+                // Reset for future use
+                currentPlan[currentIndex].Reset();
+
                 ++currentIndex;
             }
             // If the current actions fails, replan

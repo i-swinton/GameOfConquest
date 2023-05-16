@@ -7,18 +7,9 @@ namespace AI
 {
     namespace Options
     {
-        public class AttackOutward : AIAction
+        public class AttackOutward : AttackAction
         {
 
-
-
-            MapSystem.BoardTile attacker;
-            MapSystem.BoardTile defender;
-
-            bool hasEntered;
-
-            int attackCount;
-            int step = 0;
             public AttackOutward()
             {
                 precondition[StateKeys.GameState] = States.Attack;
@@ -196,10 +187,10 @@ namespace AI
 
         }
 
-        public class DraftOutwards : AIAction
+        public class DraftOutwards : DraftAction
         {
-            int step;
             List<MapSystem.BoardTile> tiles = new List<MapSystem.BoardTile>();
+            int step;
 
             public DraftOutwards():base()
             {
@@ -213,7 +204,7 @@ namespace AI
 
             }
 
-            public void Reset()
+            public override void Reset()
             {
                 step = 0;
                 hasEntered = false;
@@ -238,8 +229,10 @@ namespace AI
                 OnEnter();
 
                 // Mark as complete if not in the current draft
-                if(gm.GetState() != GameState.Draft) {Reset(); return ActionStatus.Complete; }
-                if(player.PlayerRef.draftTroop <= 0) { Reset();return ActionStatus.Complete; }
+                if (PerformBasicChecks(player) == ActionStatus.Complete)
+                {
+                    return ActionStatus.Complete;
+                }
 
                 if (tiles.Count == 0)
                 {

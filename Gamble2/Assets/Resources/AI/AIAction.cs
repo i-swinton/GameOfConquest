@@ -10,7 +10,9 @@ namespace AI
         {
             Complete,
             Working,
-            Failed
+            Failed,
+
+            Break // Used for internal function returning
         }
 
         public enum ActionTypes
@@ -191,6 +193,7 @@ namespace AI
 
             public abstract ActionStatus PerformAction(AIPlayer player);
 
+            public abstract void Reset();
 
             public virtual bool OnEnter()
             {
@@ -214,7 +217,7 @@ namespace AI
 
         }
         //----------------------------------------- Claiming Actions ------------------------------------------------
-        public class ClaimContinentNode : AIAction
+        public class ClaimContinentNode : ClaimAction
         {
             public ClaimContinentNode()
             {
@@ -276,10 +279,9 @@ namespace AI
 
         }
 
-        public class ClaimRandom : AIAction
+        public class ClaimRandom : ClaimAction
         {
-            GameMaster gm;
-            MapSystem.Board board;
+
             public ClaimRandom()
             {
                 precondition[StateKeys.GameState] = States.Claim;
@@ -310,7 +312,7 @@ namespace AI
         }
 
         //---------------------------------------------- Reinforce Actions -----------------------------------------------
-        public class ReinforceContinentNode : AIAction
+        public class ReinforceContinentNode : ReinforceAction
         {
             public ReinforceContinentNode()
             {
@@ -373,9 +375,8 @@ namespace AI
 
         }
 
-        public class ReinforceRandom : AIAction
+        public class ReinforceRandom : ReinforceAction
         {
-            GameMaster gm;
 
             public ReinforceRandom()
             {
@@ -409,7 +410,7 @@ namespace AI
 
         // --------------------------------------------- Draft Actions --------------------------------------------------
 
-        public class DraftContinent : AIAction
+        public class DraftContinent : DraftAction
         {
             AIPlayer targetPlayer;
 
@@ -451,12 +452,10 @@ namespace AI
                     return ActionStatus.Complete;
                 }
                 // We are done once we are out of draft troops
-                if (player.PlayerRef.draftTroop <= 0)
+                if (PerformBasicChecks(player) == ActionStatus.Complete)
                 {
                     return ActionStatus.Complete;
                 }
-
-                player.CardInCheck();
 
                 // Get the continent
                 MapSystem.Continent con = player.Blackboard["TargetCon"].GetContinent();
@@ -481,10 +480,8 @@ namespace AI
             }
         }
 
-        public class DraftRandom : AIAction
+        public class DraftRandom : DraftAction
         {
-            GameMaster gm;
-            MapSystem.Board board;
 
             public DraftRandom()
             {
@@ -502,13 +499,10 @@ namespace AI
 
             public override ActionStatus PerformAction(AIPlayer player)
             {
-                if(gm.GetState() != GameState.Draft) { return ActionStatus.Complete; }
-
-                // If all the troops are gone, we can continue
-                if(player.PlayerRef.draftTroop <= 0) { return ActionStatus.Complete; }
-
-                // See if we can card in
-                player.CardInCheck();
+                if(PerformBasicChecks(player)== ActionStatus.Complete)
+                {
+                    return ActionStatus.Complete;
+                }    
 
                 MapSystem.BoardTile tile = player.PlayerRef.tiles[RNG.Roll(0, player.PlayerRef.tiles.Count-1, false)];
 
@@ -522,17 +516,12 @@ namespace AI
 
         // -------------------------------------------- Attack Actions --------------------------------------------------
 
-        public class AttackContinent : AIAction
+        public class AttackContinent : AttackAction
         {
             MapSystem.BoardTile targetAttacker;
             MapSystem.BoardTile defenderAttacker;
 
-            MapSystem.Board board;
 
-            int attackCount = 1;
-            bool hasEntered = false;
-
-            int step = 0;
 
             public AttackContinent()
             {
@@ -788,17 +777,11 @@ namespace AI
             }
         }
 
-       
-
         // -------------------------------------------- Fortify Actions -------------------------------------------------
 
-        public class FortifyLastAttackReckless : AIAction
+        public class FortifyLastAttackReckless : FortifyAction
         {
-            MapSystem.BoardTile targetTile;
-            MapSystem.BoardTile defenderTile;
-            MapSystem.Board board;
-            int step;
-            GameMaster gm;
+
             public FortifyLastAttackReckless()
             {
                 precondition[StateKeys.GameState] = States.Fortify;
@@ -945,6 +928,11 @@ namespace AI
                 effects[StateKeys.GameState] = States.Attack;
             }
 
+            public override void Reset()
+            {
+                hasEntered = false;
+            }
+
             public override ActionStatus PerformAction(AIPlayer player)
             {
 
@@ -963,8 +951,11 @@ namespace AI
                 precondition[StateKeys.GameState] = States.Attack;
                 effects[StateKeys.GameState] = States.Fortify;
             }
-            
 
+            public override void Reset()
+            {
+                hasEntered = false;
+            }
             public override string ToString()
             {
                 return "Go To Fortify";
@@ -994,7 +985,10 @@ namespace AI
                 return "Action: End";
             }
 
-
+            public override void Reset()
+            {
+                hasEntered = false;
+            }
             public override ActionStatus PerformAction(AIPlayer player)
             {
 
@@ -1014,6 +1008,177 @@ namespace AI
         {
             protected MapSystem.BoardTile attacker;
             protected MapSystem.BoardTile defender;
+
+            protected int attackCount;
+
+            protected int step;
+
+            public override void Reset()
+            {
+                step = 0;
+                attacker = null;
+                defender = null;
+                hasEntered = false;
+            }
+
+            protected void GetAttackCount()
+            {
+
+            }
+
+            protected ActionStatus PerformAttack(AIPlayer player)
+            {
+                switch (step)
+                {
+                    case 0:
+                        {
+                            //GameMaster.GetInstance().AttackTile(GenerateMap.GetTile(targetAttacker));
+                            gm.OnTileClick(attacker.ID);
+                            if (gm.HasChallengerCheck())
+                            {
+                                step = 1;
+                            }
+                            break;
+                        }
+                    case 1:
+                        {
+
+                            //GameMaster.GetInstance().AttackTile(GenerateMap.GetTile(defenderAttacker));
+                            gm.OnTileClick(defender.ID);
+                            if (gm.HasDefenderCheck())
+                            {
+                                step = 2;
+                            }
+                            break;
+                        }
+                    case 2:
+                        {
+                            Debug.Log($"{attacker.Name} is attacking {defender.Name} ");
+                            // Confirm Blitz attack
+                            gm.Confirm((int)ConfirmUI.BattleConfirmValue.Blitz);
+
+
+                            // Apply has attacked
+                            player.UpdateWorldState(StateKeys.AttackState, AI.States.HasAttacked);
+
+                            // If we took the location and must
+                            if (!gm.IsInBattle)
+                            {
+                                step = 0;
+                                // Reset node for additional attacks
+                                attacker = null;
+                                defender = null;
+
+                                if (attackCount <= 0)
+                                {
+                                    Reset();
+                                    return ActionStatus.Complete;
+                                }
+                                else
+                                {
+                                    // Attack Count--
+                                    --attackCount;
+                                }
+                                break;
+                                //return ActionStatus.Complete;
+                            }
+                            else
+                            {
+                                step = 3;
+                                break;
+                            }
+                        }
+                    case 3:
+                        {
+
+                            //GameMaster gm = GameMaster.GetInstance();
+                            //MapSystem.Board board = BoardManager.instance.GetBoard();
+
+                            if (gm.IsInBattle)
+                            {
+                                // Calculate the maximum number of troops to send
+
+                                int troopsToSend = attacker.UnitCount - 1;
+
+                                gm.Confirm(troopsToSend);
+                            }
+
+
+                            if (attackCount <= 0)
+                            {
+                                Reset();
+                                return ActionStatus.Complete;
+                            }
+                            else
+                            {
+                                attacker = null;
+                                defender = null;
+                                step = 0;
+                                // Attack Count--
+                                --attackCount;
+                            }
+                            // return ActionStatus.Complete;
+                            break;
+                        }
+                }
+
+                return ActionStatus.Break;
+            }
+
+        }
+
+        public abstract class DraftAction :AIAction
+        {
+            public override void Reset()
+            {
+
+                hasEntered = false;
+            }
+
+            protected ActionStatus PerformBasicChecks(AIPlayer player)
+            {
+                if (gm.GetState() != GameState.Draft) { return ActionStatus.Complete; }
+
+                // If all the troops are gone, we can continue
+                if (player.PlayerRef.draftTroop <= 0) { return ActionStatus.Complete; }
+
+                // See if we can card in
+                player.CardInCheck();
+
+
+                return ActionStatus.Break;
+            }
+        }
+
+        public abstract class ClaimAction :AIAction
+        {
+            public override void Reset()
+            {
+                hasEntered = false;
+            }
+        }
+
+        public abstract class ReinforceAction : AIAction
+        {
+            public override void Reset()
+            {
+
+                hasEntered = false;
+            }
+        }
+
+        public abstract class FortifyAction : AIAction
+        {
+            protected MapSystem.BoardTile targetTile;
+            protected MapSystem.BoardTile defenderTile;
+            protected int step;
+            public override void Reset()
+            {
+                targetTile = null;
+                defenderTile = null;
+                step = 0;
+                hasEntered = false;
+            }
         }
 
     }
