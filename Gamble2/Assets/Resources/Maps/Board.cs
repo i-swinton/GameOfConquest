@@ -218,6 +218,8 @@ namespace MapSystem
         //---------------------------------------- Overridden Functions --------
         //
         //------------------------------------
+
+        #region Make Node Functions
         /// <summary>
         /// Adds a boardTile to the board.
         /// </summary>
@@ -255,7 +257,9 @@ namespace MapSystem
         {
             return MakeNode(Vector3.zero, name);
         }
-       
+
+
+        #endregion
         /// <summary>
         /// Sees if the node with the given name exists within the board
         /// </summary>

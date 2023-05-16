@@ -145,9 +145,12 @@ namespace MapSystem
         /// <param name="newUnits">The additional units being added. </param>
         public void AddUnits(Unit newUnits)
         {
+            // Add the units
+            if (owner != null) { owner.OnTroopCountChange(newUnits.Count); }
             if (units == null)
             {
                 units = newUnits;
+
             }
             else
             {
@@ -186,6 +189,7 @@ namespace MapSystem
         /// <param name="amount"></param>
         public void KillUnits(int amount)
         {
+            owner.OnTroopCountChange(-amount);
             units -= amount;
         }
 
@@ -205,7 +209,9 @@ namespace MapSystem
 
                 Debug.Log($"Changed ownership from {owner} to {player}");
 
-                owner.territoryCount -= 1;
+                owner.OnTileCountChange(-1);
+
+                //owner.territoryCount -= 1;
                 // On Tile change
                 owner.ChangeTileOwner(this);
             }
@@ -215,7 +221,8 @@ namespace MapSystem
 
 
             player.ChangeTileOwner(this);
-            player.territoryCount += 1;
+            owner.OnTileCountChange(1);
+            //player.territoryCount += 1;
             
         }
 

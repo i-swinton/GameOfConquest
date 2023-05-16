@@ -650,7 +650,7 @@ public class GameMaster : NetworkBehaviour
             case GameState.End: IncrementTurnTracker(); ChangeState(GameState.Draft); ; break;
         }
 
-        onTurnBegin(turnTacker);
+        onTurnBegin?.Invoke(turnTacker);
     }
 
     public void ForceTurnEnd()
@@ -787,50 +787,51 @@ public class GameMaster : NetworkBehaviour
         else if (desiredState == GameState.Draft)
         {
             // Give the base three
-            players[turnTacker].draftTroop += 3;
+            players[turnTacker].draftTroop += GetDraftAmount(players[turnTacker]);
+            //players[turnTacker].draftTroop += 3;
 
-            // Add the additional troops from the continents
-            foreach(MapSystem.Continent con in players[turnTacker].continentsOwned)
-            {
-                int total = 0;
-                foreach(BonusBase bonus in con.AllBonuses)
-                {
-                    // If not a unit bonus, ignore
+            //// Add the additional troops from the continents
+            //foreach(MapSystem.Continent con in players[turnTacker].continentsOwned)
+            //{
+            //    int total = 0;
+            //    foreach(BonusBase bonus in con.AllBonuses)
+            //    {
+            //        // If not a unit bonus, ignore
 
-                    if (bonus.MyType != BonusBase.BonusType.Unit) { continue; }
-                    // Try to cast to unit bonus
-                    UnitBonus b = (UnitBonus)bonus;
+            //        if (bonus.MyType != BonusBase.BonusType.Unit) { continue; }
+            //        // Try to cast to unit bonus
+            //        UnitBonus b = (UnitBonus)bonus;
 
-                    // Otherwise add to total
-                    total += b.Count;
-                }
+            //        // Otherwise add to total
+            //        total += b.Count;
+            //    }
 
-                players[turnTacker].draftTroop += total;
-            }
+            //    players[turnTacker].draftTroop += total;
+            //}
 
-            int tileCount = 0;
-            // Search through all of the player's tiles for additional bonuses
-            for(int i =0; i < gameBoard.Count; ++i)
-            {
-                // The tile belongs to the given player
-                if(gameBoard[i].Owner == GetPlayer())
-                {
-                    // Read the in the bonuses to units
-                    BonusBase bonus = gameBoard[i].GetBonusOfType(BonusBase.BonusType.Unit);
-                    if (bonus != null)
-                    {
-                        // Adds the additional units
-                        players[turnTacker].draftTroop += ((UnitBonus)bonus).Count; 
-                    }
-                    // Count the tile
-                    tileCount++;
-                }
-            }
+            //int tileCount = 0;
+            //// Search through all of the player's tiles for additional bonuses
+            //for(int i =0; i < gameBoard.Count; ++i)
+            //{
+            //    // The tile belongs to the given player
+            //    if(gameBoard[i].Owner == GetPlayer())
+            //    {
+            //        // Read the in the bonuses to units
+            //        BonusBase bonus = gameBoard[i].GetBonusOfType(BonusBase.BonusType.Unit);
+            //        if (bonus != null)
+            //        {
+            //            // Adds the additional units
+            //            players[turnTacker].draftTroop += ((UnitBonus)bonus).Count; 
+            //        }
+            //        // Count the tile
+            //        tileCount++;
+            //    }
+            //}
 
 
 
-            // Get plus one unit per X tiles
-            players[turnTacker].draftTroop += tileCount/gameMode.TilesPerTroop;
+            //// Get plus one unit per X tiles
+            //players[turnTacker].draftTroop += tileCount/gameMode.TilesPerTroop;
 
             // Show locations
             if(gameBoard != null)
@@ -1019,6 +1020,7 @@ public class GameMaster : NetworkBehaviour
             {
                 // Add one draft troop to a random tile
                 tiles[i][RNG.Roll(0, tiles[i].Count-1)].Fortify(1);
+                players[i].OnTroopCountChange(1);
                 players[i].draftTroop--;
             }
         }
@@ -1050,6 +1052,7 @@ public class GameMaster : NetworkBehaviour
                 EffectSystem.SpawnText(tile.Position, tile.Owner.playerColor).Text = $"+1";
 
                 tile.Owner.draftTroop--;
+                tile.Owner.OnTroopCountChange(1);
                 EndTurn();
             }
         }
@@ -1069,6 +1072,7 @@ public class GameMaster : NetworkBehaviour
         if (GetPlayerTurn() == tile.Owner.playerID)
         {
             tile.Fortify(1);
+            tile.Owner.OnTroopCountChange(1);
             EffectSystem.SpawnText(tile.Position, tile.Owner.playerColor).Text = $"+1";
 
             tile.Owner.draftTroop--;
@@ -1076,6 +1080,54 @@ public class GameMaster : NetworkBehaviour
             if (tile.Owner.draftTroop <= 0)
                 EndTurn();
         }
+    }
+
+    public int GetDraftAmount(Player player)
+    {
+        // Give the base three
+        int draftTroop = 3;
+
+        // Add the additional troops from the continents
+        foreach (MapSystem.Continent con in players[turnTacker].continentsOwned)
+        {
+            int total = 0;
+            foreach (BonusBase bonus in con.AllBonuses)
+            {
+                // If not a unit bonus, ignore
+
+                if (bonus.MyType != BonusBase.BonusType.Unit) { continue; }
+                // Try to cast to unit bonus
+                UnitBonus b = (UnitBonus)bonus;
+
+                // Otherwise add to total
+                total += b.Count;
+            }
+
+            draftTroop += total;
+        }
+
+        int tileCount = 0;
+        // Search through all of the player's tiles for additional bonuses
+        for (int i = 0; i < gameBoard.Count; ++i)
+        {
+            // The tile belongs to the given player
+            if (gameBoard[i].Owner == player)
+            {
+                // Read the in the bonuses to units
+                BonusBase bonus = gameBoard[i].GetBonusOfType(BonusBase.BonusType.Unit);
+                if (bonus != null)
+                {
+                    // Adds the additional units
+                    draftTroop += ((UnitBonus)bonus).Count;
+                }
+                // Count the tile
+                tileCount++;
+            }
+        }
+        // Get plus one unit per X tiles
+        draftTroop += tileCount / gameMode.TilesPerTroop;
+        return draftTroop;
+
     }
 
     #endregion
@@ -1442,7 +1494,7 @@ public class Player
 {
     public Player()
     {
-        troopCount = 5;
+        troopCount = 0;
         isAlive = true;
         draftTroop = 20;
         continentsOwned = new List<MapSystem.Continent>();
@@ -1479,6 +1531,12 @@ public class Player
     public bool canGetCard;
     public int territoryCount;
     // Insert spot for player UI
+
+    // Actions
+
+    public System.Action<int> onTroopCountChange;
+    public System.Action<int, int> onTerritoryCountChange;
+   
 
     public void ChangeTileOwner(MapSystem.BoardTile changedTile)
     {
@@ -1564,6 +1622,9 @@ public class Player
         {
             aiBrain.UpdateWorldState(AI.StateKeys.Owns, con, false);
         }
+
+        
+
     }
 
     public void OnAttack(int index, int attackNodeIndex)
@@ -1581,6 +1642,27 @@ public class Player
             
         }
     }
+
+    public void OnTroopCountChange(int valueMod)
+    {
+        troopCount += valueMod;
+
+        onTroopCountChange?.Invoke(troopCount);
+    }
+
+    public void OnTileCountChange(int value)
+    {
+        territoryCount += value;
+        // Get a list of bonuses on the territories
+        //List<BonusBase> bonuses = new List<BonusBase>();
+        int bonusTroops = 0;
+
+        // On Territory Count change
+        onTerritoryCountChange?.Invoke(territoryCount,bonusTroops);
+    }
+
+
+
 
     public override string ToString()
     {
