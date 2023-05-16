@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0767506f751be148b6525ef75f98fea, type: 3}
-  m_Name: Aggressive
+  m_Script: {fileID: 11500000, guid: 271726d993a0d92488f40b943ed67e80, type: 3}
+  m_Name: Personas
   m_EditorClassIdentifier: 
-  goals: 06000000040000000300000005000000
-  actions: 01000000030000000b000000050000000a0000000700000008000000
-  preferredAttackNumber: 3
+  Personas:
+  - {fileID: 11400000, guid: 8228b85222b2c9c4cb4ab1954eda6652, type: 2}
+  - {fileID: 11400000, guid: f681bef53017a634cae015221e89915b, type: 2}

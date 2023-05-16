@@ -154,14 +154,22 @@ public class AIPlayer
         //worldState.SetValue(AI.StateKeys.TroopCount, PlayerRef.troopCount);
         //
         //worldState[AI.StateKeys.AttackState] = PlayerRef. ;
-        
 
-        // For testing reasons, set target
-        if(bb["TargetCon"].GetContinent() != null)
+        worldState[AI.StateKeys.CardGain] = PlayerRef.canGetCard ? AI.States.Yes : AI.States.No;
+
+        if (bb.Contains("TargetCon"))
         {
-            var targetCon = bb["TargetCon"].GetContinent();
+            // For testing reasons, set target
+            if (bb["TargetCon"].GetContinent() != null)
+            {
+                var targetCon = bb["TargetCon"].GetContinent();
 
-            worldState[AI.StateKeys.TargetContinent] =((targetCon.IsFull) ? AI.States.Full : AI.States.NotFull);
+                worldState[AI.StateKeys.TargetContinent] = ((targetCon.IsFull) ? AI.States.Full : AI.States.NotFull);
+            }
+        }
+        else
+        {
+            worldState[AI.StateKeys.TargetContinent] = AI.States.None;
         }
     }
 

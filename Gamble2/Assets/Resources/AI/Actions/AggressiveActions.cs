@@ -146,6 +146,37 @@ namespace AI
                                     break;
                                 }
                             }
+                        case 3:
+                            {
+
+                                GameMaster gm = GameMaster.GetInstance();
+                                //MapSystem.Board board = BoardManager.instance.GetBoard();
+
+                                if (gm.IsInBattle)
+                                {
+                                    // Calculate the maximum number of troops to send
+
+                                    int troopsToSend = attacker.UnitCount - 1;
+
+                                    gm.Confirm(troopsToSend);
+                                }
+                                attacker = null;
+                                defender = null;
+                                step = 0;
+
+                                if (attackCount <= 0)
+                                {
+                                    Reset();
+                                    return ActionStatus.Complete;
+                                }
+                                else
+                                {
+                                    // Attack Count--
+                                    --attackCount;
+                                }
+                                // return ActionStatus.Complete;
+                                break;
+                            }
                     }
                 }
 
@@ -176,7 +207,7 @@ namespace AI
                 precondition[StateKeys.DraftTroops] = States.Nonzero;
 
 
-
+                effects[StateKeys.GameState] = States.Attack;
                 effects[StateKeys.CanAttack] = States.CanAttackAny;
                 effects[StateKeys.DraftTroops] = States.Zero;
 

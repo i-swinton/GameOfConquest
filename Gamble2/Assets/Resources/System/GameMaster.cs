@@ -296,7 +296,8 @@ public class GameMaster : NetworkBehaviour
             p.aiBrain = bot;
 
             // Start the bot
-            p.aiBrain.Initialize(p, this, null);
+            //p.aiBrain.Initialize(p, this, PersonasDB.RandomPersonality());
+            p.aiBrain.Initialize(p, this, PersonasDB.GetPersonality(1));
         }
 
         // Connect to player controllers to players

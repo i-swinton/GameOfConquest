@@ -99,6 +99,7 @@ namespace AI
                 
                 worldGoal[StateKeys.DraftTroops] = States.Zero;
                 worldGoal[StateKeys.GameState] = States.Draft;
+                
             }
 
             public override string ToString()
