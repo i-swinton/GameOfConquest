@@ -152,8 +152,26 @@ public class CardGainUI : UIElement
         cardList = new List<UIDisplayCard>();
     }
 
+    public void AssignCards()
+    {
+        for (int i = 0; i < cardList.Count; ++i)
+        {
+            target.cards.Add(cardList[i].Card);
+        }
+        // target.cards.Add(card);
 
-    
+        // Reset their ability to get a card
+        target.canGetCard = false;
+
+
+        IsVisible = false;
+        // End the turn only if it is the end of the game.
+        if (GameMaster.GetInstance().GetState() == GameState.End)
+        {
+            GameMaster.GetInstance().ForceTurnEnd();
+        }
+    }
+
     public void AssignCards(TerritoryCard card)
     {
         //for (int i = 0; i < cardList.Count; ++i)
