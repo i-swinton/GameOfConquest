@@ -518,8 +518,7 @@ namespace AI
 
         public class AttackContinent : AttackAction
         {
-            MapSystem.BoardTile targetAttacker;
-            MapSystem.BoardTile defenderAttacker;
+
 
 
 
@@ -555,7 +554,7 @@ namespace AI
                 }
 
                 // If target attacker is null, find the target attacker
-                if (targetAttacker == null)
+                if (attacker == null)
                 {
 
                     // Get the continent
@@ -604,8 +603,8 @@ namespace AI
                             if (outTiles[0].Owner.playerID != outTiles[1].Owner.playerID)
                             {
 
-                                targetAttacker = outTiles[0];
-                                defenderAttacker = outTiles[1];
+                                attacker = outTiles[0];
+                                defender = outTiles[1];
                             }
                         }
                     }
@@ -632,8 +631,8 @@ namespace AI
                                 // If I neighbor a tile and I can attack it
                                 if (con.Contains(neighbor))
                                 {
-                                    targetAttacker = tiles[i];
-                                    defenderAttacker = neighbor;
+                                    attacker = tiles[i];
+                                    defender = neighbor;
                                     break;
                                 }
                                 else
@@ -645,24 +644,24 @@ namespace AI
                             // Set attackers which are out of range
                             if (targetable != null)
                             {
-                                targetAttacker = tiles[i];
-                                defenderAttacker = targetable;
+                                attacker = tiles[i];
+                                defender = targetable;
                             }
 
-                            if(targetAttacker.Owner == defenderAttacker.Owner)
+                            if(attacker.Owner == defender.Owner)
                             {
                                 Debug.Log("Owner Conflict Here");
-                                targetAttacker = null;
-                                defenderAttacker = null;
+                                attacker = null;
+                                defender = null;
                             }
 
                             // If we have an attacker skip
-                            if (targetAttacker != null) { break; }
+                            if (attacker != null) { break; }
                         }
                     }
 
                     // If the target is still not found, report this as true
-                    if (targetAttacker == null)
+                    if (attacker == null)
                     {
                         if (attackCount <= 0)
                         {
@@ -679,98 +678,102 @@ namespace AI
                 }
                 else
                 {
-                    switch (step)
+                    if(PerformAttack(player) == ActionStatus.Complete)
                     {
-                        case 0:
-                            {
-                                //GameMaster.GetInstance().AttackTile(GenerateMap.GetTile(targetAttacker));
-                                GameMaster.GetInstance().OnTileClick(targetAttacker.ID);
-                                if (GameMaster.GetInstance().HasChallengerCheck())
-                                {
-                                    step = 1;
-                                }
-                                break;
-                            }
-                        case 1:
-                            {
-
-                                //GameMaster.GetInstance().AttackTile(GenerateMap.GetTile(defenderAttacker));
-                                GameMaster.GetInstance().OnTileClick(defenderAttacker.ID);
-                                if (GameMaster.GetInstance().HasDefenderCheck())
-                                {
-                                    step = 2;
-                                }
-                                break;
-                            }
-                        case 2:
-                            {
-                                Debug.Log($"{targetAttacker.Name} is attacking {defenderAttacker.Name} ");
-                                // Confirm Blitz attack
-                                GameMaster.GetInstance().Confirm((int)ConfirmUI.BattleConfirmValue.Blitz);
-
-
-                                // Apply has attacked
-                                player.UpdateWorldState(StateKeys.AttackState, AI.States.HasAttacked);
-
-                                // If we took the location and must
-                                if (!GameMaster.GetInstance().IsInBattle)
-                                {
-                                    step = 0;
-                                    // Reset node for additional attacks
-                                    targetAttacker = null;
-                                    defenderAttacker = null;
-
-                                    if (attackCount <= 0)
-                                    {
-                                        hasEntered = false;
-                                        return ActionStatus.Complete;
-                                    }
-                                    else
-                                    {
-                                        // Attack Count--
-                                        --attackCount;
-                                    }
-                                    break;
-                                    //return ActionStatus.Complete;
-                                }
-                                else
-                                {
-                                    step = 3;
-                                    break;
-                                }
-                            }
-                        case 3:
-                            {
-
-                                GameMaster gm = GameMaster.GetInstance();
-                                //MapSystem.Board board = BoardManager.instance.GetBoard();
-
-                                if (gm.IsInBattle)
-                                {
-                                    // Calculate the maximum number of troops to send
-
-                                    int troopsToSend = targetAttacker.UnitCount - 1;
-
-                                    gm.Confirm(troopsToSend);
-                                }
-                                targetAttacker = null;
-                                defenderAttacker = null;
-                                step = 0;
-
-                                if (attackCount <= 0)
-                                {
-                                    hasEntered = false;
-                                    return ActionStatus.Complete;
-                                }
-                                else
-                                {
-                                    // Attack Count--
-                                    --attackCount;
-                                }
-                                // return ActionStatus.Complete;
-                                break;
-                            }
+                        return ActionStatus.Complete;
                     }
+                    //switch (step)
+                    //{
+                    //    case 0:
+                    //        {
+                    //            //GameMaster.GetInstance().AttackTile(GenerateMap.GetTile(targetAttacker));
+                    //            GameMaster.GetInstance().OnTileClick(targetAttacker.ID);
+                    //            if (GameMaster.GetInstance().HasChallengerCheck())
+                    //            {
+                    //                step = 1;
+                    //            }
+                    //            break;
+                    //        }
+                    //    case 1:
+                    //        {
+
+                    //            //GameMaster.GetInstance().AttackTile(GenerateMap.GetTile(defenderAttacker));
+                    //            GameMaster.GetInstance().OnTileClick(defenderAttacker.ID);
+                    //            if (GameMaster.GetInstance().HasDefenderCheck())
+                    //            {
+                    //                step = 2;
+                    //            }
+                    //            break;
+                    //        }
+                    //    case 2:
+                    //        {
+                    //            Debug.Log($"{targetAttacker.Name} is attacking {defenderAttacker.Name} ");
+                    //            // Confirm Blitz attack
+                    //            GameMaster.GetInstance().Confirm((int)ConfirmUI.BattleConfirmValue.Blitz);
+
+
+                    //            // Apply has attacked
+                    //            player.UpdateWorldState(StateKeys.AttackState, AI.States.HasAttacked);
+
+                    //            // If we took the location and must
+                    //            if (!GameMaster.GetInstance().IsInBattle)
+                    //            {
+                    //                step = 0;
+                    //                // Reset node for additional attacks
+                    //                targetAttacker = null;
+                    //                defenderAttacker = null;
+
+                    //                if (attackCount <= 0)
+                    //                {
+                    //                    hasEntered = false;
+                    //                    return ActionStatus.Complete;
+                    //                }
+                    //                else
+                    //                {
+                    //                    // Attack Count--
+                    //                    --attackCount;
+                    //                }
+                    //                break;
+                    //                //return ActionStatus.Complete;
+                    //            }
+                    //            else
+                    //            {
+                    //                step = 3;
+                    //                break;
+                    //            }
+                    //        }
+                    //    case 3:
+                    //        {
+
+                    //            GameMaster gm = GameMaster.GetInstance();
+                    //            //MapSystem.Board board = BoardManager.instance.GetBoard();
+
+                    //            if (gm.IsInBattle)
+                    //            {
+                    //                // Calculate the maximum number of troops to send
+
+                    //                int troopsToSend = targetAttacker.UnitCount - 1;
+
+                    //                gm.Confirm(troopsToSend);
+                    //            }
+                    //            targetAttacker = null;
+                    //            defenderAttacker = null;
+                    //            step = 0;
+
+                    //            if (attackCount <= 0)
+                    //            {
+                    //                hasEntered = false;
+                    //                return ActionStatus.Complete;
+                    //            }
+                    //            else
+                    //            {
+                    //                // Attack Count--
+                    //                --attackCount;
+                    //            }
+                    //            // return ActionStatus.Complete;
+                    //            break;
+                    //        }
+                    //}
                 }
 
                 return ActionStatus.Working;

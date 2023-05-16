@@ -92,83 +92,87 @@ namespace AI
                 }
                 else
                 {
-                    switch(step)
+                    if(PerformAttack(player) == ActionStatus.Complete)
                     {
-                        // Click attacker
-                        case 0:
-                            {
-                                gm.OnTileClick(attacker.ID);
-                                step = 1;
-                                break;
-                            }
-                        // Click defender
-                        case 1:
-                            {
-                                gm.OnTileClick(defender.ID);
-                                step = 2;
-                                break;
-                            }
-                        // Execute attack
-                        case 2:
-                            {
-                                // Confirm Blitz attack
-                                GameMaster.GetInstance().Confirm((int)ConfirmUI.BattleConfirmValue.Blitz);
-
-
-                                // Apply has attacked
-                                player.UpdateWorldState(StateKeys.AttackState, AI.States.HasAttacked);
-
-                                // If we took the location and must
-                                if (!gm.IsInBattle)
-                                {
-                                    step = 0;
-                                    // Reset node for additional attacks
-                                    defender = null;
-                                    attacker = null;
-
-                                    attackCount--;
-
-                                    break;
-                                    //return ActionStatus.Complete;
-                                }
-                                else
-                                {
-                                    step = 3;
-                                    break;
-                                }
-                            }
-                        case 3:
-                            {
-
-                                GameMaster gm = GameMaster.GetInstance();
-                                //MapSystem.Board board = BoardManager.instance.GetBoard();
-
-                                if (gm.IsInBattle)
-                                {
-                                    // Calculate the maximum number of troops to send
-
-                                    int troopsToSend = attacker.UnitCount - 1;
-
-                                    gm.Confirm(troopsToSend);
-                                }
-                                attacker = null;
-                                defender = null;
-                                step = 0;
-
-                                if (attackCount <= 0)
-                                {
-                                    Reset();
-                                    return ActionStatus.Complete;
-                                }
-                                else
-                                {
-                                    // Attack Count--
-                                    --attackCount;
-                                }
-                                // return ActionStatus.Complete;
-                                break;
-                            }
+                        return ActionStatus.Complete;
                     }
+                    //switch(step)
+                    //{
+                    //    // Click attacker
+                    //    case 0:
+                    //        {
+                    //            gm.OnTileClick(attacker.ID);
+                    //            step = 1;
+                    //            break;
+                    //        }
+                    //    // Click defender
+                    //    case 1:
+                    //        {
+                    //            gm.OnTileClick(defender.ID);
+                    //            step = 2;
+                    //            break;
+                    //        }
+                    //    // Execute attack
+                    //    case 2:
+                    //        {
+                    //            // Confirm Blitz attack
+                    //            GameMaster.GetInstance().Confirm((int)ConfirmUI.BattleConfirmValue.Blitz);
+
+
+                    //            // Apply has attacked
+                    //            player.UpdateWorldState(StateKeys.AttackState, AI.States.HasAttacked);
+
+                    //            // If we took the location and must
+                    //            if (!gm.IsInBattle)
+                    //            {
+                    //                step = 0;
+                    //                // Reset node for additional attacks
+                    //                defender = null;
+                    //                attacker = null;
+
+                    //                attackCount--;
+
+                    //                break;
+                    //                //return ActionStatus.Complete;
+                    //            }
+                    //            else
+                    //            {
+                    //                step = 3;
+                    //                break;
+                    //            }
+                    //        }
+                    //    case 3:
+                    //        {
+
+                    //            GameMaster gm = GameMaster.GetInstance();
+                    //            //MapSystem.Board board = BoardManager.instance.GetBoard();
+
+                    //            if (gm.IsInBattle)
+                    //            {
+                    //                // Calculate the maximum number of troops to send
+
+                    //                int troopsToSend = attacker.UnitCount - 1;
+
+                    //                gm.Confirm(troopsToSend);
+                    //            }
+                    //            attacker = null;
+                    //            defender = null;
+                    //            step = 0;
+
+                    //            if (attackCount <= 0)
+                    //            {
+                    //                Reset();
+                    //                return ActionStatus.Complete;
+                    //            }
+                    //            else
+                    //            {
+                    //                // Attack Count--
+                    //                --attackCount;
+                    //            }
+                    //            // return ActionStatus.Complete;
+                    //            break;
+                    //        }
+                    //}
                 }
 
 
