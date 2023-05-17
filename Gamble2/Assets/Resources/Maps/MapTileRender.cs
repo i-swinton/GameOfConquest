@@ -82,6 +82,9 @@ public class MapTileRender : MonoBehaviour
 
         Tile.NodeRef.onBindBonus += DisplayBonus;
         Tile.NodeRef.onVisibleUpdate += SetFogMask;
+
+        // Disable Fog mask at the start
+        Mat.SetFloat("_FogMask", 0);
     }
 
     public void Select()
