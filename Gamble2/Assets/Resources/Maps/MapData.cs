@@ -32,6 +32,8 @@ public struct TileData
     //  Sprite this[int i = 0] { get { return Image; } }
 }
 
+#if UNITY_EDITOR
+
 [CustomEditor(typeof(MapData))]
 public class MapDataEditor : Editor
 {
@@ -53,3 +55,4 @@ public class MapDataEditor : Editor
        // return base.RenderStaticPreview(assetPath, subAssets, width, height);
     }
 }
+#endif
