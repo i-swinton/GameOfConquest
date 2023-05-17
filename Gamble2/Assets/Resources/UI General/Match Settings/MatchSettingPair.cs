@@ -24,8 +24,10 @@ public class MatchSettingPair : MonoBehaviour
 
         AutoClaim,
         AutoReinforce,
+        FogOfWar,
 
-        
+
+        Count
     }
     public SettingType MyType
     {
@@ -63,6 +65,14 @@ public class MatchSettingPair : MonoBehaviour
                     settingList.Add("True");
 
                     titleText.text = "Auto Claim";
+                    break;
+                }
+            case SettingType.FogOfWar:
+                {
+                    settingList.Add("False");
+                    settingList.Add("True");
+
+                    titleText.text = "Fog Of War";
                     break;
                 }
             case SettingType.GameMode:

@@ -136,6 +136,18 @@ public class MapTileRender : MonoBehaviour
         }
     }
 
+    public void SetFogMask(bool value)
+    {
+        if(value)
+        {
+            Mat.SetFloat("_FogMask", 1);
+        }
+        else
+        {
+            Mat.SetFloat("_FogMask", 0);
+        }
+    }
+
     public void DisplayBonus(BonusBase bonus)
     {
         Vector3 scale = transform.localScale;
