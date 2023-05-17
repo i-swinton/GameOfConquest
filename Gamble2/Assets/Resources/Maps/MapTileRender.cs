@@ -62,6 +62,7 @@ public class MapTileRender : MonoBehaviour
         }
     }
 
+
     // Start is called before the first frame update
     public void LoadTile()
     {
@@ -78,6 +79,7 @@ public class MapTileRender : MonoBehaviour
 
 
         Tile.NodeRef.onBindBonus += DisplayBonus;
+        Tile.NodeRef.onVisibleUpdate += SetFogMask;
     }
 
     public void Select()
@@ -138,7 +140,10 @@ public class MapTileRender : MonoBehaviour
 
     public void SetFogMask(bool value)
     {
-        if(value)
+        //value = true;
+
+        Debug.Log("Setting Fog Mask to " + value);
+        if(!value)
         {
             Mat.SetFloat("_FogMask", 1);
         }

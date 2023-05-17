@@ -36,6 +36,8 @@ namespace MapSystem
 
         public System.Action<BonusBase> onBindBonus;
 
+        public System.Action<bool> onVisibleUpdate;
+
         //--------------------------------------------- Properties---------------------------------------------------
 
         /// <summary>
@@ -227,7 +229,9 @@ namespace MapSystem
             player.ChangeTileOwner(this);
             owner.OnTileCountChange(1);
             //player.territoryCount += 1;
-            
+
+
+            VisibleUpdate();
         }
 
         /// <summary>
@@ -250,6 +254,56 @@ namespace MapSystem
         public void Deselect()
         {
             onDeselect?.Invoke();
+        }
+
+        public void VisibleUpdate()
+        {
+            GameMaster gm = GameMaster.GetInstance();
+
+            if (!gm.InFogOfWar) { return; }
+            
+            // Network check
+            if((gm.IsNetworked))
+            {
+                if (Owner.playerID == ClientPlayerController.LocalPlayer)
+                {
+                    onVisibleUpdate?.Invoke(true);
+                    return;
+                }
+                else
+                {
+                    foreach (BoardTile tile in Neighbors)
+                    {
+                        if (tile.Owner.playerID == ClientPlayerController.LocalPlayer)
+                        {
+                            onVisibleUpdate?.Invoke(true);
+                            return;
+                        }
+                    }
+                }
+            } // Nonetwork check
+            else if(!gm.IsNetworked )
+            {
+                if(Owner == gm.GetPlayer())
+                {
+                    onVisibleUpdate?.Invoke(true);
+                    return;
+                }
+                else
+                {
+                    foreach(BoardTile tile in Neighbors)
+                    {
+                        if(tile.Owner == gm.GetPlayer())
+                        {
+                            onVisibleUpdate?.Invoke(true);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // Calculate the value
+            onVisibleUpdate?.Invoke(false);
         }
 
         /// <summary>

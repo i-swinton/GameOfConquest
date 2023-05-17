@@ -86,7 +86,8 @@ public class MapTile : MonoBehaviour
     {
         if (Player != null)
         {
-            _spriteRenderer.color = Player.playerColor;
+            //_spriteRenderer.color = Player.playerColor;
+            Render.SetPlayerColor(Player.playerColor);
             UnitsDisplay.text = Units.ToString();
         }
     }
@@ -128,6 +129,11 @@ public class MapTile : MonoBehaviour
         //    case GameState.Attack: MouseDown_Attack(); break; 
         //    case GameState.Fortify: MouseDown_Fortify();  break;
         //}
+    }
+
+    public void ChangeVisibility(bool newVis)
+    {
+        Render.SetFogMask(newVis);
     }
 
     void MouseDown_Claim()
@@ -263,8 +269,6 @@ public class MapTile : MonoBehaviour
         //    }
         //}
     }
-    
-    
 
     void MouseDown_Fortify()
     {

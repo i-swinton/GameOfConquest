@@ -87,6 +87,8 @@ public class GameMaster : NetworkBehaviour
         }
     }
 
+    public bool InFogOfWar { get { return settings.FogOfWar; } }
+
     // ------------------------------------ Static Functions ---------------------------------------------------
 
 
@@ -647,7 +649,21 @@ public class GameMaster : NetworkBehaviour
                 }
                 else { EndTurn(); }
                 break;
-            case GameState.End: IncrementTurnTracker(); ChangeState(GameState.Draft); ; break;
+            case GameState.End:
+                {
+                    IncrementTurnTracker(); ChangeState(GameState.Draft); 
+
+                    if(settings.FogOfWar)
+                    {
+                        // Update the fog of war
+                        for(int i=0; i < gameBoard.Count; ++i)
+                        {
+                            gameBoard[i].VisibleUpdate();
+                        }
+                    }
+                    
+                    break;
+                }
         }
 
         onTurnBegin?.Invoke(turnTacker);
