@@ -62,6 +62,8 @@ public class MapTileRender : MonoBehaviour
         }
     }
 
+    public bool IsVisible { get { return isVisible; } }
+    bool isVisible = true;
 
     // Start is called before the first frame update
     public void LoadTile()
@@ -145,10 +147,12 @@ public class MapTileRender : MonoBehaviour
         Debug.Log("Setting Fog Mask to " + value);
         if(!value)
         {
+            isVisible = false;
             Mat.SetFloat("_FogMask", 1);
         }
         else
         {
+            isVisible = true;
             Mat.SetFloat("_FogMask", 0);
         }
     }

@@ -232,6 +232,11 @@ namespace MapSystem
 
 
             VisibleUpdate();
+            // Update neighbors
+            foreach(BoardTile tile in Neighbors)
+            {
+                tile.VisibleUpdate();
+            }
         }
 
         /// <summary>

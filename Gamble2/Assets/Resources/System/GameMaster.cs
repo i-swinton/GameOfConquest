@@ -796,6 +796,14 @@ public class GameMaster : NetworkBehaviour
                 {
                     DraftSelections();
                     ChangeState(GameState.Draft);
+                    if(settings.FogOfWar)
+                    {
+                        // Update the fog of war
+                        for (int i = 0; i < gameBoard.Count; ++i)
+                        {
+                            gameBoard[i].VisibleUpdate();
+                        }
+                    }
                     return;
                 }
             }

@@ -88,7 +88,14 @@ public class MapTile : MonoBehaviour
         {
             //_spriteRenderer.color = Player.playerColor;
             Render.SetPlayerColor(Player.playerColor);
-            UnitsDisplay.text = Units.ToString();
+            if (Render.IsVisible)
+            {
+                UnitsDisplay.text = Units.ToString();
+            }
+            else
+            {
+                UnitsDisplay.text = "???";
+            }
         }
     }
 
