@@ -704,7 +704,7 @@ MonoBehaviour:
   settings:
     AutoFillTiles: 1
     AutoReinforce: 1
-    FogOfWar: 1
+    FogOfWar: 0
 --- !u!4 &265174797
 Transform:
   m_ObjectHideFlags: 0

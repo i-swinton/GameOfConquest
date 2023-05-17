@@ -870,40 +870,41 @@ namespace AI
                 }
                 else
                 {
-                    Debug.Log($"Target Tile: {targetTile}, Defender Tile: {defenderTile}");
-                    // Step 3, Profit
-                    switch(step)
-                    {
-                        // Step 3.1: Target Challenger
-                        case 0:
-                            {
-                                gm.OnTileClick(defenderTile.ID);
-                                step = 1;
-                                break;
-                            }
-                        //Step 3.2: Target Defender
-                        case 1:
-                            {
-                                gm.OnTileClick(targetTile.ID);
-                                step = 2;
-                                break;
-                            }
-                        // Step 3.3 Do it
-                        case 2:
-                            {
-                                step = 0;
+                    Fortify();
+                    //Debug.Log($"Target Tile: {targetTile}, Defender Tile: {defenderTile}");
+                    //// Step 3, Profit
+                    //switch(step)
+                    //{
+                    //    // Step 3.1: Target Challenger
+                    //    case 0:
+                    //        {
+                    //            gm.OnTileClick(defenderTile.ID);
+                    //            step = 1;
+                    //            break;
+                    //        }
+                    //    //Step 3.2: Target Defender
+                    //    case 1:
+                    //        {
+                    //            gm.OnTileClick(targetTile.ID);
+                    //            step = 2;
+                    //            break;
+                    //        }
+                    //    // Step 3.3 Do it
+                    //    case 2:
+                    //        {
+                    //            step = 0;
 
-                                // Confirm
-                                gm.Confirm(defenderTile.UnitCount - 1);
+                    //            // Confirm
+                    //            gm.Confirm(defenderTile.UnitCount - 1);
 
-                                // Target Tile
-                                targetTile = null;
-                                defenderTile = null;
+                    //            // Target Tile
+                    //            targetTile = null;
+                    //            defenderTile = null;
 
-                                // Return complete
-                                return ActionStatus.Complete;
-                            }
-                    }
+                    //            // Return complete
+                    //            return ActionStatus.Complete;
+                    //        }
+                    //}
                 }
 
                 // Make sure to shut down everything in step 3
@@ -1182,6 +1183,43 @@ namespace AI
                 defenderTile = null;
                 step = 0;
                 hasEntered = false;
+            }
+            public ActionStatus  Fortify()
+            {
+                // Step 3, Profit
+                switch (step)
+                {
+                    // Step 3.1: Target Challenger
+                    case 0:
+                        {
+                            gm.OnTileClick(defenderTile.ID);
+                            step = 1;
+                            break;
+                        }
+                    //Step 3.2: Target Defender
+                    case 1:
+                        {
+                            gm.OnTileClick(targetTile.ID);
+                            step = 2;
+                            break;
+                        }
+                    // Step 3.3 Do it
+                    case 2:
+                        {
+                            step = 0;
+
+                            // Confirm
+                            gm.Confirm(defenderTile.UnitCount - 1);
+
+                            // Target Tile
+                            targetTile = null;
+                            defenderTile = null;
+
+                            // Return complete
+                            return ActionStatus.Complete;
+                        }
+                }
+                return ActionStatus.Break;
             }
         }
 
