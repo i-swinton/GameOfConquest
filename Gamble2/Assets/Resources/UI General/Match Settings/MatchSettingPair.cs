@@ -48,51 +48,65 @@ public class MatchSettingPair : MonoBehaviour
         settingType = setting;
         settingList.Clear();
 
-        switch(settingType)
-        {
-            case SettingType.AutoReinforce:
-                {
-                    settingList.Add("False");
-                    settingList.Add("True");
+        string title; 
+        GetOptions(settingType, out settingList,out title);
 
-                    titleText.text = "Auto Reinforce";
-
-                    break;
-                }
-            case SettingType.AutoClaim:
-                {
-                    settingList.Add("False");
-                    settingList.Add("True");
-
-                    titleText.text = "Auto Claim";
-                    break;
-                }
-            case SettingType.FogOfWar:
-                {
-                    settingList.Add("False");
-                    settingList.Add("True");
-
-                    titleText.text = "Fog Of War";
-                    break;
-                }
-            case SettingType.GameMode:
-                {
-                    for(int i=0; i < GameModeList.Count; ++i)
-                    {
-                        // Add all of the game modes
-                        settingList.Add(GameModeList.GetGameMode(i).Name);
-                    }
-                    titleText.text = "Game Mode";
-
-                    break;
-                }
-        }
+        titleText.text = title;
 
         UpdateDisplay();
 
     }
 
-    
+    public static void GetOptions(SettingType setting, out List<string> options, out string title)
+    {
+        List<string> optionsOut = new List<string>();
+        title = null;
+        switch (setting)
+        {
+            case SettingType.AutoReinforce:
+                {
+                    optionsOut.Add("False");
+                    optionsOut.Add("True");
+
+                    title = "Auto Reinforce";
+
+                    break;
+                }
+            case SettingType.AutoClaim:
+                {
+                    optionsOut.Add("False");
+                    optionsOut.Add("True");
+
+                    title = "Auto Claim";
+                    break;
+                }
+            case SettingType.FogOfWar:
+                {
+                    optionsOut.Add("False");
+                    optionsOut.Add("True");
+
+                    title = "Fog Of War";
+                    break;
+                }
+            case SettingType.GameMode:
+                {
+                    for (int i = 0; i < GameModeList.Count; ++i)
+                    {
+                        // Add all of the game modes
+                        optionsOut.Add(GameModeList.GetGameMode(i).Name);
+                    }
+                    title = "Game Mode";
+
+                    break;
+                }
+         
+
+        }
+        
+        options = optionsOut;
+
+
+    }
 
     public void Next()
     {

@@ -11,14 +11,13 @@ public class CustomLayoutGroup : MonoBehaviour
     List<SettingOption> Components = new List<SettingOption>();
 
     [SerializeField] GameObject SettingPrefab;
-    [SerializeField] GameObject OptionPrefab;
 
     public void GenOptions()
     {
         for (int i = 0; i < (int)MatchSettingPair. SettingType.Count; i++)
         {
             SettingOption setting = Instantiate(SettingPrefab, transform).GetComponent<SettingOption>();
-            setting.Setting = (MatchSettingPair.SettingType) i;
+            setting.GenOptions((MatchSettingPair.SettingType) i);
             setting.gameObject.name = ((MatchSettingPair.SettingType)i).ToString();
             setting.transform.anchorMax = Vector2.up;
             setting.transform.anchorMin = Vector2.up;
