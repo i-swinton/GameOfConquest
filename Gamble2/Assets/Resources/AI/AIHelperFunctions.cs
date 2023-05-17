@@ -160,6 +160,10 @@ namespace AI
                     {
                         return new Options.FortifyOutwards();
                     }
+                case Options.ActionTypes.ReinforceCapitalRandom:
+                    {
+                        return new Options.ReinforceCapitalRandom();
+                    }
                 default:
                     {
                         throw new System.Exception($"{actionType} could not be found in Make Action");
