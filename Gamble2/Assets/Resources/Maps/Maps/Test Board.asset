@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc0ecca68e98444b9da6da7a7652410, type: 3}
   m_Name: Test Board
   m_EditorClassIdentifier: 
+  Image: {fileID: 2800000, guid: 66a50ad5a81529a4c9bf760449277228, type: 3}
+  Descrition: 'Basic Map, contains some things I guess
+
+
+    Good for 3 players.'
   Contenents:
   - Name: Tea Town
     bonus:
@@ -73,19 +78,28 @@ MonoBehaviour:
   namedPairs:
   - node1: LMAO
     node2: Oolong
+    RenderConnection: 2
   - node1: Taft
     node2: Lincoln
+    RenderConnection: 2
   - node1: Taft
     node2: Johnson
+    RenderConnection: 2
   - node1: Taft
     node2: Right
+    RenderConnection: 2
   - node1: Left
     node2: Cod
+    RenderConnection: 2
   - node1: Black
     node2: Salmon
+    RenderConnection: 2
   - node1: LMAO
     node2: RIP
+    RenderConnection: 2
   - node1: RIP
     node2: Truman
+    RenderConnection: 2
   - node1: Jackson
     node2: Cod
+    RenderConnection: 2

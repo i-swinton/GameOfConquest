@@ -8,6 +8,9 @@ public class MapData : ScriptableObject
 {
     public Texture2D Image;
 
+    [Multiline()]
+    public string Descrition;
+
     public List<MapContinent> Contenents;
 
 
