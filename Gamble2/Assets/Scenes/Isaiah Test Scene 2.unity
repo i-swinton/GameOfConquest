@@ -3230,6 +3230,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -312.962
       objectReference: {fileID: 0}
+    - target: {fileID: 3235829300939119918, guid: f8ffa25589cd04e4692c85c2a1c102a8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3904887656164956719, guid: f8ffa25589cd04e4692c85c2a1c102a8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7179543238162972086, guid: f8ffa25589cd04e4692c85c2a1c102a8, type: 3}
       propertyPath: m_Name
       value: PlayerUI
@@ -3316,6 +3324,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8486613703945716927, guid: f8ffa25589cd04e4692c85c2a1c102a8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8985865789555672388, guid: f8ffa25589cd04e4692c85c2a1c102a8, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
