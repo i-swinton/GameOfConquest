@@ -167,6 +167,10 @@ namespace MapSystem
         public void Fortify(int additionalUnits)
         {
             units += additionalUnits;
+            if(owner!=null)
+            {
+                owner.OnTroopCountChange(additionalUnits);
+            }
         }
         
 

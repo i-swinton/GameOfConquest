@@ -1044,7 +1044,7 @@ public class GameMaster : NetworkBehaviour
             {
                 // Add one draft troop to a random tile
                 tiles[i][RNG.Roll(0, tiles[i].Count-1)].Fortify(1);
-                players[i].OnTroopCountChange(1);
+                //players[i].OnTroopCountChange(1);
                 players[i].draftTroop--;
             }
         }
@@ -1076,7 +1076,7 @@ public class GameMaster : NetworkBehaviour
                 EffectSystem.SpawnText(tile.Position, tile.Owner.playerColor).Text = $"+1";
 
                 tile.Owner.draftTroop--;
-                tile.Owner.OnTroopCountChange(1);
+                //tile.Owner.OnTroopCountChange(1);
                 EndTurn();
             }
         }
@@ -1096,7 +1096,7 @@ public class GameMaster : NetworkBehaviour
         if (GetPlayerTurn() == tile.Owner.playerID)
         {
             tile.Fortify(1);
-            tile.Owner.OnTroopCountChange(1);
+            //tile.Owner.OnTroopCountChange(1);
             EffectSystem.SpawnText(tile.Position, tile.Owner.playerColor).Text = $"+1";
 
             tile.Owner.draftTroop--;

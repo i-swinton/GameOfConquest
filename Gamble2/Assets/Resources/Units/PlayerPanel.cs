@@ -34,6 +34,7 @@ public class PlayerPanel : MonoBehaviour
 
     public void OnTroopCountChange(int value)
     {
+
         troopText.text = $"Troops {value}";
     }
     public void OnTerritoryCountChange(int value, int bonus)
