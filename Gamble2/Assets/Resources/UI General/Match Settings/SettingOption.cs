@@ -53,7 +53,7 @@ public class SettingOption : MonoBehaviour
         ContentSizeFitter();
 
     }
-
+    
     void ContentSizeFitter()
     {
         float contentHeight = 0;
@@ -81,11 +81,13 @@ public class SettingOption : MonoBehaviour
         //$"{title} ({options[settingIndex]}";
     }
 
-
+    //Called on button click, collapses other options and expands this
     public void Expand()
     {
         LayoutGroup.ExpandElement(this);
     }
+
+    //Toggles option pannel on/off
     public void ShowOptions(bool value)
     {
         OptionsPannel.SetActive(value);
@@ -93,10 +95,11 @@ public class SettingOption : MonoBehaviour
         transform.sizeDelta = new Vector2(transform.sizeDelta.x, value ? Height.Expanded:Height.Collapsed);
     }
 
+    //Called by option buttons, sets option.
     public void SetValue(int value)
     {
-        SetTitle();
         settingIndex = value;
+        SetTitle();
         Debug.Log(value);
     }
 
