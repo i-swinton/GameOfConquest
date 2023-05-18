@@ -178,6 +178,9 @@ public class ConfirmUI : UIElement
 
     void InitFortifyScroll(MapSystem.BoardTile tile1, MapSystem.BoardTile tile2, int value)
     {
+        sliderParent.gameObject.SetActive(false);
+
+
         List<string> fortifyList = new List<string>();
         // Write each i as an item in the list
         for(int i = value; i < tile1.UnitCount; ++i)
@@ -191,6 +194,9 @@ public class ConfirmUI : UIElement
 
     void InitBattleScroll(MapSystem.BoardTile tile)
     {
+
+        sliderParent.gameObject.SetActive(true);
+
         // Get the list
         List<string> battleList = battleStrings.ToList();
         
