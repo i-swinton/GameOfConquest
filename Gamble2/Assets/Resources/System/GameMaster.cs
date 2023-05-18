@@ -1330,11 +1330,11 @@ public class GameMaster : NetworkBehaviour
 
     //------------------------------------------ Combat Functions -------------------------------------------
     #region Combat Functions
-    public void CompleteBattle(int index =-1)
+    public void CompleteBattle(int index =-1, int other =1)
     {
 
         int AtkUnitsLost = 0, DefUnitsLost = 0;
-        CombatSystem.BattleTiles(GetChallenger().NodeRef, Defender.NodeRef,(Combat.CombatRollType)(-index), out AtkUnitsLost, out DefUnitsLost);
+        CombatSystem.BattleTiles(GetChallenger().NodeRef, Defender.NodeRef,(Combat.CombatRollType)(-index), out AtkUnitsLost, out DefUnitsLost,other);
 
         EffectSystem.SpawnText(Challenger.NodeRef.Position, Challenger.Player.playerColor).Text = $"-{AtkUnitsLost}";
         EffectSystem.SpawnText(Defender.NodeRef.Position, Defender.Player.playerColor).Text = $"-{DefUnitsLost}";
@@ -1426,7 +1426,7 @@ public class GameMaster : NetworkBehaviour
 
     // ------------------------------------------ Confirm Functions --------------------------------------------
     #region Confirm Functions
-    public void Confirm(int value)
+    public void Confirm(int value, int otherV =1)
     {
         switch(GetState())
         {
@@ -1442,7 +1442,7 @@ public class GameMaster : NetworkBehaviour
                         }
                        
                         // NOTE: Will want to make fortify changes here as well.
-                        CompleteBattle(value);
+                        CompleteBattle(value,otherV);
                     }
                     else
                     {

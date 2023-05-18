@@ -92,7 +92,7 @@ public static class CombatSystem {
                         // If we have less than three attack tiles, change the type
                         if(attackTile.UnitCount < (blitzLimit+3))
                         {
-                            rollType = (Combat.CombatRollType)(attackTile.UnitCount-1);
+                            rollType = (Combat.CombatRollType)(attackTile.UnitCount-blitzLimit);
                         }
 
                         PerformBattle(attackTile, defenderTile, rollType,

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Linq;
 
 public class ConfirmUI : UIElement
@@ -49,6 +50,14 @@ public class ConfirmUI : UIElement
     [SerializeField]
     NumberScroll confirmScroll;
 
+    [Header("Slider Elements")]
+    [SerializeField]
+    GameObject sliderParent;
+    [SerializeField]
+    Slider percentslider;
+    [SerializeField]
+    TMPro.TextMeshProUGUI sliderText;
+
     // ------------------------------------------------- Properties -----------------------------------------------------
 
     public static ConfirmType confirmType
@@ -65,6 +74,7 @@ public class ConfirmUI : UIElement
     {
         instance = this;
         actions = new Actions.ActionList();
+        
     }
 
 
@@ -93,6 +103,27 @@ public class ConfirmUI : UIElement
     private void Update()
     {
         actions.Update(Time.deltaTime);
+        if (IsVisible)
+        {
+            switch (confirmType)
+            {
+                case ConfirmType.Fortify:
+                    {
+
+                        break;
+                    }
+                case ConfirmType.Battle:
+                    {
+                        GameMaster gm = GameMaster.GetInstance();
+                        int totalCount = gm.GetChallenger().Units;
+
+                        int otherCount = Mathf.RoundToInt(totalCount * percentslider.value);
+
+                        sliderText.text = $"{otherCount}/{totalCount}";
+                        break;
+                    }
+            }
+        }
     }
 
     /// <summary>
@@ -175,7 +206,7 @@ public class ConfirmUI : UIElement
     public void OnConfirm()
     {
         int value = 0;
-
+        int other = 0;
         switch(current)
         {
             case ConfirmType.Battle:
@@ -202,6 +233,12 @@ public class ConfirmUI : UIElement
                         default:
                             {
                                 value = -4;
+
+                                // Set the other value to the slider
+                                other = Mathf.RoundToInt(GameMaster.GetInstance().GetChallenger().Units * percentslider.value);
+
+                                other = Mathf.Max(other, 1);
+
                                 break;
                             }
                     }
@@ -220,7 +257,7 @@ public class ConfirmUI : UIElement
         // Hide the UI
         CloseUI();
 
-        requester.Confirm(value);
+        requester.Confirm(value,other);
     }
     public static void CancelConfirm()
     {
