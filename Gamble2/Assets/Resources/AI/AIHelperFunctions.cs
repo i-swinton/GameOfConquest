@@ -43,9 +43,14 @@ namespace AI
         internal static States Convert(GameMode getMode)
         {
             // Test Capital Conquest
+            try
             {
                 CapitalConquest cc = (CapitalConquest)getMode;
                 if (cc != null) { return States.CapitalConquest; }
+
+            }
+            catch (Exception)
+            {
             }
             // Test Global Domination
             {

@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class CustomLayoutGroup : MonoBehaviour
+public class Setting_Pannel : MonoBehaviour
 {
     public float Spacing = 10;
     public float Padding = 10;
@@ -11,9 +10,10 @@ public class CustomLayoutGroup : MonoBehaviour
     List<SettingOption> Components = new List<SettingOption>();
 
     [SerializeField] GameObject SettingPrefab;
-
+    [SerializeField] MatchSettingsPanels Setter;
     public void GenOptions()
     {
+        
         for (int i = 0; i < (int)MatchSettingPair. SettingType.Count; i++)
         {
             SettingOption setting = Instantiate(SettingPrefab, transform).GetComponent<SettingOption>();
@@ -21,8 +21,9 @@ public class CustomLayoutGroup : MonoBehaviour
             setting.gameObject.name = ((MatchSettingPair.SettingType)i).ToString();
             setting.transform.anchorMax = Vector2.up;
             setting.transform.anchorMin = Vector2.up;
+
         }
-        
+        Setter.SetOptions(Components);
     }
 
     public void UpdateLayout()
@@ -47,9 +48,7 @@ public class CustomLayoutGroup : MonoBehaviour
         }
         element.ShowOptions(true);
 
-        Invoke("UpdateLayout", 0.04f);
-
-       // UpdateLayout();
+        UpdateLayout();
     }
 
     public void AddElement(SettingOption element)
@@ -63,9 +62,9 @@ public class CustomLayoutGroup : MonoBehaviour
     void Start()
     {
         GenOptions();
-        Invoke("UpdateLayout", 0.01f);
-       //s UpdateLayout();
+
+        UpdateLayout();
     }
 
- 
+
 }
