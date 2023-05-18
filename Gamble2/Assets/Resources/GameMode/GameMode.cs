@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class GameMode : ScriptableObject
 {
     [SerializeField] string modeName;
+    
 
     public string Name
     {

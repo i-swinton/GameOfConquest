@@ -700,7 +700,7 @@ MonoBehaviour:
   EndOfUILine: {x: 8, y: -3}
   playerPanelPrefab: {fileID: 2996229461121013388, guid: 141fc8e2b35ef5941a0a1b98da900f77, type: 3}
   text: {fileID: 1857778260}
-  gameMode: {fileID: 11400000, guid: f189433e6dbbc324da4dfe2926b82405, type: 2}
+  gameMode: {fileID: 11400000, guid: 257af75c3b962ce4394fa964ff617ac1, type: 2}
   settings:
     AutoFillTiles: 1
     AutoReinforce: 1

@@ -1289,6 +1289,11 @@ public class GameMaster : NetworkBehaviour
         return state;
     }
 
+    public GameMode GetMode()
+    {
+        return gameMode;
+    }
+
     public Player GetPlayer()
     {
         return players[turnTacker];

@@ -52,9 +52,12 @@ namespace AI
         
 
         // Game Mode
-
+        CapitalConquest,
+        GlobalDomination,
         // Blackboard
         Home,
+
+
 
     }
 

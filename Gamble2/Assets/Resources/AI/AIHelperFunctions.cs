@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -39,6 +40,21 @@ namespace AI
             }
         }
 
+        internal static States Convert(GameMode getMode)
+        {
+            // Test Capital Conquest
+            {
+                CapitalConquest cc = (CapitalConquest)getMode;
+                if (cc != null) { return States.CapitalConquest; }
+            }
+            // Test Global Domination
+            {
+                GlobalDomination gd = (GlobalDomination)getMode;
+                if (gd != null) { return States.GlobalDomination; }
+            }
+
+            return States.Invalid;
+        }
 
         // Make functions
         public static AI.Goals.AIGoal MakeGoal(GoalTypes goalType, AIPlayer player)
@@ -103,6 +119,8 @@ namespace AI
                     }
             }
         }
+
+
 
         public static Options.AIAction MakeAction(Options.ActionTypes actionType, AIPlayer player)
         {

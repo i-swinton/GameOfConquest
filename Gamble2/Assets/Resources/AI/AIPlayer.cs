@@ -148,6 +148,7 @@ public class AIPlayer
     public void UpdateWorldState()
     {
         // Update the game mode
+        worldState[AI.StateKeys.Mode] = AI.AIAssist.Convert(GameMaster.GetInstance().GetMode());
         worldState[AI.StateKeys.GameState] = AI.AIAssist.Convert(GameMaster.GetInstance().GetState());
         // Draft troops
         worldState[AI.StateKeys.DraftTroops] = PlayerRef.draftTroop > 0 ? AI.States.Nonzero : AI.States.Zero;
