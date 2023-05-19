@@ -44,7 +44,8 @@ public class Setting_Pannel : MonoBehaviour
     {
         foreach (SettingOption item in Components)
         {
-            item.ShowOptions(false);
+            if(item != element)
+                item.ShowOptions(false);
         }
         element.ShowOptions(true);
 

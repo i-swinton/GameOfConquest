@@ -306,8 +306,8 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
+    m_Top: 10
+    m_Bottom: 10
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
@@ -341,7 +341,6 @@ GameObject:
   - component: {fileID: 3844093134966783182}
   - component: {fileID: 3844093134966783177}
   - component: {fileID: 3844093134966783183}
-  - component: {fileID: 3844093134966783180}
   - component: {fileID: 3844093134966783181}
   - component: {fileID: 3844093134966783176}
   m_Layer: 5
@@ -395,10 +394,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: {fileID: 3844093133546861741}
   SelectedOption: {fileID: 7092760029319691203}
-  OptionsPannel: {fileID: 3844093134523730318}
+  OptionsPannel: {fileID: 3844093134523730313}
   OptionPrefab: {fileID: 2784840906013767624, guid: b81aac26966ca5047b287ca39b33f29c, type: 3}
   Setting: 0
   transform: {fileID: 3844093134966783170}
+  render:
+    Display: {fileID: 3844093134966783183}
+    BaseColor: {r: 0.7830189, g: 0, b: 0, a: 1}
+    Base_ChangeTime: 0.2
+    Hover_Color: {r: 1, g: 0.19301024, b: 0, a: 1}
+    Hover_ChangeTime: 0.2
+    Expanded_Color: {r: 1, g: 0.16467756, b: 0, a: 1}
+    Expanded_ChangeTime: 0.2
+    State: 0
+    CancelAnimation: 0
 --- !u!114 &3844093134966783183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -412,7 +421,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.78431374, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -429,20 +438,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3844093134966783180
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3844093134966783171}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 0
-  m_VerticalFit: 2
 --- !u!114 &3844093134966783181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -489,6 +484,38 @@ MonoBehaviour:
         - m_Target: {fileID: 3844093134966783177}
           m_TargetAssemblyTypeName: SettingOption, Assembly-CSharp
           m_MethodName: Expand
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3844093134966783177}
+          m_TargetAssemblyTypeName: SettingOption, Assembly-CSharp
+          m_MethodName: SetHover
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3844093134966783177}
+          m_TargetAssemblyTypeName: SettingOption, Assembly-CSharp
+          m_MethodName: SetBase
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
