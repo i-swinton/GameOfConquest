@@ -327,6 +327,14 @@ public class GameMaster : NetworkBehaviour
         if(!hasGameStarted)
         {
             // Choose to initialize local or online game
+            if (BoardManager.instance.GetBoard() == null)
+            {
+                GenerateMap.instance.SetMap(DataCarrier.GetMap());
+                GenerateMap.instance.GenBoard();
+
+                
+                return;
+            }
             if (GameType.isNetworked)
             {
                 NetworkPlayerDataCarrier.InitializeGame(this);

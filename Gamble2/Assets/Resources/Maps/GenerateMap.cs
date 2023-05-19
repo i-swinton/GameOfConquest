@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GenerateMap : MonoBehaviour
 {
-    public MapData Map;
+    [SerializeField] MapData Map;
 
 
     public GameObject ContinentPrefab;
@@ -15,13 +15,18 @@ public class GenerateMap : MonoBehaviour
     public List<MapTile> mapTiles;
 
 
-    static GenerateMap instance;
+   public static GenerateMap instance;
 
 
     private void Awake()
     {
         mapTiles = new List<MapTile>();
         instance = this;
+    }
+
+    public void SetMap(MapData map)
+    {
+        Map = map;
     }
 
     public static MapTile GetTile(int id)
@@ -44,10 +49,6 @@ public class GenerateMap : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
-    {
-        GenBoard();
-    }
 
     public void GenBoard()
     {

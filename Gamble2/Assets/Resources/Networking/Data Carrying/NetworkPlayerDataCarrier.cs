@@ -128,6 +128,7 @@ namespace NetworkSystem
         public List<ClientPlayerController> cpcs;
         public GameSettings settings;
         public GameMode mode;
+        public MapData map;
     }
 
 

@@ -169,7 +169,7 @@ public class NetworkLobbyScript : NetworkBehaviour
         var settings = new NetworkSystem.GameSettingStruct(MatchSettingsPanels.GetGameSettingsList());
 
         DataCarrier.Instance.onLoadInGame += BeginGameScene_Local;
-        DataCarrier.LoadGameData(GameModeList.GetGameMode(modeIndex), new GameSettings(settings));
+        DataCarrier.LoadGameData(GameModeList.GetGameMode(modeIndex), new GameSettings(settings),  MapSelector.GetValue());
     }
 
     public void BeginGameScene_Local()

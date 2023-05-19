@@ -5,6 +5,8 @@ using TMPro;
 using UnityEngine.UI;
 public class MapSelector : MonoBehaviour
 {
+    static MapSelector instance;
+
     [Header("Pannels")]
 
     [SerializeField] RawImage MapDisplay;
@@ -53,6 +55,11 @@ public class MapSelector : MonoBehaviour
 
         SetValue(newValue);
     }
+
+    public static MapData GetValue()
+    {
+        return instance.Maps[instance.SelectedMap];
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -61,8 +68,8 @@ public class MapSelector : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void Awake()
     {
-        
+        instance = this;
     }
 }

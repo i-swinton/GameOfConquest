@@ -90,13 +90,16 @@ public class DataCarrier : MonoBehaviour
     }
 
 
-    public static void LoadGameData(GameMode mode, GameSettings settings)
+    public static void LoadGameData(GameMode mode, GameSettings settings, MapData map)
     {
         // Set the settings to the given value
         instance.data.settings = settings;
 
         // Set the game mode
         instance.data.mode = mode;
+
+        // Set the game map
+        instance.data.map = map;
 
         instance.onLoadInGame?.Invoke();
     }
@@ -115,5 +118,10 @@ public class DataCarrier : MonoBehaviour
         //NOTE: Add a computer player count insert here as well
         master.StartGame(instance.playerCount, new AI.AIPlayerData(instance.botCount), instance.data.settings, instance.data.mode);
 
+    }
+
+    public static MapData GetMap()
+    {
+        return instance.data.map;
     }
 }
