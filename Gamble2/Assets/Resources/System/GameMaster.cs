@@ -1119,6 +1119,7 @@ public class GameMaster : NetworkBehaviour
         // Give the base three
         int draftTroop = 3;
 
+
         // Add the additional troops from the continents
         foreach (MapSystem.Continent con in players[turnTacker].continentsOwned)
         {
@@ -1636,7 +1637,7 @@ public class Player
         if (continentsOwned.Contains(con)) { return; }
 
         // Add to owned continents
-        continentsOwned.Add(con);
+       // continentsOwned.Add(con);
 
         // If not a player, update the ai
         if(!isHuman)
@@ -1652,7 +1653,7 @@ public class Player
         if (!continentsOwned.Contains(con)) { return; }
 
         // Add to owned continents
-        continentsOwned.Remove(con);
+      //s  continentsOwned.Remove(con);
 
         // If not a player, update the ai
         if (!isHuman)
