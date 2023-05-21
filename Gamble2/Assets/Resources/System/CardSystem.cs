@@ -110,7 +110,7 @@ public static class CardSystem
         return false;
     }
 
-    public static List<TerritoryCard> GetCardIn(ref List<TerritoryCard> cards)
+    public static List<TerritoryCard> GetCardIn(ref List<TerritoryCard> cards, out List<int> indices)
     {
         // Count each of the cards
         int infCount = 0; int calvCount = 0; int artCount = 0;
@@ -120,6 +120,8 @@ public static class CardSystem
         List<int> artil = new List<int>();
 
         List<TerritoryCard> outList = new List<TerritoryCard>();
+
+        indices = new List<int>();
 
         for (int i = 0; i < cards.Count; ++i)
         {
@@ -166,6 +168,7 @@ public static class CardSystem
                 for (int j = 0; j < 3; ++j)
                 {
                     outList.Add(cards[infintry[j]]);
+                    indices.Add( infintry[j]);
                 }
                 cards.RemoveAt(infintry[2]);
                 cards.RemoveAt(infintry[1]);
@@ -176,6 +179,7 @@ public static class CardSystem
                 for (int j = 0; j < 3; ++j)
                 {
                     outList.Add(cards[calv[j]]);
+                    indices.Add(calv[j]);
                 }
                 cards.RemoveAt(calv[2]);
                 cards.RemoveAt(calv[1]);
@@ -186,6 +190,7 @@ public static class CardSystem
                 for (int j = 0; j < 3; ++j)
                 {
                     outList.Add(cards[artil[j]]);
+                    indices.Add(artil[j]);
                 }
                 cards.RemoveAt(artil[2]);
                 cards.RemoveAt(artil[1]);
@@ -197,6 +202,11 @@ public static class CardSystem
                 outList.Add(cards[infintry[0]]);
                 outList.Add(cards[calv[0]]);
                 outList.Add(cards[artil[0]]);
+
+                // Add to out index
+                indices.Add(infintry[0]);
+                indices.Add(calv[0]);
+                indices.Add(artil[0]);
 
                 if(infintry[0] > calv[0])
                 {

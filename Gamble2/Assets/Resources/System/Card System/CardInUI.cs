@@ -341,15 +341,31 @@ public class CardInUI : UIElement
 
 
         // Delete the cards
-        RemoveCardRefs();
+        RemoveCardRefs(GameMaster.GetInstance().GetPlayer());
     }
 
-    void RemoveCardRefs()
+    void RemoveCardRefs(Player player)
     {
+        List<int> indices = new List<int>();
+        // Remove cards from player
+        for (int i = 0; i < turnInCards.Length; ++i)
+        {
+            indices.Add(cards.IndexOf(turnInCards[i]));
+        }
+        // Sort the indicies
+        indices.Sort();
+
+        for(int i=indices.Count-1; i >=0; --i)
+        {
+            player.cards.RemoveAt(indices[i]);
+        }
+
         // Loop through and remove the turn in cards
         for(int i=0; i < turnInCards.Length; ++i)
         {
+
             // Remove from total list
+            
             cards.Remove(turnInCards[i]);
 
             // Delete the turn in cards

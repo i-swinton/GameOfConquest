@@ -1055,6 +1055,11 @@ namespace AI
                             {
                                 step = 2;
                             }
+                            else
+                            {
+                                // Go back if false
+                                if(gm.HasChallengerCheck() == false) { step = 0; }
+                            }
                             break;
                         }
                     case 2:

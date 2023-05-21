@@ -228,12 +228,27 @@ public class AIPlayer
         // Always card in 
         if (CardSystem.CanCardIn(PlayerRef.cards))
         {
-            List<TerritoryCard> cards = CardSystem.GetCardIn(ref PlayerRef.cards);
+            List<TerritoryCard> cards = CardSystem.GetCardIn(ref PlayerRef.cards, out List<int> ind);
             // Insert player for card in here
             int troopCount = CardSystem.CardIn(cards, GameMaster.GetInstance().GetPlayer(), BoardManager.instance.GetBoard());
 
             PlayerRef.draftTroop += troopCount;
 
+            // Increasing Order
+            if(ind[0] < ind[1])
+            {
+                for(int x = ind.Count-1; x >=0; --x)
+                {
+                    PlayerRef.cards.RemoveAt(x);
+                }
+            }
+            else // Decreasing Order
+            {
+                for(int x = 0; x < ind.Count; ++x)
+                {
+                    PlayerRef.cards.RemoveAt(x);
+                }
+            }
 
             NotifySystem.Message($"{PlayerRef} has recieved {troopCount} units.");
         }

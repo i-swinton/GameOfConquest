@@ -104,6 +104,8 @@ public class CardGainUI : UIElement
             
         }
 
+        Debug.Log($"{target.Name} has recieved card");
+
         // If AI
         if (!target.isHuman)
         {
