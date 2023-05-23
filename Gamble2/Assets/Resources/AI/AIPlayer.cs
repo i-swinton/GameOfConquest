@@ -234,21 +234,21 @@ public class AIPlayer
 
             PlayerRef.draftTroop += troopCount;
 
-            // Increasing Order
-            if(ind[0] < ind[1])
-            {
-                for(int x = ind.Count-1; x >=0; --x)
-                {
-                    PlayerRef.cards.RemoveAt(x);
-                }
-            }
-            else // Decreasing Order
-            {
-                for(int x = 0; x < ind.Count; ++x)
-                {
-                    PlayerRef.cards.RemoveAt(x);
-                }
-            }
+            //// Increasing Order
+            //if(ind[0] < ind[1])
+            //{
+            //    for(int x = ind.Count-1; x >=0; --x)
+            //    {
+            //        PlayerRef.cards.RemoveAt(x);
+            //    }
+            //}
+            //else // Decreasing Order
+            //{
+            //    for(int x = 0; x < ind.Count; ++x)
+            //    {
+            //        PlayerRef.cards.RemoveAt(x);
+            //    }
+            //}
 
             NotifySystem.Message($"{PlayerRef} has recieved {troopCount} units.");
         }

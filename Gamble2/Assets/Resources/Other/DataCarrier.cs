@@ -30,6 +30,13 @@ public class DataCarrier : MonoBehaviour
         get { return instance.botCount; }
     }
 
+    public static bool IsValid
+    {
+        get
+        {
+            return instance && instance.data != null;
+        }
+    }
     private void Awake()
     {
         if(instance == null)
