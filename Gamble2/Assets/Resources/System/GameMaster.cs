@@ -20,6 +20,8 @@ public class GameMaster : NetworkBehaviour
     Player lastDeadPlayer;
 
     private int turnTacker = 0;
+    int lastHumanIndex = 0;
+
     public int PlayerAmount = 2;
     private List<Player> players = new List<Player>();
     private GameState state;
@@ -88,6 +90,8 @@ public class GameMaster : NetworkBehaviour
     }
 
     public bool InFogOfWar { get { return settings.FogOfWar; } }
+
+    public Player CurrentPlayer { get { return players[turnTacker]; } }
 
     // ------------------------------------ Static Functions ---------------------------------------------------
 
@@ -418,6 +422,20 @@ public class GameMaster : NetworkBehaviour
 
     }
 
+    void VisibleUpdateBoard()
+    {
+        if (settings.FogOfWar)
+        {
+            Debug.Log("Current Player: " + CurrentPlayer);
+            // Update the fog of war
+            for (int i = 0; i < gameBoard.Count; ++i)
+            {
+                gameBoard[i].VisibleUpdate();
+            }
+        }
+    }
+
+
     //------------------------------------- Defender and Challenger functions --------------------------------------
 
     #region Defenders and Challengers
@@ -640,9 +658,14 @@ public class GameMaster : NetworkBehaviour
     {
         switch (state) {
             case GameState.Claim:
-                if(AllTerroritesClaim())
+                if (AllTerroritesClaim())
+                {
                     ChangeState(GameState.Reinforce);
+                }
                 IncrementTurnTracker();
+
+                VisibleUpdateBoard();
+
                 // Let players know if someone owns a whole continent
                 UpdateContinentsOwned();
                 break;
@@ -652,6 +675,8 @@ public class GameMaster : NetworkBehaviour
                 if (ReinforcingDone())
                     ChangeState(GameState.Draft);
                 //onTurnBegin(turnTacker);
+                VisibleUpdateBoard();
+
                 break;
             case GameState.Draft: ChangeState(GameState.Attack); break;
             case GameState.Attack: ChangeState(GameState.Fortify); break; 
@@ -665,16 +690,9 @@ public class GameMaster : NetworkBehaviour
                 break;
             case GameState.End:
                 {
-                    IncrementTurnTracker(); ChangeState(GameState.Draft); 
+                    IncrementTurnTracker(); ChangeState(GameState.Draft);
 
-                    if(settings.FogOfWar)
-                    {
-                        // Update the fog of war
-                        for(int i=0; i < gameBoard.Count; ++i)
-                        {
-                            gameBoard[i].VisibleUpdate();
-                        }
-                    }
+                    VisibleUpdateBoard();
                     
                     break;
                 }
@@ -736,6 +754,11 @@ public class GameMaster : NetworkBehaviour
         {
             // Sync the RNG
             GMNet.Instance.SyncRNG_ServerRPC(RNG.Seed);
+        }
+
+        if(turnTacker >=0  && players[turnTacker].isHuman && players[turnTacker].isAlive)
+        {
+            lastHumanIndex = turnTacker;
         }
 
         // Increment turn tracker to the next non-dead player
@@ -1312,6 +1335,11 @@ public class GameMaster : NetworkBehaviour
     public Player GetPlayer()
     {
         return players[turnTacker];
+    }
+
+    public Player GetLastHumanPlayer()
+    {
+        return players[lastHumanIndex];
     }
 
     public Player GetPlayerAt(int index)

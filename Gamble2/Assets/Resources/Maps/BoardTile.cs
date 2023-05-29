@@ -293,21 +293,48 @@ namespace MapSystem
             } // Nonetwork check
             else if(!gm.IsNetworked )
             {
-                if(Owner == gm.GetPlayer())
+                if(Owner != null)
                 {
-                    onVisibleUpdate?.Invoke(true);
-                    return;
+                    if (Owner.playerID == 0)
+                    {
+                        Debug.Log("Owned By player");
+
+                    }
+                    if (Owner == gm.CurrentPlayer)
+                    {
+                        onVisibleUpdate?.Invoke(Owner.isHuman);
+                        return;
+                    }
+                    else
+                    {
+                        foreach (BoardTile tile in Neighbors)
+                        {
+                            if(tile.Owner != null && tile.Owner.playerID ==0)
+                            {
+                                Debug.Log("Owned By player");
+                               
+                            }
+                            if (tile.Owner == gm.CurrentPlayer && gm.GetState() > GameState.Reinforce)
+                            {
+                               
+                                onVisibleUpdate?.Invoke(true);
+                                return;
+                            }
+
+                            // If empty tile, don't hide it
+                            //if(tile.Owner == null)
+                            //{
+                            //    onVisibleUpdate?.Invoke(true);
+                            //    return;
+                            //}
+                        }
+                    }
                 }
                 else
                 {
-                    foreach(BoardTile tile in Neighbors)
-                    {
-                        if(tile.Owner == gm.GetPlayer())
-                        {
-                            onVisibleUpdate?.Invoke(true);
-                            return;
-                        }
-                    }
+                    onVisibleUpdate(true);
+                    //Selectable(true); // Set the tile to be selectables
+                    return;
                 }
             }
 
