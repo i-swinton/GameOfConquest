@@ -661,6 +661,8 @@ public class GameMaster : NetworkBehaviour
                 if (AllTerroritesClaim())
                 {
                     ChangeState(GameState.Reinforce);
+                    // Update the visual board
+                    VisibleUpdateBoard();
                 }
                 IncrementTurnTracker();
 

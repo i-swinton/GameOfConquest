@@ -314,7 +314,8 @@ namespace MapSystem
                                 Debug.Log("Owned By player");
                                
                             }
-                            if (tile.Owner == gm.CurrentPlayer && gm.GetState() > GameState.Reinforce)
+                            if (tile.Owner == gm.CurrentPlayer 
+                                && gm.GetState() > GameState.Reinforce) // Makes Claim and Reinforce hidden
                             {
                                
                                 onVisibleUpdate?.Invoke(true);
