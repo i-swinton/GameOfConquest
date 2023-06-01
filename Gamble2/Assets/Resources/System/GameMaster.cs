@@ -333,7 +333,7 @@ public class GameMaster : NetworkBehaviour
             // Choose to initialize local or online game
             if (BoardManager.instance.GetBoard() == null)
             {
-                if (IsNetworked)
+                if (IsNetworked || NetworkPlayerDataCarrier.Instance != null)
                 {
                     // Set the map of the network
                     GenerateMap.instance.SetMap(NetworkPlayerDataCarrier.Map);

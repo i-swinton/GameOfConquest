@@ -111,6 +111,7 @@ public class NetworkLobbyScript : NetworkBehaviour
         this.index = index;
     }
 
+    #region Bots
     [ClientRpc]
     public void AddBot_ClientRPC()
     {
@@ -130,6 +131,7 @@ public class NetworkLobbyScript : NetworkBehaviour
         DataCarrier.AddBot();
         Debug.Log("Adding bot");
     }
+    #endregion
 
     public void AddPlayer()
     {
@@ -225,6 +227,9 @@ public class NetworkLobbyScript : NetworkBehaviour
 
             searchForGamePanel.SetActive(false);
             hostForGamePanel.SetActive(true);
+
+            // Set the match panel
+            matchPanel.SetActive(true);
 
             state = LobbyState.Host;
             GameType.isNetworked = true;
