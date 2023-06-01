@@ -22,6 +22,9 @@ public class NetworkLobbyScript : NetworkBehaviour
     [SerializeField] GameObject hostForGamePanel;
     [SerializeField] GameObject localGamePanel;
 
+    [Header("Match Panel")]
+    [SerializeField] GameObject matchPanel;
+
     [Header("Host Panel References")]
     [SerializeField] TMPro.TextMeshProUGUI[] playerTexts;
     [SerializeField] TMPro.TextMeshProUGUI[] pT;
@@ -72,8 +75,9 @@ public class NetworkLobbyScript : NetworkBehaviour
         }
     }
 
-
-
+    /// <summary>
+    /// Updates the display of player data 
+    /// </summary>
     void UpdatePlayerText()
     {
         int i = 0;
@@ -129,7 +133,6 @@ public class NetworkLobbyScript : NetworkBehaviour
 
     public void AddPlayer()
     {
-
         // Add a player to the carrier
         DataCarrier.AddPlayer();
     }
@@ -139,6 +142,9 @@ public class NetworkLobbyScript : NetworkBehaviour
     {
         searchForGamePanel.SetActive(false);
         hostForGamePanel.SetActive(true);
+
+        // Trigger the match panel
+        matchPanel.SetActive(true);
 
         state = LobbyState.Host;
         GameType.isNetworked = true;
@@ -152,16 +158,17 @@ public class NetworkLobbyScript : NetworkBehaviour
         hostForGamePanel.SetActive(false);
         localGamePanel.SetActive(true);
 
+        // Trigger the match panel
+        matchPanel.SetActive(true);
+
         state = LobbyState.Local;
         GameType.isNetworked = false;
 
         // Add player
         DataCarrier.AddPlayer();
-
-        
-
     }
 
+    #region Load Game
     public void LoadGame_Local()
     {
         // Get the index and settings
@@ -171,6 +178,19 @@ public class NetworkLobbyScript : NetworkBehaviour
         DataCarrier.Instance.onLoadInGame += BeginGameScene_Local;
         DataCarrier.LoadGameData(GameModeList.GetGameMode(modeIndex), new GameSettings(settings),  MapSelector.GetValue());
     }
+    public void LoadGame()
+    {
+        NetworkPlayerDataCarrier.Instance.onLoadInGame += BeginGameScene;
+
+        // Load in the game settings
+        //NetworkPlayerDataCarrier.LoadGameData_ServerRPC(MatchSettingsPanels.GetGameMode(), MatchSettingsPanels.GetSettings());
+        LoadGameData_ServerRPC(MatchSettingsPanels.GetGameModeIndex(),
+           new NetworkSystem.GameSettingStruct(MatchSettingsPanels.GetGameSettingsList()),
+            MapSelector.GetValueIndex());
+
+        //NetworkManager.SceneManager.LoadScene(gameplayScene, UnityEngine.SceneManagement.LoadSceneMode.Single);
+    }
+    #endregion
 
     public void BeginGameScene_Local()
     {
@@ -232,30 +252,19 @@ public class NetworkLobbyScript : NetworkBehaviour
         NetworkManager.Singleton.StartServer();
     }
 
-    public void LoadGame()
-    {
-        NetworkPlayerDataCarrier.Instance.onLoadInGame += BeginGameScene;
-        
-        // Load in the game settings
-        //NetworkPlayerDataCarrier.LoadGameData_ServerRPC(MatchSettingsPanels.GetGameMode(), MatchSettingsPanels.GetSettings());
-        LoadGameData_ServerRPC(MatchSettingsPanels.GetGameModeIndex(), 
-           new NetworkSystem.GameSettingStruct( MatchSettingsPanels.GetGameSettingsList()));
-
-        //NetworkManager.SceneManager.LoadScene(gameplayScene, UnityEngine.SceneManagement.LoadSceneMode.Single);
-    }
 
     [ServerRpc]
-    public  void LoadGameData_ServerRPC(int modeIndex, NetworkSystem.GameSettingStruct settings)
+    public  void LoadGameData_ServerRPC(int modeIndex, NetworkSystem.GameSettingStruct settings, int mapIndex)
     {
         // Broadcast the data to all of the clients
-        LoadGameData_ClientRPC(modeIndex, settings);
+        LoadGameData_ClientRPC(modeIndex, settings, mapIndex);
     }
 
     [ClientRpc]
-    public  void LoadGameData_ClientRPC(int modeIndex, NetworkSystem.GameSettingStruct settings)
+    public  void LoadGameData_ClientRPC(int modeIndex, NetworkSystem.GameSettingStruct settings, int index)
     {
         //DebugNetworklLog.Log("Setting data on "+instance)
-        NetworkPlayerDataCarrier.LoadGameData(GameModeList.GetGameMode(modeIndex), new GameSettings(settings));
+        NetworkPlayerDataCarrier.LoadGameData(GameModeList.GetGameMode(modeIndex), new GameSettings(settings), MapDataList.Get(index));
     }
 
     public void BeginGameScene()

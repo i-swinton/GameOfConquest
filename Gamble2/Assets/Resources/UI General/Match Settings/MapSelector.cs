@@ -60,6 +60,10 @@ public class MapSelector : MonoBehaviour
     {
         return instance.Maps[instance.SelectedMap];
     }
+    public static int GetValueIndex()
+    {
+        return instance.SelectedMap;
+    }
     // Start is called before the first frame update
     void Start()
     {

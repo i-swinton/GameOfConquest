@@ -15,6 +15,8 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
 
     public static System.Action OnLoadInGame;
 
+
+
     public static int BotCount
     {
         get
@@ -23,6 +25,14 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
         }
     }
 
+
+    public static MapData Map
+    {
+        get
+        {
+            return instance.data.map;
+        }
+    }
 
     private void Awake()
     {
@@ -60,13 +70,16 @@ public class NetworkPlayerDataCarrier : MonoBehaviour
 
     }
 
-    public static void LoadGameData(GameMode mode, GameSettings settings)
+    public static void LoadGameData(GameMode mode, GameSettings settings, MapData map)
     {
         // Set the settings to the given value
         instance.data.settings = settings;
 
         // Set the game mode
         instance.data.mode = mode;
+
+        // Set the map data
+        instance.data.map = map;
 
         instance.onLoadInGame?.Invoke();
 
