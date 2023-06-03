@@ -274,21 +274,35 @@ namespace MapSystem
             // Network check
             if((gm.IsNetworked))
             {
-                if (Owner.playerID == ClientPlayerController.LocalPlayer)
+                if (Owner != null)
                 {
-                    onVisibleUpdate?.Invoke(true);
-                    return;
+                    if (Owner.playerID == ClientPlayerController.LocalPlayer)
+                    {
+                        onVisibleUpdate?.Invoke(true);
+                        return;
+                    }
+                    else
+                    {
+                        foreach (BoardTile tile in Neighbors)
+                        {
+                            if (tile.Owner != null &&tile.Owner.playerID == ClientPlayerController.LocalPlayer)
+                            {
+                                if (gm.GetState() > GameState.Reinforce)
+                                {
+                                    onVisibleUpdate?.Invoke(true);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+
+
                 }
                 else
                 {
-                    foreach (BoardTile tile in Neighbors)
-                    {
-                        if (tile.Owner.playerID == ClientPlayerController.LocalPlayer)
-                        {
-                            onVisibleUpdate?.Invoke(true);
-                            return;
-                        }
-                    }
+                    // Show all unclaimed tiles
+                    onVisibleUpdate?.Invoke(true);
+                    return;
                 }
             } // Nonetwork check
             else if(!gm.IsNetworked )
