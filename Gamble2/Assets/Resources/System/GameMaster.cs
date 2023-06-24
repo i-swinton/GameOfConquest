@@ -59,6 +59,9 @@ public class GameMaster : NetworkBehaviour
 
     // Networking Variables
     bool isNetworked;
+    // Use to check if all players are ready before starting game
+    public NetworkVariable<int> readyCount = new NetworkVariable<int>(0);
+
 
     public bool IsNetworked { get { return isNetworked; } }
 
@@ -92,6 +95,21 @@ public class GameMaster : NetworkBehaviour
     public bool InFogOfWar { get { return settings.FogOfWar; } }
 
     public Player CurrentPlayer { get { return players[turnTacker]; } }
+
+    public int HumanPlayers 
+    {
+        get
+        {
+            if(IsNetworked)
+            {
+                return playerControllers.Count;
+            }
+            else
+            {
+                return players.Count;
+            }
+        } 
+    }
 
     // ------------------------------------ Static Functions ---------------------------------------------------
 
@@ -170,6 +188,103 @@ public class GameMaster : NetworkBehaviour
         // Complete the fortify for all players
         CompleteFortify(value);
     }
+
+    [ClientRpc]
+    public void SyncBoardFull_ClientRPC(int[] tileOwners, int[] tileTroops, int playerCount, int[] numOfTroops, int rngSeed)
+    {
+        // Don't worry about syncing as the host
+        if (IsHost) { return; }
+
+        // Iterate through all the tiles and adjust them accordingly. 
+        for(int i=0; i < tileOwners.Length; ++i)
+        {
+            // Get the target tile
+            var target = gameBoard[i];
+            int playerID = tileOwners[i];
+            int tileID = i;
+            int numOfUnits = tileTroops[i];
+
+            // Set the new owner
+            if (target.Owner != players[playerID])
+            {
+                // Remove the Units (if any)
+                if (target.UnitCount > 0)
+                {
+                    target.KillUnits(target.UnitCount);
+                }
+                // Change the owner
+                gameBoard[tileID].ChangeOwner(players[playerID]);
+            }
+            // Change the units if they don't match
+            if (target.UnitCount != numOfUnits)
+            {
+                if (target.UnitCount > numOfUnits)
+                {
+                    target.KillUnits(target.UnitCount - numOfUnits);
+                }
+                if (target.UnitCount < numOfUnits)
+                {
+                    target.Fortify(numOfUnits - target.UnitCount);
+                }
+            }
+        }
+
+        // After we set up the count of units, correct player displays
+        for(int i=0; i < playerCount; ++i)
+        {
+            int playerID = i;
+            int draftTroops = numOfTroops[i];
+            players[playerID].draftTroop = draftTroops;
+
+        }
+
+        // Sync the rng of the two
+        RNG.SeedRandom(rngSeed);
+    }
+
+
+    [ClientRpc]
+    public void SyncBoardTile_ClientRPC(int tileID, int playerID, int numOfUnits)
+    {
+        DebugNetworklLog.Log("Sync Board Begin");
+
+        // Don't sync board if host
+        if (IsHost) { return; }
+        var target = gameBoard[tileID];
+
+        // Set the new owner
+        if (target.Owner != players[playerID])
+        {
+            // Remove the Units (if any)
+            if(target.UnitCount > 0)
+            {
+                target.KillUnits(target.UnitCount);
+            }
+            // Change the owner
+            gameBoard[tileID].ChangeOwner(players[playerID]);
+        }
+        // Change the units if they don't match
+        if(target.UnitCount != numOfUnits)
+        {
+            if(target.UnitCount > numOfUnits)
+            {
+                target.KillUnits(target.UnitCount - numOfUnits);
+            }
+            if(target.UnitCount < numOfUnits)
+            {
+                target.Fortify(numOfUnits - target.UnitCount);
+            }
+        }
+    }
+
+    [ClientRpc]
+    public void SyncPlayer_ClientRPC(int playerID, int draftTroops)
+    {
+        // Ignore this call if you are the host
+        if (IsHost) { return; }
+        players[playerID].draftTroop = draftTroops;
+    }
+
     #endregion
     #region Host Functions
 
@@ -182,9 +297,66 @@ public class GameMaster : NetworkBehaviour
         return IsHost && !GetPlayer().isHuman;
     }
 
+    public void SyncBoards()
+    {
+        // Don't call this function if not the host
+        if (!IsHost) { return; }
+
+        // Set up the variables
+
+        // The ids of the owners of each tile within the game
+        List<int> tileOwners = new List<int>();
+        // The number of troops on a given tile
+        List<int> tileTroops = new List<int>();
+
+        // Total number of players
+        int playerCount;
+
+        List<int> numberOfPlayerUnits = new List<int>();
+
+        // The seed value of the rng at the given time.
+        int rngSeed ;
+
+
+        // Loop through each tile
+        for (int i = 0; i < gameBoard.Count; ++i)
+        {
+            // Call the sync function
+
+            // Tile ID, Tile Owner, Number of Units
+            int ownerID = gameBoard[i].Owner != null ? gameBoard[i].Owner.playerID : -1;
+            int numberOfUnits = gameBoard[i].UnitCount;
+
+            //DebugNetworklLog.Log("Launching sync");
+
+            //GMNet.Instance.SyncBoards_ServerRPC(i, ownerID, numberOfUnits); ;
+            tileOwners.Add(ownerID);
+            tileTroops.Add(numberOfUnits);
+            //SyncBoardTile_ClientRPC(i, ownerID, numberOfUnits);
+        }
+
+        // Set the player count
+        playerCount = players.Count;
+        //Re-Sync the boards
+        for (int i = 0; i < players.Count; ++i)
+        {
+            //SyncPlayer_ClientRPC(i, players[i].draftTroop);
+            //GMNet.Instance.SyncPlayer_ServerRPC(i, players[i].draftTroop);
+            numberOfPlayerUnits.Add(players[i].draftTroop);
+        }
+
+        // Sync the rng
+        rngSeed = RNG.Seed;
+        //GMNet.Instance.SyncRNG_ServerRPC(RNG.Seed);
+
+        // Initiate the sync
+        GMNet.Instance.SyncBoardsFull_ServerRPC(tileOwners.ToArray(), tileTroops.ToArray(), playerCount, numberOfPlayerUnits.ToArray(), rngSeed);
+    }
+
     #endregion
     // ------------------------------------ Starting Functions ------------------------------------------------------------
 
+    #region Starting Functions
     private void Awake()
     {
         instance = this;
@@ -220,6 +392,8 @@ public class GameMaster : NetworkBehaviour
     {
         instance.settings = settings;
     }
+
+    #endregion
 
     #region Start Game Functions
     /// <summary>
@@ -313,6 +487,20 @@ public class GameMaster : NetworkBehaviour
             isNetworked = true;
         }
 
+        // Increment the readyCount
+       // readyCount.Value = readyCount.Value + 1 ;
+        
+        // If all players ready, start
+        //if(readyCount.Value == playerControllers.Count)
+        {
+            GMNet.Instance.ReadyComplete_ServerRPC();
+        }
+    }
+
+    [ClientRpc]
+    public void ReadyComplete_ClientRPC()
+    {
+        DebugNetworklLog.Log($"Readying Game");
         ChangeState(GameState.Claim);
 
         turnTacker = -1;
@@ -320,9 +508,10 @@ public class GameMaster : NetworkBehaviour
 
         // Only invoke action if someone is listening
         onTurnBegin?.Invoke(turnTacker);
-
     }
     #endregion
+
+    #region Update
 
     // Update is called once per frame
     void Update()
@@ -442,7 +631,7 @@ public class GameMaster : NetworkBehaviour
         }
     }
 
-
+    #endregion
     //------------------------------------- Defender and Challenger functions --------------------------------------
 
     #region Defenders and Challengers
@@ -817,8 +1006,21 @@ public class GameMaster : NetworkBehaviour
             // Automatically fill the map with this mode
             if(settings.AutoFillTiles)
             {
-                AutoClaimMap();
-                
+                if (IsNetworked)
+                {
+                    // If this is the host/ server, claim and sync
+                    if(IsHost)
+                    {
+                        AutoClaimMap();
+                        SyncBoards();
+                    }
+                }
+                else // In a local game
+                {
+
+                    AutoClaimMap();
+                }
+
                 // Check if we can move on to the next phase
                 if(AllTerroritesClaim())
                 {
@@ -1072,6 +1274,9 @@ public class GameMaster : NetworkBehaviour
 
     public void AutoReinforce()
     {
+
+        
+
         // Generate lists of tiles for each player
         List<MapSystem.BoardTile>[] tiles = new List<MapSystem.BoardTile>[PlayerAmount];
         for(int i=0; i <gameBoard.Count; ++i)

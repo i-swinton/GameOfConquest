@@ -248,6 +248,11 @@ namespace AI
                 currentPlan[currentIndex].Reset();
 
                 ++currentIndex;
+
+                if(currentIndex < currentPlan.Count && GameMaster.GetInstance().IsNetworked)
+                {
+                    DebugNetworklLog.Log($"Next step in plan is {currentPlan[currentIndex]}");
+                }
             }
             // If the current actions fails, replan
             else if(result == ActionStatus.Failed)

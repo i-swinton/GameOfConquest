@@ -131,6 +131,23 @@ public static class SerializationExtensions
         // Write value safe
         writer.WriteValueSafe(gss.ToInt());
     }
+
+    // Map Net Data
+    #region Map Net Data
+
+    //public static void ReadValueSafe(this FastBufferReader reader, out MapSystem.MapNetData map)
+    //{
+    //    // tileOwners
+    //    // tileTroops
+    //    // playerCount
+    //    // num of players
+    //    // rng seed
+
+    //    reader.ReadValueSafe(out List<int> tileOwners);
+    //}
+
+    #endregion
+
 }
 
 namespace NetworkSystem

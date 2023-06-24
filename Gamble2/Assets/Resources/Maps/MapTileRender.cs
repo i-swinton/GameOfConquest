@@ -147,7 +147,7 @@ public class MapTileRender : MonoBehaviour
     {
         //value = true;
 
-        Debug.Log("Setting Fog Mask to " + value);
+        //Debug.Log("Setting Fog Mask to " + value);
         if(!value)
         {
             isVisible = false;
