@@ -192,6 +192,7 @@ public class GameMaster : NetworkBehaviour
     [ClientRpc]
     public void SyncBoardFull_ClientRPC(int[] tileOwners, int[] tileTroops, int playerCount, int[] numOfTroops, int rngSeed)
     {
+        DebugNetworklLog.Log("Sync Client Start");
         // Don't worry about syncing as the host
         if (IsHost) { return; }
 
@@ -492,6 +493,7 @@ public class GameMaster : NetworkBehaviour
         
         // If all players ready, start
         //if(readyCount.Value == playerControllers.Count)
+        if(IsNetworked)
         {
             GMNet.Instance.ReadyComplete_ServerRPC();
         }
@@ -522,7 +524,7 @@ public class GameMaster : NetworkBehaviour
             // Choose to initialize local or online game
             if (BoardManager.instance.GetBoard() == null)
             {
-                if (IsNetworked || NetworkPlayerDataCarrier.Instance != null)
+                if (IsNetworked && NetworkPlayerDataCarrier.Instance != null)
                 {
                     // Set the map of the network
                     GenerateMap.instance.SetMap(NetworkPlayerDataCarrier.Map);
@@ -531,6 +533,11 @@ public class GameMaster : NetworkBehaviour
                 }
                 else if (DataCarrier.IsValid)
                 {
+                    // If map is set to null, wait until it is ready
+                    if(DataCarrier.GetMap() == null)
+                    {
+                        return;
+                    }
                     GenerateMap.instance.SetMap(DataCarrier.GetMap());
                     GenerateMap.instance.GenBoard();
                 }

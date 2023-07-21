@@ -117,6 +117,7 @@ public class GMNet : NetworkBehaviour
     [ServerRpc]
     public void SyncBoardsFull_ServerRPC(int[] tileOwners, int[] tileTroops, int playerCount, int[] numOfTroops, int rngSeed)
     {
+        DebugNetworklLog.Log("Sending Sync Request");
         GameMaster.GetInstance().SyncBoardFull_ClientRPC(tileOwners, tileTroops, playerCount, numOfTroops, rngSeed);
     }
 
